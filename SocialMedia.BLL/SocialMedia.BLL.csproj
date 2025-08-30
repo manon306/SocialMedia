@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Mapper\" />
+    <Folder Include="ModelVM\" />
+    <Folder Include="Helper\" />
+    <Folder Include="Common\" />
+    <Folder Include="Service\Abstraction\" />
+    <Folder Include="Service\Implementation\" />
+  </ItemGroup>
+    <!--All Packages we need-->
+	<ItemGroup>
+		<PackageReference Include="AutoMapper" Version="15.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+	</ItemGroup>
+
+
+	<ItemGroup>
+    <ProjectReference Include="..\SocialMedia.DAL\SocialMedia.DAL.csproj" />
+  </ItemGroup>
+
+</Project>
