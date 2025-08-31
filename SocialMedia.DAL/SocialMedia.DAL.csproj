@@ -7,13 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entity\" />
     <Folder Include="ENUM\" />
-    <Folder Include="Common\" />
     <Folder Include="Views\" />
     <Folder Include="SP\" />
-    <Folder Include="REPO\Abstraction\" />
-    <Folder Include="REPO\IMPLEMENTATION\" />
   </ItemGroup>
 	 <!--Package References--> 
 	<ItemGroup>
