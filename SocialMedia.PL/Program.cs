@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using SocialMedia.BLL.Mapper;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.PL.Language;
 using System.Globalization;
@@ -28,6 +29,9 @@ namespace SocialMedia.PL
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                         factory.Create(typeof(Resource));
                 }); ;
+
+            //Auto Mapper Configuration
+            builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
             var app = builder.Build();
 
