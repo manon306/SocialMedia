@@ -30,7 +30,7 @@ namespace SocialMedia.PL.Controllers
             var (isSuccess, errorMessage) = postService.AddPost(post);
             if (isSuccess)
             {
-                return View("index");
+                return RedirectToAction("GetAllPosts");
             }
             ModelState.AddModelError(string.Empty, errorMessage);
             return View();

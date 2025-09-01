@@ -2,6 +2,7 @@ html {
   font-size: 14px;
 }
 
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -16,7 +17,16 @@ html {
   position: relative;
   min-height: 100%;
 }
-
-body {
-  margin-bottom: 60px;
+:root {
+    --primary-color: #131a2a;
+    --secondary-color: #202938;
+    --header-color: #3a4354;
 }
+nav,footer {
+    background-color: var(--secondary-color);
+}
+body {
+    margin-bottom: 60px;
+    background-color: var(--primary-color);
+}
+
