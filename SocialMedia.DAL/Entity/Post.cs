@@ -12,6 +12,12 @@ namespace SocialMedia.DAL.Entity
             this.Videos = Videos;
             this.IsDeleted = false;
             this.CreatedAt = DateTime.Now;
+            this.IsArchived = false;
+            this.IsSaved = false;
+            this.CreatedBy = "Menna";
+            this.Comments = new List<Comment>();
+            this.Reacts = new List<React>();
+            this.UserID = 1; // to be changed later
         }
         // Properties
         public int ID { get;private set; }

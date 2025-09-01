@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using SocialMedia.BLL.Mapper;
+using SocialMedia.BLL.Service.Abstraction;
+using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
+using SocialMedia.DAL.REPO.Abstraction;
+using SocialMedia.DAL.REPO.IMPLEMENTATION;
 using SocialMedia.PL.Language;
 using System.Globalization;
 
@@ -19,6 +23,12 @@ namespace SocialMedia.PL
 
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
             options.UseSqlServer(connectionString));
+            builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+            //dependancy injection
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IPostsRepo, PostsRepo>();
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews()
@@ -31,7 +41,7 @@ namespace SocialMedia.PL
                 }); ;
 
             //Auto Mapper Configuration
-            builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+            
 
             var app = builder.Build();
 
