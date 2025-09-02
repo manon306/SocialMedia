@@ -1,4 +1,6 @@
-﻿namespace SocialMedia.BLL.Service.Implementation
+﻿using SocialMedia.BLL.Helper;
+
+namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
     {
@@ -11,14 +13,18 @@
         }
         public (bool, string) AddPost(CreateVm post)
         {
+            
             //validation
-            if(post == null)
+            if (post == null)
             {
                 return (false, "Post cannot be null");
-            }
-            //mapping
-            var postEntity = new Post(post.Content, post.Image ,post.Videos);
-            if(postEntity == null)
+            }// Upload files (store file name or path)
+            string? imagePath = post.Image != null ? Upload.UploadFile("Images", post.Image) : null;
+            string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
+
+            // Mapping
+            var postEntity = new Post(post.Content, imagePath, videoPath);
+            if (postEntity == null)
             {
                 return (false, "Mapping failed");
             }

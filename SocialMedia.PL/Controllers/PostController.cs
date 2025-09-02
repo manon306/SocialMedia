@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SocialMedia.BLL.ModelVM.Post;
 using SocialMedia.BLL.Service.Abstraction;
+using SocialMedia.BLL.Service.Implementation;
 
 namespace SocialMedia.PL.Controllers
 {
@@ -20,43 +21,76 @@ namespace SocialMedia.PL.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public IActionResult AddPost(CreateVm post)
         {
             if (!ModelState.IsValid)
             {
-                return View(post);
+                var (isSuccess, errorMessage, posts) = postService.GetPosts();
+                return View(posts);
             }
-            var (isSuccess, errorMessage) = postService.AddPost(post);
-            if (isSuccess)
+
+            var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);
+            if (!isSuccessAdd)
             {
-                return RedirectToAction("GetAllPosts");
+                ModelState.AddModelError(string.Empty, errorMessageAdd);
             }
-            ModelState.AddModelError(string.Empty, errorMessage);
-            return View();
+
+            return RedirectToAction("AddPost"); 
         }
         [HttpGet]
-        public IActionResult GetAllPosts()
+        public IActionResult GetAllSavedPosts()
         {
-            var (isSuccess, ErrorMessage ,posts) = postService.GetPosts();
+            var (isSuccess, ErrorMessage ,posts) = postService.GetSavedPosts();
             if (isSuccess)
             {
                 return View(posts);
             }
             ModelState.AddModelError(string.Empty, ErrorMessage);
             return View();
-
+        }
+        [HttpGet]
+        public IActionResult GetAllArchivedPosts()
+        {
+            var (isSuccess, ErrorMessage, posts) = postService.GetArchivedPosts();
+            if (isSuccess)
+            {
+                return View(posts);
+            }
+            ModelState.AddModelError(string.Empty, ErrorMessage);
+            return View();
+        }
+        [HttpGet]
+        public IActionResult GetAllPosts()
+        {
+            var (isSuccess, ErrorMessage, posts) = postService.GetPosts();
+            if (isSuccess)
+            {
+                return View(posts);
+            }
+            ModelState.AddModelError(string.Empty, ErrorMessage);
+            return View();
         }
         [HttpGet]
         public IActionResult UpdatePost()
         {
             return View();
         }
-        [HttpGet]
-        public IActionResult DeletePost()
+        [HttpPost]
+        public IActionResult DeletePost( int id)
         {
-            return View();
+            var deletedBy = "Menna"; 
+            var result = postService.DeletePost(id,deletedBy);
+            if(result.Item1 == true)
+            {
+                ViewBag.Message = "Post Deleted Successfully";
+                return RedirectToAction("GetAllPosts");
+            }
+            ModelState.AddModelError(string.Empty, result.Item2);
+            return RedirectToAction("GetAllPosts");
         }
+
 
     }
 }
