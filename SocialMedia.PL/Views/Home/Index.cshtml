@@ -1,8 +1,13 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using SocialMedia.BLL.ModelVM.Post
+@model List<PostVm>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+<div class="container">
+    <h3>Add a New Post</h3>
+    @await Html.PartialAsync("AddPost", new SocialMedia.BLL.ModelVM.Post.CreateVm())
+
+    <hr />
+
+    <h3>All Posts</h3>
+    @await Html.PartialAsync("GetPosts", Model)
 </div>
