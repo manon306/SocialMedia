@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace SocialMedia.BLL.ModelVM.Post
+﻿namespace SocialMedia.BLL.ModelVM.Post
 {
     public class CreateVm
     {

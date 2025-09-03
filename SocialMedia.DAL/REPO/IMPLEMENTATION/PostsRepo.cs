@@ -7,7 +7,6 @@
         {
             this.DB = DB;
         }
-
         public (bool, string) AddPost(Post post)
         {
             if(post == null)
@@ -18,7 +17,6 @@
             DB.SaveChanges();
             return (true, null);
         }
-
         public (bool, string) DeletePost(int postId, string deletedBy)
         {
             if(postId <= 0 || string.IsNullOrEmpty(deletedBy))
@@ -30,7 +28,6 @@
             DB.SaveChanges();
             return (true, null);
         }
-
         public (bool, string) UpdatePost(Post post)
         {
             if(post == null)
@@ -62,7 +59,8 @@
             {
                 var posts = DB.Posts
                               .Where(p => !p.IsDeleted)  
-                              .Where(filter)              
+                              .Where(filter)
+                              .OrderByDescending(p => p.ID)
                               .ToList();
 
                 if (!posts.Any())
@@ -75,16 +73,56 @@
                 return (false, $"Error: {ex.Message}", new List<Post>());
             }
         }
+        public (bool , string ) ToggleSavePost(int postId)
+        {
+            if (postId <= 0)
+            {
+                return (false, "Invalid postId");
+            }
+            var post = DB.Posts.FirstOrDefault(p => p.ID == postId && !p.IsDeleted);
+            if (post == null)
+            {
+                return (false, "Post not found");
+            }
+            post.ToggleSave();
+            DB.SaveChanges();
+            return (true, null);
+        }
+        public (bool, string) ToggleArchievePost(int postId)
+        {
+            if (postId <= 0)
+            {
+                return (false, "Invalid postId");
+            }
+            var post = DB.Posts.FirstOrDefault(p => p.ID == postId && !p.IsDeleted);
+            if (post == null)
+            {
+                return (false, "Post not found");
+            }
+            post.ToggleArchive();
+            DB.SaveChanges();
+            return (true, null);
+        }
+        public (bool, string,List<Post>) unArchive()
+        {
+            var post = DB.Posts.Where(x => x.IsArchived == true).ToList();
+            if (post == null)
+            {
+                return (false, "Post not found", null);
+            }
+            foreach (var p in post)
+                p.unArchive();
+            DB.SaveChanges();
+            return (true, null, post);
+        }
         public (bool, string, List<Post>) GetSavedPosts()
         {
             return GetFilteredPosts(p => p.IsSaved, "No saved posts found");
         }
-
         public (bool, string, List<Post>) GetArchivedPosts()
         {
             return GetFilteredPosts(p => p.IsArchived, "No archived posts found");
         }
-
         public (bool, string, List<Post>) GetPosts()
         {
             return GetFilteredPosts(p => true, "No posts found"); // كل البوستات غير المحذوفة

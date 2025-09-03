@@ -12,11 +12,9 @@
         public string? DeletedBy { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedAt { get; set; }
-
         //navigation properties
         public int PostID { get; set; }
         public virtual Post Post { get; set; }
-
         public List<React> Reacts { get; set; }
 
         //Methods

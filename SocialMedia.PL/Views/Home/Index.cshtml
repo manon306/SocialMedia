@@ -1,13 +1,1 @@
-﻿@using SocialMedia.BLL.ModelVM.Post
-@model List<PostVm>
-
-
-<div class="container">
-    <h3>Add a New Post</h3>
-    @await Html.PartialAsync("AddPost", new SocialMedia.BLL.ModelVM.Post.CreateVm())
-
-    <hr />
-
-    <h3>All Posts</h3>
-    @await Html.PartialAsync("GetPosts", Model)
-</div>
+﻿
