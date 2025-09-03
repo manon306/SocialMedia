@@ -1,0 +1,40 @@
+﻿@using SocialMedia.BLL.ModelVM.Account
+@model SignUpVM
+
+<div class="card">
+    <div class="card-header" style="background-color:skyblue ;color:black">
+        SignUp
+
+    </div>
+    <div class="card-body">
+
+        <form enctype="multipart/form-data" asp-action="SignUp" asp-controller="Account">
+
+            <div class="mb-3">
+                <label for="UserName" class="form-label">
+                    UserName
+                </label>
+                <input type="text" asp-for=UserName name="UserName" class="form-control" id="UserName" aria-describedby="emailHelp">
+                <span class="text-danger" asp-validation-for="UserName"></span>
+            </div>
+            <div class="mb-3">
+                <label for="Email" class="form-label">
+                    Email
+                </label>
+                <input type="text" asp-for=Email name="Email" class="form-control" id="Email" aria-describedby="emailHelp">
+                <span class="text-danger" asp-validation-for="Email"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="Password" class="form-label">
+                    Password
+                </label>
+                <input type="text" asp-for=Password name="Password" class="form-control" id="Password" aria-describedby="emailHelp">
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
