@@ -1,19 +1,17 @@
-﻿using SocialMedia.BLL.Helper;
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
     {
         private readonly IPostsRepo postsRepo;
         private readonly IMapper mapper;
-        public PostService(IPostsRepo postsRepo , IMapper mapper)
+        public PostService(IPostsRepo postsRepo, IMapper mapper)
         {
             this.postsRepo = postsRepo;
             this.mapper = mapper;
         }
         public (bool, string) AddPost(CreateVm post)
         {
-            
+
             //validation
             if (post == null)
             {
@@ -30,34 +28,34 @@ namespace SocialMedia.BLL.Service.Implementation
             }
             //use repo to add post
             var result = postsRepo.AddPost(postEntity);
-            if(!result.Item1)
+            if (!result.Item1)
             {
                 return (false, result.Item2);
             }
             //return result
-            return (true ,null);
+            return (true, null);
 
         }
         public (bool, string) DeletePost(int postId, string deletedBy)
         {
             //validation
-            if(postId <= 0 || string.IsNullOrEmpty(deletedBy))
+            if (postId <= 0 || string.IsNullOrEmpty(deletedBy))
             {
                 return (false, "Invalid postId or deletedBy");
             }
             //use repo to delete post
             var result = postsRepo.DeletePost(postId, deletedBy);
-            if(!result.Item1)
+            if (!result.Item1)
             {
                 return (false, result.Item2);
             }
             //return result
-            return (true ,null);
+            return (true, null);
         }
-        public (bool ,string) UpdatePost(updatePostVm post)
+        public (bool, string) UpdatePost(updatePostVm post)
         {
             //validation
-            if (post == null )
+            if (post == null)
             {
                 return (false, " no Post to update");
             }
@@ -78,19 +76,32 @@ namespace SocialMedia.BLL.Service.Implementation
             }
             return (true, null);
         }
+        public (bool , string ,Post) GetById(int id)
+        {
+            if (id <= 0)
+            {
+                return (false, "Invalid PostId",null);
+            }
+            var result = postsRepo.GetPostById(id);
+            if(result.Item1 == false)
+            {
+                return (false , result.Item2 , null);  
+            }
+            return (true, null, result.Item3);
+        }
         public (bool, string, List<PostVm>) GetPosts()
         {
             //use repo to get posts
             var result = postsRepo.GetPosts();
-            if(!result.Item1)
+            if (!result.Item1)
             {
-                return (false, result.Item2,null);
+                return (false, result.Item2, null);
             }
             //mapping
             var postsVm = mapper.Map<List<PostVm>>(result.Item3);
-            if(postsVm == null || postsVm.Count == 0)
+            if (postsVm == null || postsVm.Count == 0)
             {
-                return (false, "Mapping failed or no posts found",null);
+                return (false, "Mapping failed or no posts found", null);
             }
             //return result
             return (true, null, postsVm);
@@ -99,11 +110,11 @@ namespace SocialMedia.BLL.Service.Implementation
         {
             //use repo to get posts
             var result = postsRepo.GetSavedPosts();
-            if(!result.Item1)
+            if (!result.Item1)
             {
                 return (false, result.Item2, null);
             }
-            var postVm =mapper.Map<List<PostVm>>(result.Item3);
+            var postVm = mapper.Map<List<PostVm>>(result.Item3);
             if (postVm == null || postVm.Count == 0)
             {
                 return (false, "Mapping failed or no posts found", null);
@@ -127,6 +138,46 @@ namespace SocialMedia.BLL.Service.Implementation
             //return result
             return (true, null, postVm);
         }
+        public (bool, string) toggleSaved(int PostId)
+        {
+            if (PostId <= 0)
+            {
+                return (false, "Invalid PostId");
+            }
+            var result = postsRepo.ToggleSavePost(PostId);
+            if (!result.Item1)
+            {
+                return (false, result.Item2);
+            }
+            return (true, null);
+        }
+        public (bool, string) toggleArchive(int PostId)
+        {
+            if (PostId <= 0)
+            {
+                return (false, "Invalid PostId");
+            }
+            var result = postsRepo.ToggleArchievePost(PostId);
+            if (!result.Item1)
+            {
+                return (false, result.Item2);
+            }
+
+            
+            return (true, null);
+        }
+        public void UnArchiveAllPosts()
+        {
+            
+            postsRepo.unArchive();
+        }
+        public void UseHangfire()
+        {
+            RecurringJob.AddOrUpdate(() => UnArchiveAllPosts(),
+                                            Cron.Monthly);
+        }
+
 
     }
 }
+    
