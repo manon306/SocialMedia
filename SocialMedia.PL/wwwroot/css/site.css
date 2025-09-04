@@ -2,6 +2,7 @@ html {
   font-size: 14px;
 }
 
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -16,7 +17,128 @@ html {
   position: relative;
   min-height: 100%;
 }
+:root {
+    --primary-color: #131a2a;
+    --secondary-color: #202938;
+    --header-color: #3a4354;
+    --accent-color: #4e57d4;
+    --text-color: #ffffff;
+    --muted-text: #a8b3cf;
+}
+nav,footer {
+    background-color: var(--secondary-color);
+}
 
 body {
-  margin-bottom: 60px;
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.post-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 20px;
+    border: none;
+}
+
+    .post-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+.post-content {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.post-image {
+    border-radius: 12px;
+    max-height: 300px;
+    object-fit: cover;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.post-video {
+    border-radius: 12px;
+    width: 100%;
+    max-height: 400px;
+    margin-top: 15px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 15px;
+}
+
+.action-btn {
+    color: var(--muted-text);
+    transition: color 0.2s ease;
+    font-size: 14px;
+}
+
+    .action-btn:hover {
+        color: var(--text-color);
+    }
+
+    .action-btn i {
+        margin-left: 5px;
+    }
+
+.post-time {
+    font-size: 12px;
+    color: var(--muted-text);
+}
+
+.user-name {
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.user-title {
+    font-size: 13px;
+    color: var(--muted-text);
+}
+
+.unsave-btn {
+    background: linear-gradient(45deg, #ff9500, #ff5e3a);
+    border: none;
+    border-radius: 20px;
+    padding: 6px 16px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+    .unsave-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 10px rgba(255, 94, 58, 0.3);
+    }
+
+.engagement-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    font-size: 13px;
+    color: var(--muted-text);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header {
+    background-color: var(--secondary-color);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-body {
+    background-color: var(--secondary-color);
 }

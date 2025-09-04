@@ -1,0 +1,11 @@
+﻿@model Tuple<SocialMedia.BLL.ModelVM.Post.CreateVm, List<SocialMedia.BLL.ModelVM.Post.PostVm>>
+
+
+        <div>
+            @await Html.PartialAsync("_AddPost",Model.Item1)
+        </div>
+
+        <div>
+            @await Html.PartialAsync("_GetAllPosts", Model.Item2)
+        </div>
+

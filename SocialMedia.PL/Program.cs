@@ -1,7 +1,13 @@
+using Hangfire;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using SocialMedia.BLL.Mapper;
+using SocialMedia.BLL.Service.Abstraction;
+using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
+using SocialMedia.DAL.REPO.Abstraction;
+using SocialMedia.DAL.REPO.IMPLEMENTATION;
 using SocialMedia.PL.Language;
 using System.Globalization;
 
@@ -15,9 +21,22 @@ namespace SocialMedia.PL
 
             //connection string configuration
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
-
+            //Auto Mapper Configuration
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
             options.UseSqlServer(connectionString));
+            builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+            //dependancy injection
+            builder.Services.AddScoped<IPostService, PostService>();
+            builder.Services.AddScoped<IPostsRepo, PostsRepo>();
+
+
+            //Hangfire
+            builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+            builder.Services.AddHangfireServer();
+            
+
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews()
@@ -28,6 +47,9 @@ namespace SocialMedia.PL
                     options.DataAnnotationLocalizerProvider = (type, factory) =>
                         factory.Create(typeof(Resource));
                 }); ;
+
+            
+            
 
             var app = builder.Build();
 
@@ -63,6 +85,9 @@ namespace SocialMedia.PL
                 }
             });
 
+            // Hangfire dashboard middleware
+            app.UseHangfireDashboard("/SocialMedia");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -72,7 +97,14 @@ namespace SocialMedia.PL
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Post}/{action=Index}/{id?}");
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
+                postService.UseHangfire();
+            }
+
 
             app.Run();
         }
