@@ -57,6 +57,7 @@
                                     </li>
                                     
                                     
+                                    
                                 </ul>
                             </div>
                         </div>
@@ -97,12 +98,24 @@
                         </div>
 
                         <div class="d-flex align-items-center mt-3">
-                            <img src="https://via.placeholder.com/32" class="rounded-circle me-2" width="32" height="32" alt="Profile Image">
-                            <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Add Comment" aria-label="Add Comment">
-                                <button class="btn btn-outline-secondary" type="button"><i class="bi bi-send"></i></button>
+                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2 border" width="40" height="40" alt="Profile Image">
+                            <div class="flex-grow-1">
+                                <form asp-controller="Comment" asp-action="AddComment" method="post" class="d-flex">
+                                    <input type="hidden" name="PostID" value="@post.ID" />
+                                    <input type="text" name="Content" class="form-control rounded-pill me-2" placeholder="Write a comment..." aria-label="Add Comment">
+                                    <button class="btn btn-primary rounded-pill" type="submit">
+                                        <i class="bi bi-send"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
+
+                        <!-- الكومنتات -->
+                        <div class="comments-container mt-3 p-2 border rounded bg-light" id="comments-@post.ID">
+                            <!-- الكومنتات هتيجي هنا -->
+                        </div>
+
+
                     </div>
                 </div>
             }
@@ -117,3 +130,32 @@
         </div>
     </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+function loadComments(postId) {
+    $.ajax({
+        url: `/Comment/GetAllComments?id=${postId}`,
+        type: "GET",
+        success: function (data) {
+            let container = $(`#comments-${postId}`);
+            container.empty();
+            if (data && data.length > 0) {
+                data.forEach(c => {
+                    container.append(`
+<div class="d-flex align-items-start mb-2">
+    <img src="https://via.placeholder.com/32" class="rounded-circle me-2" width="32" height="32" alt="User">
+    <div>
+        <strong>${c.createdBy}</strong><br>
+        <span>${c.content}</span>
+    </div>
+</div>
+                    `);
+                });
+            } else {
+                container.append(`<p class="text-muted">No comments yet.</p>`);
+            }
+        },
+        error: function () {
+            console.log("Error loading comments.");
+        }
+    });
+}
