@@ -1,0 +1,50 @@
+﻿@* _AddPost *@
+@model CreateVm
+@{
+    ViewData["Title"] = "Add Post";
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center text-white" >
+        <div class="col-md-8 col-lg-6">
+            <!-- البطاقة الرئيسية -->
+            <div class="card shadow-sm border-0 mb-3 rounded-3">
+                <!-- الهيدر -->
+                <div class="card-header border-0 d-flex align-items-center py-3 text-white" style="background-color: var(--secondary-color);">
+                    <img src="https://via.placeholder.com/48" class="rounded-circle me-3" width="48" height="48" alt="صورة المستخدم">
+                    <div>
+                        <h6 class="mb-0">عمر أحمد</h6>
+                        <p class="text-muted mb-0 small">مطور واجهات أمامية</p>
+                    </div>
+                </div>
+
+                <div class="card-body text-white" style="background-color: var(--secondary-color);">
+                    <form asp-action="AddPost" method="post" enctype="multipart/form-data">
+                        <textarea asp-for="Content" class="form-control border-0 shadow-none fs-5" placeholder="What's on your mind?" rows="4"></textarea>
+                        <span asp-validation-for="Content" class="text-danger small mt-1"></span>
+                        
+                        <!-- خيارات الإضافة -->
+                        <div class="d-flex justify-content-between border-top pt-3 pb-2 mt-3">
+                            <button type="button" class="btn btn-sm text-muted d-flex align-items-center" onclick="document.getElementById('ImageInput').click()">
+                                <i class="bi bi-image text-primary me-1"></i>
+                                Image
+                            </button>
+
+                            <input type="file" asp-for="Image" id="ImageInput" class="d-none" multiple />
+
+                            <button type="button" class="btn btn-sm text-muted d-flex align-items-center" onclick="document.getElementById('VidInput').click()">
+                                <i class="bi bi-camera-video text-success me-1"></i> Video
+                            </button>
+                            <input type="file" asp-for="Videos" id="VidInput" class="d-none" multiple />
+
+                        </div>
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">
+                            <i class="bi bi-send me-2"></i> send
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- نهاية البطاقة الرئيسية -->
+        </div>
+    </div>
+</div>
