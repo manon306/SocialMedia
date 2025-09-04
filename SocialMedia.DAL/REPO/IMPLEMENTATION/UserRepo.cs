@@ -1,7 +1,5 @@
-﻿using SocialMedia.DAL.DataBase;
-using SocialMedia.DAL.Entity;
-using SocialMedia.DAL.REPO.Abstraction;
-using System.Linq.Expressions;
+﻿
+
 
 namespace SocialMedia.DAL.REPO.IMPLEMENTATION
 {

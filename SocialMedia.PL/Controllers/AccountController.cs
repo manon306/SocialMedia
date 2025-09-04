@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.BLL.ModelVM.Account;
-using SocialMedia.DAL.Entity;
-using System.Security.Claims;
+﻿
 
 namespace SocialMedia.PL.Controllers
 {

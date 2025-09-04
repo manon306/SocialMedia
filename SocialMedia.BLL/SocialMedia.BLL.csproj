@@ -5,10 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Common\" />
-  </ItemGroup>
     <!--All Packages we need-->
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="15.0.1" />

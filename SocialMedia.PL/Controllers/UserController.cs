@@ -1,7 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.BLL.ModelVM.User;
-using SocialMedia.BLL.Service.Abstraction;
+﻿
+
 
 namespace SocialMedia.PL.Controllers
 {
