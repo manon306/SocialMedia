@@ -2,16 +2,26 @@
 {
     public class Comment
     {
+        //constractor
+        public Comment(string Content,int PostID, string CreatedBy)
+        {
+            this.Content = Content;
+            this.PostID = PostID;
+            this.CreatedBy = CreatedBy;
+            CreatedAt = DateTime.Now;
+            IsDeleted = false;
+
+        }
         //Properties
-        public int ID { get; set; }
-        public string Content { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string CreatedBy { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
-        public string? DeletedBy { get; set; }
-        public string? UpdatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public int ID { get; private set; }
+        public string Content { get; private set; }
+        public DateTime CreatedAt { get; private set; } = DateTime.Now;
+        public string CreatedBy { get; private set; }
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedAt { get; private set; }
+        public string? DeletedBy { get; private set; }
+        public string? UpdatedBy { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
         //navigation properties
         public int PostID { get; set; }
         public virtual Post Post { get; set; }

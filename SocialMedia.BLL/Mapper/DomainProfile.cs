@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SocialMedia.BLL.ModelVM.Comment;
 
 namespace SocialMedia.BLL.Mapper
 {
@@ -7,6 +8,8 @@ namespace SocialMedia.BLL.Mapper
         public DomainProfile()
         {
             CreateMap<Post, PostVm>().ReverseMap();
+            CreateMap<Comment , UpdateCommentVm>().ReverseMap();
+            CreateMap<Comment, GetCommentVm>().ReverseMap();
         }
     }
 }

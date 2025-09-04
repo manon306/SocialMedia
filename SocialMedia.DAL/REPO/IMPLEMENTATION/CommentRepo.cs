@@ -32,7 +32,7 @@
 
             return (true, null);
         }
-        public (bool, string) DeletePost(int commentId ,string Deletedby)
+        public (bool, string) DeleteComment(int commentId ,string Deletedby)
         {
             if(commentId< 0 || string.IsNullOrEmpty(Deletedby))
             {
@@ -46,6 +46,15 @@
             result.Delete(Deletedby);
             DB.SaveChanges();
             return (true, null);
+        }
+        public (bool , string , List<Comment>) GetAllComments(int PostId)
+        {
+            var result = DB.Comments.Where(x=>x.PostID ==  PostId).ToList();
+            if (!result.Any())
+            {
+                return (false, "there is no comment yet", null);
+            }
+            return (true,null ,result);
         }
     }
 }

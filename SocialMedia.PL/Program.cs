@@ -28,6 +28,8 @@ namespace SocialMedia.PL
             //dependancy injection
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
+            builder.Services.AddScoped<ICommentService, CommentService>();
+            builder.Services.AddScoped<ICommentRepo, CommentRepo>();
 
 
             //Hangfire
