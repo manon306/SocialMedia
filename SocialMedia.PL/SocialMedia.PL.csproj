@@ -12,6 +12,7 @@
 	<!--Packages-->
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="15.0.1" />
+		<PackageReference Include="Hangfire" Version="1.8.21" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.8">
 
 			<PrivateAssets>all</PrivateAssets>
@@ -19,6 +20,10 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="wwwroot\Files\" />
+	  <Folder Include="wwwroot\Videos\" />
 	</ItemGroup>
 
 </Project>
