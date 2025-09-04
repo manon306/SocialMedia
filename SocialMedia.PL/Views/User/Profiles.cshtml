@@ -1,0 +1,26 @@
+﻿@model List<SocialMedia.BLL.ModelVM.User.ViewProfile>
+
+<h2>User Profiles</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var profile in Model)
+        {
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    @* <img src="@profile.PersonalImag" class="card-img-top" alt="Profile Picture" /> *@
+                    <img src="~/Files/@profile.PersonalImag" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">@profile.Name</h5>
+                        <p class="card-text">@profile.Bio</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
