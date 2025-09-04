@@ -1,0 +1,51 @@
+﻿@using SocialMedia.BLL.ModelVM.Account
+@model LoginVM
+
+<div class="card">
+    <div class="card-header" style="background-color:skyblue ;color:black">
+        Login
+    </div>
+    <div class="card-body">
+
+        <form asp-action="Login" asp-controller="Account" method="post">
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <small>
+                Don’t have an account?
+                <a asp-action="SignUp" asp-controller="Account">Sign up</a>
+            </small>
+        </div>
+
+        <hr />
+
+        <form asp-action="ExternalLogin" asp-controller="Account" method="post">
+
+
+            <button type="submit" name="provider" value="Google" class="btn btn-light w-100 mb-2">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+            <button type="submit" name="provider" value="Facebook" class="btn btn-primary w-100">
+                <i class="fab fa-facebook-f"></i> Continue with Facebook
+            </button>
+
+        </form>
+
+        
+
+
+    </div>
+</div>
