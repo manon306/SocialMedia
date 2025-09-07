@@ -1,9 +1,11 @@
 ﻿
 
 
+using SocialMedia.BLL.ModelVM.User;
+
 namespace SocialMedia.PL.Controllers
 {
-   // [Authorize(Roles = "User")]
+    // [Authorize(Roles = "User")]
     public class UserController : Controller
     {
         private readonly IUserSerives userServices;
@@ -12,44 +14,28 @@ namespace SocialMedia.PL.Controllers
         {
             this.userServices = userServices;
         }
-
-        [HttpGet]
-        public IActionResult Create()
+        public IActionResult Search(string keyword)
         {
-            return View();
-        }
+            var allUsers = userServices.GetAll().Item3;
 
-        [HttpPost]
-        public IActionResult Create(CreateProfile model)
-        {
-            if (ModelState.IsValid)
+            if (string.IsNullOrEmpty(keyword))
             {
-                var result = userServices.Create(model);
-
-                if (result.Item1) // success
-                {
-                    TempData["Success"] = "Profile created successfully!";
-                    return RedirectToAction("Profiles");
-                }
-
-                ModelState.AddModelError("", result.Item2); 
+                return View("Index", allUsers);
             }
 
-            return View(model);
-        }
+            var result = allUsers
+                .Where(u => !string.IsNullOrEmpty(u.Name)
+                            && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-        [HttpGet]
-        public IActionResult Profiles()
-        {
-            var result = userServices.ViewProfile();
-
-            if (!result.Item1) // if failed
+            if (!result.Any())
             {
-                ViewBag.Error = result.Item2;
-                return View(new List<ViewProfile>());
+                ViewBag.Message = "No User Found😢";
             }
 
-            return View(result.Item3);
+            return View("Index", result);
         }
+
+
     }
 }

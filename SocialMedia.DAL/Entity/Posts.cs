@@ -1,6 +1,8 @@
 ﻿
 
 
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace SocialMedia.DAL.Entity
 {
     public class Posts

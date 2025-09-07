@@ -1,8 +1,200 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿
+
+@model SocialMedia.BLL.ModelVM.Profile.CreateProfileVM
+@{
+    ViewData["Title"] = "Home";
+    Layout = null;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SocialMedia</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #131a2a;
+            --secondary-color: #202938;
+            --header-color: #3a4354;
+            --accent-color: #4e57d4;
+            --text-color: #ffffff;
+            --muted-text: #a8b3cf;
+        }
+
+        body {
+            margin: 0;
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: var(--secondary-color);
+        }
+
+            .navbar .form-control {
+                background-color: #1a2233;
+                border: none;
+                color: var(--text-color);
+            }
+
+                .navbar .form-control:focus {
+                    box-shadow: 0 0 0 0.1rem var(--accent-color);
+                }
+
+        /* aside left */
+        aside {
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .profile-mini img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent-color);
+        }
+
+        .profile-mini h6 {
+            margin-top: 10px;
+            font-weight: 600;
+        }
+
+        /* post card */
+        .post-card {
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 20px;
+            background-color: var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+            .post-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            }
+
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* right side */
+        .right-side {
+            background-color: var(--secondary-color);
+            border-radius: 12px;
+            padding: 15px;
+        }
+
+        footer {
+            background-color: var(--secondary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- ✅ Navbar -->
+    <nav class="navbar navbar-dark px-3">
+        <a class="navbar-brand fw-bold" href="#"><i class="fa-brands fa-linkedin"></i> LinkAI OR LinkQ </a>
+
+        <form class="d-flex mx-auto w-50">
+            Search
+            @* <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"> *@
+            <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" aria-label="Search">
+           @*  <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" />
+            <button type="submit">Search</button> *@
+        </form>
+
+        <div>
+           <!--Notifaction-->
+            <a href="#" class="text-light me-3"><i class="fa-solid fa-bell"></i></a>
+            <!--Message-->
+            <a href="#" class="text-light me-3"><i class="fa-solid fa-envelope"></i></a>
+            <!--Profile-->
+            <a href="/UserProfile/Create" class="text-light"><i class="fa-solid fa-user"> </i></a>
+            <!--Logout-->
+            <a asp-action="LogOff" asp-controller="Account" class="text-light"><i class="fa-solid fa-right-from-bracket"></i> </a>
+        </div>
+    </nav>
+
+    <!--  Layout with Aside + Main + Right -->
+    <div class="container my-4">
+        <div class="row">
+            <!-- Left Aside -->
+            <div class="col-md-3">
+                <aside class="profile-mini text-center">
+                    <img src="https://via.placeholder.com/80" alt="Profile" />
+                    <!--name the user-->
+                    <h6><label asp-for="Name" class="form-label"></label></h6>
+                    <p class="text-muted small">Web Developer</p>
+                    <hr />
+                    <p class="small">👀 Views: <b></b></p>
+                    <p class="small">🌍 Visitors: <b></b></p>
+                    <a href="/UserProfile/Create" class="btn btn-primary w-100 mt-3">+ Create Profile</a>
+                </aside>
+            </div>
+
+            <!-- Main Feed -->
+            <div class="col-md-6">
+                <!-- Example Post -->
+                <div class="card post-card text-white">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <img src="https://via.placeholder.com/48" class="user-avatar me-3" />
+                            <div>
+                                <h6 class="mb-0">Malak <!--name of user--></h6>
+                                <small class="text-muted">Designer</small>
+                            </div>
+                        </div>
+                        <p> <!--add post-->  </p>
+                        <img src="https://via.placeholder.com/600x300" class="img-fluid rounded" />
+                        <div class="d-flex justify-content-around mt-3">
+                            <button class="btn btn-sm btn-outline-light"><i class="fa-solid fa-thumbs-up"></i> Like</button>
+                            <button class="btn btn-sm btn-outline-light"><i class="fa-solid fa-comment"></i> Comment</button>
+                            <button class="btn btn-sm btn-outline-light"><i class="fa-solid fa-share"></i> Share</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Aside -->
+            <div class="col-md-3">
+                <div class="right-side">
+                    <h6>Suggested for you</h6>
+                    <hr class="text-muted" />
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" />
+                        <div>
+                            <small>Friends</small><br />
+                            <button class="btn btn-sm btn-primary mt-1">+ Connect</button>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="https://via.placeholder.com/40" class="rounded-circle me-2" />
+                        <div>
+                            <small>Friends</small><br />
+                            <button class="btn btn-sm btn-primary mt-1">+ Connect</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ✅ Footer 
+    <footer class="text-center py-3">
+        <small class="text-muted">© 2023 SocialMedia. All rights reserved.</small>
+    </footer>  -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

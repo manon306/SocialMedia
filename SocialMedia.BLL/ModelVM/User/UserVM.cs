@@ -11,7 +11,6 @@ namespace SocialMedia.BLL.ModelVM.User
         public string? Bio { get; set; }
         public string? ImagePath { get; set; }
         public string? Location { get; set; }
-
         public List<string> PostBody { get; set; }
         public List<string> Skills { get; set; }
         public int Age { get; set; }

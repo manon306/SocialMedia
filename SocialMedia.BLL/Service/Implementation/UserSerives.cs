@@ -1,13 +1,6 @@
-﻿using AutoMapper;
-using SocialMedia.BLL.Helper;
-using SocialMedia.BLL.ModelVM.User;
-using SocialMedia.BLL.Service.Abstraction;
-using SocialMedia.DAL.Entity;
-using SocialMedia.DAL.REPO.Abstraction;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿
+using SocialMedia.BLL.ModelVM.Profile;
+
 
 
 namespace SocialMedia.BLL.Service.Implementation
@@ -16,48 +9,56 @@ namespace SocialMedia.BLL.Service.Implementation
     {
         private readonly IuserRepo userRepo;
         private readonly IMapper mapper;
-        
-
+   
         public UserSerives(IMapper mapper, IuserRepo userRepo)
         {
             this.userRepo = userRepo;
             this.mapper = mapper;
         }
 
-        public (bool, string) Create(CreateProfile user)
+        public (bool, string, List<ViewProfileVM>) Search(string keyword)
         {
             try
             {
-                // Get Image Path in server 
-                var imagePath = Upload.UploadFile("Files", user.PersonalImag);
-
-                var mappuser = new User(user.Name, user.Bio, "System", imagePath);
-                var result = userRepo.Create(mappuser);
-
-                if (result)
-                    return (true, null);
-
-                return (false, "There was an error saving the user.");
+                var users = userRepo.SearchUser(keyword);
+                var result = mapper.Map<List<ViewProfileVM>>(users);
+                return (false, "Sucess", result);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message);
-            }
-        }
+                return (true, ex.Message, null);
 
-        public (bool, string, List<ViewProfile>) ViewProfile()
+            }
+
+        }
+        public (bool, string, List<ViewProfileVM>) GetAll()
         {
             try
             {
                 var users = userRepo.GetUsers();
-                var result = mapper.Map<List<ViewProfile>>(users);
+                // var result = mapper.Map<List<GetAllUserVM>>(users);
+                List<ViewProfileVM> result = new();
+                foreach (var useritem in users)
+                {
+                    result.Add(new ViewProfileVM()
+                    {
+                        // headline , bio ,location ,skills
+                        Name = useritem.Name,
+                        ProfileImagePath = useritem.ImagePath,
+                        Headline=useritem.Headline,
+                        Bio=useritem.Bio,
+                        Location=useritem.Location
 
-                return (true, null, result);
+                    });
+                }
+                return (false, null, result);
             }
             catch (Exception ex)
             {
-                return (false, ex.Message, null);
+                return (true, ex.Message, null);
+
             }
         }
+
     }
 }

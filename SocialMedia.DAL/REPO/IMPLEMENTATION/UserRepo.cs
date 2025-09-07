@@ -30,7 +30,11 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
         {
             return db.user.ToList();
         }
+        public List<User> SearchUser(string keyword)
+        {
+            return db.user.Where(u => u.Name.Contains(keyword) || u.Email.Contains(keyword)).ToList();
 
-       
+        }
+
     }
 }

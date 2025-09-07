@@ -1,6 +1,8 @@
 ﻿
 
 
+using Microsoft.AspNetCore.Identity;
+
 namespace SocialMedia.DAL.Entity
 {
     public class User:IdentityUser

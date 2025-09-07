@@ -1,0 +1,28 @@
+﻿@using SocialMedia.BLL.ModelVM.Profile
+@model ViewProfileVM
+
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-body text-center">
+            <img src="~/Files/@Model.ProfileImagePath" class="rounded-circle mb-3" width="150" height="150" alt="Profile Image" />
+
+            <h3>@Model.Name</h3>
+            <h5 class="text-muted">@Model.Headline</h5>
+
+            <p class="mt-3">@Model.Bio</p>
+
+            <p><strong>Location:</strong> @Model.Location</p>
+
+            <p>
+                <strong>Skills:</strong>
+                @if (!string.IsNullOrEmpty(Model.Skills))
+                {
+                    foreach (var skill in Model.Skills.Split(','))
+                    {
+                        <span class="badge bg-secondary me-1">@skill.Trim()</span>
+                    }
+                }
+            </p>
+        </div>
+    </div>
+</div>

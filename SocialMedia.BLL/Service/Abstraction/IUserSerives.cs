@@ -1,12 +1,11 @@
-﻿using SocialMedia.BLL.ModelVM.User;
+﻿using SocialMedia.BLL.ModelVM.Profile;
 
 
 namespace SocialMedia.BLL.Service.Abstraction
 {
     public interface IUserSerives
     {
-        (bool, string) Create(CreateProfile user);
-        (bool, string,List<ViewProfile>) ViewProfile();
-        
+        (bool, string, List<ViewProfileVM>) Search(string keyword);
+        (bool, string, List<ViewProfileVM>) GetAll();
     }
 }

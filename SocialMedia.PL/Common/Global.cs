@@ -1,11 +1,7 @@
-﻿global using Microsoft.AspNetCore.Authorization;
-global using Microsoft.AspNetCore.Mvc;
-global using Microsoft.AspNetCore.Identity;
-global using SocialMedia.BLL.ModelVM.Account;
-global using SocialMedia.DAL.Entity;
-global using System.Security.Claims;
+﻿global using Microsoft.AspNetCore.Mvc;
+global using SocialMedia.BLL.ModelVM.Post;
+global using SocialMedia.BLL.Service.Abstraction;
 global using Microsoft.AspNetCore.Localization;
 global using SocialMedia.PL.Models;
 global using System.Diagnostics;
-global using SocialMedia.BLL.ModelVM.User;
-global using SocialMedia.BLL.Service.Abstraction;
+

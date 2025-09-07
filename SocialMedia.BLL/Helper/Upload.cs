@@ -14,6 +14,11 @@ namespace SocialMedia.BLL.Helper
                 // 1 ) Get Directory
                 string FolderPath = Directory.GetCurrentDirectory() + "/wwwroot/" + FolderName;
 
+                if (!Directory.Exists(FolderPath))
+                {
+                    Directory.CreateDirectory(FolderPath);
+                }
+
 
                 //2) Get File Name
                 string FileName = Guid.NewGuid() + Path.GetFileName(File.FileName);
@@ -60,5 +65,6 @@ namespace SocialMedia.BLL.Helper
                 return ex.Message;
             }
         }
+
     }
 }

@@ -1,5 +1,7 @@
 ﻿
 
+using Microsoft.AspNetCore.Authorization;
+
 namespace SocialMedia.PL.Controllers
 {
     [Authorize(Roles = "Admin")]

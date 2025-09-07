@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SocialMedia.BLL.Mapper;
-using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
@@ -21,21 +22,22 @@ namespace SocialMedia.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
             // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
 
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString));
 
 
-            // Register Repositories & Services
-            builder.Services.AddScoped<IuserRepo, UserRepo>();
-            builder.Services.AddScoped<IUserSerives, UserSerives>();
-
+            //maaper
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
+            builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+            builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 
-            // MVC + Localization
+
+            // Add services to the container.
             builder.Services.AddControllersWithViews()
                 .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
                 .AddDataAnnotationsLocalization(options =>
@@ -64,11 +66,12 @@ namespace SocialMedia.PL
 .AddDefaultTokenProviders();
 
 
-           
+
+
+
 
             // Google Auth
-            builder.Services.AddAuthentication()
-                .AddGoogle(googleOptions =>
+            builder.Services.AddAuthentication().AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
@@ -83,6 +86,9 @@ namespace SocialMedia.PL
 
 
 
+
+            
+            
 
             var app = builder.Build();
 
@@ -112,6 +118,9 @@ namespace SocialMedia.PL
                 }
             });
 
+            // Hangfire dashboard middleware
+          //  object value = app.UseHangfireDashboard("/SocialMedia");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -124,9 +133,8 @@ namespace SocialMedia.PL
             //    name: "default",
             //    pattern: "{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Account}/{action=Login}/{id?}");
-
+                name: "default",
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }
