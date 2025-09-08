@@ -85,8 +85,8 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IJobsRepo, JobsRepo>();
 
             // Hangfire configuration
-            //builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
-            //builder.Services.AddHangfireServer();
+            builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+            builder.Services.AddHangfireServer();
 
             // MVC + Localization
 
@@ -132,7 +132,7 @@ namespace SocialMedia.PL
                 }
             });
 
-            // Hangfire dashboard middleware
+            //Hangfire dashboard middleware
             app.UseHangfireDashboard("/SocialMedia");
 
             app.UseHttpsRedirection();
@@ -176,23 +176,23 @@ namespace SocialMedia.PL
                 //    }
                 //}
             }
-            if (app.Environment.IsDevelopment())
-            {
-                using (var scope = app.Services.CreateScope())
-                {
-                    var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
-                    if (!db.Jobs.Any())
-                    {
-                        db.Jobs.AddRange(
-                          new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
-                          new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
-                          new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
-                          new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
-                        );
-                        db.SaveChanges();
-                    }
-                }
-            }
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    using (var scope = app.Services.CreateScope())
+            //    {
+            //        var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
+            //        if (!db.Jobs.Any())
+            //        {
+            //            db.Jobs.AddRange(
+            //              new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
+            //              new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
+            //              new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
+            //              new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
+            //            );
+            //            db.SaveChanges();
+            //        }
+            //    }
+            //}
             // if (enableHangfire && canConnectToSql) { /* register Hangfire services */ }
 
 
