@@ -12,7 +12,7 @@
             IsDeleted = false;
         }
 
-        }
+        
         //Properties
         public int ID { get; private set; }
         public string Content { get; private set; }
