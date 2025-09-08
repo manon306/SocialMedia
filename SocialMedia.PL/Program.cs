@@ -22,36 +22,37 @@ namespace SocialMedia.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //connection string configuration
+            // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
+
+            // Identity configuration
             builder.Services.AddIdentity<User, IdentityRole>()
-            .AddEntityFrameworkStores<SocialMediaDbContext>()
-            .AddDefaultTokenProviders();
+                .AddEntityFrameworkStores<SocialMediaDbContext>()
+                .AddDefaultTokenProviders();
+
+
             builder.Services.Configure<IdentityOptions>(options =>
             {
-                // خليه يستخدم الـ ClaimTypes.GivenName أو Name زي ما انتي عايزة
                 options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
                 options.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
             });
 
-            // Google Auth
+            // Authentication: Google & Facebook
             builder.Services.AddAuthentication()
-    .AddGoogle(googleOptions =>
-    {
-        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 
-        // اطلب البيانات
-        googleOptions.Scope.Add("email");
-        googleOptions.Scope.Add("profile");
-        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+                    googleOptions.Scope.Add("email");
+                    googleOptions.Scope.Add("profile");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
 
 
-    })
-                // Facebook Auth
+                })
                 .AddFacebook(facebookOptions =>
                 {
                     facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
@@ -68,11 +69,12 @@ namespace SocialMedia.PL
                     facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
                 });
 
-            //Auto Mapper Configuration
+            // DbContext & AutoMapper
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
-            options.UseSqlServer(connectionString));
+                options.UseSqlServer(connectionString));
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             //dependancy injection
+            // Dependency Injection
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
             builder.Services.AddScoped<ICommentService, CommentService>();
@@ -82,23 +84,11 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IJobsService, JobsService>();
             builder.Services.AddScoped<IJobsRepo, JobsRepo>();
 
+            // Hangfire configuration
+            //builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+            //builder.Services.AddHangfireServer();
 
-            //Hangfire
-            // Hangfire (disabled unless packages and config are added)
-            var enableHangfire = false;
-            bool canConnectToSql = false;
-            try
-            {
-                using var sqlConn = new SqlConnection(connectionString);
-                sqlConn.Open();
-                canConnectToSql = true;
-            }
-            catch
-            {
-                canConnectToSql = false;
-            }
-            builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
-            builder.Services.AddHangfireServer();
+            // MVC + Localization
 
             // Add services to the container.
             builder.Services.AddControllersWithViews()
@@ -137,8 +127,8 @@ namespace SocialMedia.PL
                 SupportedUICultures = supportedCultures,
                 RequestCultureProviders = new List<IRequestCultureProvider>
                 {
-                new QueryStringRequestCultureProvider(),
-                new CookieRequestCultureProvider()
+                    new QueryStringRequestCultureProvider(),
+                    new CookieRequestCultureProvider()
                 }
             });
 
@@ -153,17 +143,38 @@ namespace SocialMedia.PL
 
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            // Hangfire Dashboard
+            //app.UseHangfireDashboard("/SocialMedia");
+
+            // Default route
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Post}/{action=Index}/{id?}");
 
+            // Hangfire jobs
             using (var scope = app.Services.CreateScope())
             {
                 var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
                 postService.UseHangfire();
+
+                // Seed Jobs data in Development
+                //if (app.Environment.IsDevelopment())
+                //{
+                //    var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
+                //    if (!db.Jobs.Any())
+                //    {
+                //        db.Jobs.AddRange(
+                //            new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
+                //            new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
+                //            new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
+                //            new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
+                //        );
+                //        db.SaveChanges();
+                //    }
+                //}
             }
             if (app.Environment.IsDevelopment())
             {

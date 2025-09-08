@@ -196,7 +196,7 @@ namespace SocialMedia.DAL.Migrations
 
                     b.HasIndex("ParentCommentID");
 
-                    b.ToTable("Reply");
+                    b.ToTable("Reply"  );
                 });
 
             modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
