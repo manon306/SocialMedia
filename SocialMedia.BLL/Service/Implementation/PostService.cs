@@ -1,4 +1,5 @@
-﻿namespace SocialMedia.BLL.Service.Implementation
+
+namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
     {
@@ -181,3 +182,4 @@
     }
 }
     
+

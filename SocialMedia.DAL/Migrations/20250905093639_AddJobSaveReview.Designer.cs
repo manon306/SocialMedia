@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMedia.DAL.DataBase;
 
@@ -11,9 +12,11 @@ using SocialMedia.DAL.DataBase;
 namespace SocialMedia.DAL.Migrations
 {
     [DbContext(typeof(SocialMediaDbContext))]
-    partial class SocialMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250905093639_AddJobSaveReview")]
+    partial class AddJobSaveReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,7 +266,6 @@ namespace SocialMedia.DAL.Migrations
 
                     b.ToTable("Comments");
                 });
-
 
             modelBuilder.Entity("SocialMedia.DAL.Entity.Job", b =>
                 {
