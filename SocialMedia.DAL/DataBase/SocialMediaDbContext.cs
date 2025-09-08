@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using SocialMedia.DAL.Entity;
-
-namespace SocialMedia.DAL.DataBase
+﻿namespace SocialMedia.DAL.DataBase
 {
     public class SocialMediaDbContext :IdentityDbContext<User>
     {

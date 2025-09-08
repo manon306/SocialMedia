@@ -2,6 +2,8 @@ namespace SocialMedia.DAL.Entity
 {
     public class Job
     {
+        private Job() { }
+
         public int Id { get; private set; }
         public string Title { get; private set; }
         public string Company { get; private set; }
