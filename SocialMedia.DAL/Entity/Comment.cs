@@ -10,6 +10,7 @@
             this.CreatedBy = CreatedBy;
             CreatedAt = DateTime.Now;
             IsDeleted = false;
+        }
 
         }
         //Properties
@@ -43,3 +44,4 @@
         }
     }
 }
+

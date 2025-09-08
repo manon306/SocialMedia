@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
-
+using System;
+using System.Collections.Generic;
+using SocialMedia.DAL.Entity;
 
 namespace SocialMedia.DAL.Entity
 {

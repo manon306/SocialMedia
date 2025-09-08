@@ -1,4 +1,6 @@
-﻿namespace SocialMedia.BLL.Service.Implementation
+﻿using SocialMedia.BLL.Service.Abstraction;
+
+namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
     {

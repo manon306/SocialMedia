@@ -1,0 +1,37 @@
+@model List<SocialMedia.DAL.Entity.Job>
+
+<h2>Jobs</h2>
+<p>
+	<a class="btn btn-sm btn-outline-secondary" asp-action="Saved">View Saved Jobs</a>
+</p>
+
+@if (Model == null || !Model.Any())
+{
+	<p>No jobs found.</p>
+}
+else
+{
+	<div class="list-group">
+		@foreach (var job in Model)
+		{
+			<div class="list-group-item">
+				<h5 class="mb-1">@job.Title</h5>
+				<small>@job.Company @if(!string.IsNullOrWhiteSpace(job.Location)){<text>- @job.Location</text>}</small>
+				<p class="mb-1">@job.Description</p>
+				<small>Posted @job.PostedAt.ToString("yyyy-MM-dd")</small>
+
+				<div class="mt-2 d-flex gap-2">
+					<form asp-action="ToggleSave" method="post">
+						<input type="hidden" name="id" value="@job.Id" />
+						<button class="btn btn-sm @(job.IsSaved ? "btn-success" : "btn-outline-secondary")" type="submit">
+							@(job.IsSaved ? "Saved" : "Save")
+						</button>
+					</form>
+					<a class="btn btn-sm btn-outline-primary" asp-action="Details" asp-route-id="@job.Id">Details</a>
+				</div>
+			</div>
+		}
+	</div>
+}
+
+
