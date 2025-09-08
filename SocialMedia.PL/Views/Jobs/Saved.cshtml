@@ -1,0 +1,26 @@
+@model List<SocialMedia.DAL.Entity.Job>
+
+<h2>Saved Jobs</h2>
+
+@if (Model == null || !Model.Any())
+{
+	<p>No saved jobs yet.</p>
+}
+else
+{
+	<div class="list-group">
+		@foreach (var job in Model)
+		{
+			<div class="list-group-item">
+				<h5 class="mb-1">
+					<a asp-action="Details" asp-route-id="@job.Id">@job.Title</a>
+				</h5>
+				<small>@job.Company @if(!string.IsNullOrWhiteSpace(job.Location)){<text>- @job.Location</text>}</small>
+				<p class="mb-1">@job.Description</p>
+				<small>Posted @job.PostedAt.ToString("yyyy-MM-dd")</small>
+			</div>
+		}
+	</div>
+}
+
+
