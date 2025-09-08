@@ -5,18 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Folder Include="Mapper\" />
-    <Folder Include="ModelVM\" />
-    <Folder Include="Helper\" />
-    <Folder Include="Common\" />
-    <Folder Include="Service\Abstraction\" />
-    <Folder Include="Service\Implementation\" />
-  </ItemGroup>
     <!--All Packages we need-->
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="15.0.1" />
+		<PackageReference Include="Hangfire" Version="1.8.21" />
 		<PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
 	</ItemGroup>
 

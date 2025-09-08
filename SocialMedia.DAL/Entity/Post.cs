@@ -2,7 +2,8 @@ namespace SocialMedia.DAL.Entity
 {
     public class Post
     {
-        public Post(string Content, string? Image, string? Videos)
+        //constructors
+        public Post(string Content, string? Image, string? Videos, string userId)
         {
             this.Content = Content;
             this.Image = Image;
@@ -14,9 +15,9 @@ namespace SocialMedia.DAL.Entity
             this.CreatedBy = "Menna";
             this.Comments = new List<Comment>();
             this.Reacts = new List<React>();
-            this.UserID = 1;
+            this.UserId = userId;
         }
-
+        // Properties
         public int ID { get; private set; }
         public string Content { get; private set; }
         public string? Image { get; private set; }
@@ -30,12 +31,16 @@ namespace SocialMedia.DAL.Entity
         public string? DeletedBy { get; private set; }
         public string? UpdatedBy { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
+        // Foreign Key
+        public string UserId { get; private set; }
+        public User User { get; set; }
 
-        public int UserID { get; private set; }
-
+        // Relations
         public List<Comment> Comments { get; private set; }
         public List<React> Reacts { get; private set; }
+        //public List<PostShare> PostShares { get; set; }
 
+        // Methods
         public void Update(string UpdatedBy, string content, string? Image, string? Videos)
         {
             if (!string.IsNullOrEmpty(content)) this.Content = content;
@@ -62,6 +67,7 @@ namespace SocialMedia.DAL.Entity
         {
             this.IsSaved = !this.IsSaved;
         }
+
     }
 }
 

@@ -264,6 +264,7 @@ namespace SocialMedia.DAL.Migrations
                     b.ToTable("Comments");
                 });
 
+
             modelBuilder.Entity("SocialMedia.DAL.Entity.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -452,6 +453,44 @@ namespace SocialMedia.DAL.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
+                {
+                    b.HasOne("SocialMedia.DAL.Entity.Post", "Post")
+                        .WithMany("Comments")
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.React", b =>
+                {
+                    b.HasOne("SocialMedia.DAL.Entity.Comment", null)
+                        .WithMany("Reacts")
+                        .HasForeignKey("CommentID");
+
+                    b.HasOne("SocialMedia.DAL.Entity.Post", "Post")
+                        .WithMany("Reacts")
+                        .HasForeignKey("PostID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
+                {
+                    b.Navigation("Reacts");
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Post", b =>
+                {
+                    b.Navigation("Comments");
+
+                    b.Navigation("Reacts");
                 });
 #pragma warning restore 612, 618
         }

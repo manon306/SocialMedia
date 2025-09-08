@@ -1,7 +1,9 @@
+
 namespace SocialMedia.DAL.Entity
 {
     public class Comment
     {
+
         public Comment(string Content,int PostID, string CreatedBy)
         {
             this.Content = Content;
@@ -10,6 +12,7 @@ namespace SocialMedia.DAL.Entity
             CreatedAt = DateTime.Now;
             IsDeleted = false;
         }
+        //Properties
 
         public int ID { get; private set; }
         public string Content { get; private set; }
@@ -20,10 +23,12 @@ namespace SocialMedia.DAL.Entity
         public string? DeletedBy { get; private set; }
         public string? UpdatedBy { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
+        //navigation properties
 
         public int PostID { get; set; }
         public virtual Post Post { get; set; }
         public List<React> Reacts { get; set; }
+        //Methods
 
         public void Update(string UpdatedBy, string content)
         {
@@ -39,4 +44,3 @@ namespace SocialMedia.DAL.Entity
         }
     }
 }
-

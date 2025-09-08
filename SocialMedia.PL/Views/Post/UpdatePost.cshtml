@@ -1,0 +1,40 @@
+﻿@model SocialMedia.BLL.ModelVM.Post.updatePostVm
+
+<div class="container py-4">
+    <div class="row justify-content-center text-white">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm border-0 mb-3 rounded-3">
+                <div class="card-header border-0 py-3 text-white" style="background-color: var(--secondary-color);">
+                    Edit Post
+                </div>
+
+                <div class="card-body text-white" style="background-color: var(--secondary-color);">
+                    <form asp-action="UpdatePost" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="ID" />
+                        <textarea asp-for="Content" class="form-control border-0 shadow-none fs-5" placeholder="What's on your mind?" rows="4"></textarea>
+                        <span asp-validation-for="Content" class="text-danger small mt-1"></span>
+
+                        <!-- خيارات الإضافة -->
+                        <div class="d-flex justify-content-between border-top pt-3 pb-2 mt-3">
+                            <button type="button" class="btn btn-sm text-muted d-flex align-items-center" onclick="document.getElementById('ImageInput').click()">
+                                <i class="bi bi-image text-primary me-1"></i>
+                                Image
+                            </button>
+
+                            <input type="file" asp-for="Image" id="ImageInput" class="d-none" multiple />
+
+                            <button type="button" class="btn btn-sm text-muted d-flex align-items-center" onclick="document.getElementById('VidInput').click()">
+                                <i class="bi bi-camera-video text-success me-1"></i> Video
+                            </button>
+                            <input type="file" asp-for="Videos" id="VidInput" class="d-none" multiple />
+
+
+                        <button type="submit" class="btn btn-primary rounded-pill px-4">
+                            <i class="bi bi-save me-2"></i> Update
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

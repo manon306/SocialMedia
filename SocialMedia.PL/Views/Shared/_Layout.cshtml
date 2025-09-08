@@ -7,25 +7,32 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/SocialMedia.PL.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-light">
+
+    <!-- ✅ Navbar -->
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">SocialMedia.PL</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+        <nav class="navbar navbar-expand-lg shadow-sm fixed-top text-white">
+            <div class="container">
+                <a class="navbar-brand fw-bold text-primary" href="#">ConnectPro</a>
+
+                <!-- Search -->
+                <form class="d-none d-md-flex flex-grow-1 mx-4">
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="search" class="form-control bg-light border-0" placeholder="Search">
+                    </div>
+                </form>
+
+                <!-- Menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item mx-2">
+                            <a class="nav-link text-white" href="#"><i class="bi bi-house-door fs-5"></i><br /><small>Home</small></a>
                         </li>
-<<<<<<< Updated upstream
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-=======
                         <li class="nav-item mx-2">
                             <a class="nav-link text-white" href="#"><i class="bi bi-people fs-5"></i><br /><small>Network</small></a>
                         </li>
@@ -43,24 +50,47 @@
                                 <img src="https://via.placeholder.com/32" class="rounded-circle" width="24" height="24" />
                                 <br /><small>Me</small>
                             </a>
->>>>>>> Stashed changes
+
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+
+    <!-- ✅ Page Layout -->
+    <div class="container-fluid text-white" style="margin-top: 70px; background-color: var(--primary-color);">
+        <div class="row">
+
+            <!-- Aside -->
+            <aside class="col-md-3 col-lg-2 border-end p-3">
+                <div class="text-center mb-4 p-3 rounded-4">
+                    <div class="rounded-circle overflow-hidden mx-auto mb-3 border border-3 border-primary" style="width: 80px; height: 80px;">
+                        <img src="https://via.placeholder.com/80" class="w-100 h-100" alt="Profile">
+                    </div>
+                    <h6 class="fw-bold">أحمد محمد</h6>
+                    <p class="text-muted small">مطور تطبيقات ويب</p>
+                </div>
+                <div class="mb-4 p-3 rounded-4">
+                    <span class="small text-muted">من يشاهدونك: <b>12</b></span><br />
+                    <span class="small text-muted">زوار الملف: <b>45</b></span>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="col-md-9 col-lg-10 p-4">
+                @RenderBody()
+            </main>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - SocialMedia.PL - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- ✅ Footer -->
+    <footer class="border-top py-4 ">
+        <div class="container text-center">
+            <p class="small text-muted mb-0">© 2023 ConnectPro. All rights reserved.</p>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
