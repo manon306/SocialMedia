@@ -1,19 +1,18 @@
 ﻿using SocialMedia.BLL.ModelVM.Comment;
-using SocialMedia.DAL.Entity;
 
 namespace SocialMedia.BLL.Service.Implementation
 {
-    public class CommentService : ICommentService
+    public class ReplyService : IReplyService
     {
-        private readonly ICommentRepo repo;
+        private readonly IReplyRepo repo;
         private readonly IMapper mapper;
-        public CommentService(ICommentRepo repo, IMapper mapper)
+        public ReplyService(IReplyRepo repo, IMapper mapper)
         {
             this.repo = repo;
             this.mapper = mapper;
         }
 
-        public (bool, string) AddComment(AddCommentVm comment)
+        public (bool, string) AddComment(AddReplyVm comment)
         {
             //validation
             if (comment == null)
@@ -21,18 +20,18 @@ namespace SocialMedia.BLL.Service.Implementation
                 return (false, "Cannot be null");
             }
             //Mapping
-            var commentEntity = new Comment(comment.Content, comment.PostID, comment.CreatedBy);
+            var commentEntity = new Reply(comment.Content, comment.ParentCommentID, comment.CreatedBy);
             if (commentEntity == null)
             {
                 return (false, "faild to create new Object");
             }
             //use repo
-            var result = repo.AddComment(commentEntity);
-            if(result.Item1 == false)
+            var result = repo.AddReply(commentEntity);
+            if (result.Item1 == false)
             {
                 return (false, result.Item2);
             }
-            return (true ,null);
+            return (true, null);
         }
         public (bool, string) DeleteComment(DeleteCommentVm comment)
         {
@@ -42,14 +41,14 @@ namespace SocialMedia.BLL.Service.Implementation
                 return (false, "Cannot delete empty Comment");
             }
             // use repo
-            var result = repo.DeleteComment(comment.Id, comment.DeletedBy);
+            var result = repo.DeleteReply(comment.Id, comment.DeletedBy);
             if (result.Item1 == false)
             {
                 return (false, result.Item2);
             }
-            return (true ,null);
+            return (true, null);
         }
-        public (bool , string) UpdateComment(UpdateCommentVm comment)
+        public (bool, string) UpdateComment(UpdateCommentVm comment)
         {
             //validation
             if (comment == null)
@@ -57,22 +56,22 @@ namespace SocialMedia.BLL.Service.Implementation
                 return (false, "Cannot be null");
             }
             //repo
-            var result = repo.UpdateComment(comment.ID , comment.Content ,comment.UpdatedBy);
+            var result = repo.UpdateReply(comment.ID, comment.Content, comment.UpdatedBy);
             if (result.Item1 == false)
             {
                 return (false, result.Item2);
             }
-            return (true ,null);
+            return (true, null);
         }
-        public (bool , string ,List<GetCommentVm>) GetAllComment(int postId)
+        public (bool, string, List<GetCommentVm>) GetAllComment(int postId)
         {
             //validation
-            if(postId <= 0)
+            if (postId <= 0)
             {
                 return (false, "No Post Found", null);
             }
             //repo
-            var result = repo.GetAllComments(postId);
+            var result = repo.GetAllReplies(postId);
             var entity = mapper.Map<List<GetCommentVm>>(result.Item3);
             if (result.Item1 == false)
             {

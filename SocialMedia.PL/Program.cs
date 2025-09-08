@@ -1,15 +1,20 @@
-using Hangfire;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using SocialMedia.BLL.Mapper;
 using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
+using SocialMedia.DAL.Entity;
 using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
 using SocialMedia.PL.Language;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace SocialMedia.PL
 {
@@ -21,6 +26,50 @@ namespace SocialMedia.PL
 
             //connection string configuration
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
+            builder.Services.AddIdentity<User, IdentityRole>()
+            .AddEntityFrameworkStores<SocialMediaDbContext>()
+            .AddDefaultTokenProviders();
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                // خليه يستخدم الـ ClaimTypes.GivenName أو Name زي ما انتي عايزة
+                options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
+                options.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
+            });
+
+            // Google Auth
+            builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+        // اطلب البيانات
+        googleOptions.Scope.Add("email");
+        googleOptions.Scope.Add("profile");
+        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+        googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+
+
+    })
+                // Facebook Auth
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+
+                    facebookOptions.Fields.Add("name");
+                    facebookOptions.Fields.Add("email");
+                    facebookOptions.Fields.Add("first_name");
+                    facebookOptions.Fields.Add("last_name");
+
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "first_name");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
+                });
+
             //Auto Mapper Configuration
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
             options.UseSqlServer(connectionString));
@@ -30,12 +79,16 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ICommentRepo, CommentRepo>();
+            builder.Services.AddScoped<IReplyService, ReplyService>();
+            builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
+
 
 
             //Hangfire
             builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
             
+
 
 
 

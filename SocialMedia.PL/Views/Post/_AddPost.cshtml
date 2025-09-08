@@ -13,13 +13,14 @@
                 <div class="card-header border-0 d-flex align-items-center py-3 text-white" style="background-color: var(--secondary-color);">
                     <img src="https://via.placeholder.com/48" class="rounded-circle me-3" width="48" height="48" alt="صورة المستخدم">
                     <div>
-                        <h6 class="mb-0">عمر أحمد</h6>
+                        <h6 class="mb-0">@User.Identity.Name</h6>
                         <p class="text-muted mb-0 small">مطور واجهات أمامية</p>
                     </div>
                 </div>
 
                 <div class="card-body text-white" style="background-color: var(--secondary-color);">
                     <form asp-action="AddPost" method="post" enctype="multipart/form-data">
+                        
                         <textarea asp-for="Content" class="form-control border-0 shadow-none fs-5" placeholder="What's on your mind?" rows="4"></textarea>
                         <span asp-validation-for="Content" class="text-danger small mt-1"></span>
                         

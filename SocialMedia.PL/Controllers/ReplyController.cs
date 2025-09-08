@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using SocialMedia.BLL.ModelVM.Comment;
 using SocialMedia.DAL.Entity;
 
 namespace SocialMedia.PL.Controllers
 {
-    public class CommentController : Controller
+    public class ReplyController : Controller
     {
-        private readonly ICommentService commentService;
+        private readonly IReplyService commentService;
         private readonly UserManager<User> userManager;
-        public CommentController(ICommentService commentService , UserManager<User> userManager)
+        public ReplyController(IReplyService commentService, UserManager<User> userManager)
         {
             this.commentService = commentService;
             this.userManager = userManager;
@@ -18,7 +19,7 @@ namespace SocialMedia.PL.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> AddComment(AddCommentVm cm)
+        public async Task<IActionResult> AddComment(AddReplyVm cm)
         {
             var user = await userManager.GetUserAsync(User);
             if (user == null)
@@ -40,7 +41,7 @@ namespace SocialMedia.PL.Controllers
                 return RedirectToAction("Index", "Post");
             }
 
-            return RedirectToAction("Index", "Post");
+            return Ok(new { success = true, message = "Reply added successfully" });
         }
         [HttpPost]
         public async Task<IActionResult> UpdateComment(UpdateCommentVm c)
@@ -83,7 +84,7 @@ namespace SocialMedia.PL.Controllers
 
 
         [HttpGet]
-        public IActionResult GetAllComments(int id ,int? limit = null )
+        public IActionResult GetAllComments(int id, int? limit = null)
         {
             var result = commentService.GetAllComment(id);
             if (!result.Item1)

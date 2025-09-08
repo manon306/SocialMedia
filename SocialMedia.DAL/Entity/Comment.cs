@@ -26,6 +26,7 @@
         public int PostID { get; set; }
         public virtual Post Post { get; set; }
         public List<React> Reacts { get; set; }
+        public List<Reply> Replies { get;  set; }
 
         //Methods
         public void Update(string UpdatedBy, string content)

@@ -10,6 +10,9 @@ namespace SocialMedia.BLL.Mapper
             CreateMap<Post, PostVm>().ReverseMap();
             CreateMap<Comment , UpdateCommentVm>().ReverseMap();
             CreateMap<Comment, GetCommentVm>().ReverseMap();
+            CreateMap<Reply, GetCommentVm>().ReverseMap();
+            CreateMap<UpdateCommentVm, Comment>();
+            CreateMap<Reply , AddReplyVm>().ReverseMap();
         }
     }
 }

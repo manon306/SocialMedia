@@ -67,13 +67,22 @@
                     <div class="rounded-circle overflow-hidden mx-auto mb-3 border border-3 border-primary" style="width: 80px; height: 80px;">
                         <img src="https://via.placeholder.com/80" class="w-100 h-100" alt="Profile">
                     </div>
-                    <h6 class="fw-bold">أحمد محمد</h6>
+                    <h6 class="fw-bold">
+                        @User.Identity.Name
+                    </h6>
                     <p class="text-muted small">مطور تطبيقات ويب</p>
                 </div>
                 <div class="mb-4 p-3 rounded-4">
                     <span class="small text-muted">من يشاهدونك: <b>12</b></span><br />
                     <span class="small text-muted">زوار الملف: <b>45</b></span>
                 </div>
+                <ul>
+                    @foreach (var claim in User.Claims)
+                    {
+                        <li>@claim.Type : @claim.Value</li>
+                    }
+                </ul>
+
             </aside>
 
             <!-- Main Content -->

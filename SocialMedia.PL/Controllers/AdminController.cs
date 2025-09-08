@@ -10,7 +10,5 @@ namespace SocialMedia.PL.Controllers
         {
             return View();
         }
-
-
     }
 }

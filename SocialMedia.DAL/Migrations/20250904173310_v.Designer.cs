@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMedia.DAL.DataBase;
 
@@ -11,9 +12,11 @@ using SocialMedia.DAL.DataBase;
 namespace SocialMedia.DAL.Migrations
 {
     [DbContext(typeof(SocialMediaDbContext))]
-    partial class SocialMediaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250904173310_v")]
+    partial class v
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -153,50 +156,6 @@ namespace SocialMedia.DAL.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Reply", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("ParentCommentID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentCommentID");
-
-                    b.ToTable("Reply");
                 });
 
             modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
@@ -510,17 +469,6 @@ namespace SocialMedia.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Reply", b =>
-                {
-                    b.HasOne("SocialMedia.DAL.Entity.Comment", "ParentComment")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentCommentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ParentComment");
-                });
-
             modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
                 {
                     b.HasOne("SocialMedia.DAL.Entity.Post", "Post")
@@ -561,8 +509,6 @@ namespace SocialMedia.DAL.Migrations
             modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
                 {
                     b.Navigation("Reacts");
-
-                    b.Navigation("Replies");
                 });
 
             modelBuilder.Entity("SocialMedia.DAL.Entity.Post", b =>

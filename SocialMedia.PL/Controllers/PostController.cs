@@ -1,7 +1,12 @@
-﻿namespace SocialMedia.PL.Controllers
+﻿using Microsoft.AspNetCore.Identity;
+using SocialMedia.DAL.Entity;
+
+namespace SocialMedia.PL.Controllers
 {
     public class PostController : Controller
     {
+        private readonly UserManager<User> userManager;  
+        
         public IActionResult Index()
         {
             var (isSuccess, errorMessage, posts) = postService.GetPosts();
@@ -20,9 +25,10 @@
             return View(viewModel);
         }
         private readonly IPostService postService;
-        public PostController(IPostService postService)
+        public PostController(IPostService postService, UserManager<User> userManager)
         {
             this.postService = postService;
+            this.userManager = userManager;
         }
         [HttpGet]
         public IActionResult AddPost()
@@ -30,20 +36,23 @@
             return View("Index");
         }
         [HttpPost]
-        public IActionResult AddPost(CreateVm post)
+        public async Task<IActionResult> AddPost(CreateVm post)
         {
+            var user = await userManager.GetUserAsync(User);
+            post.UserId = user.Id;
+            ModelState.Remove("UserId");
             if (!ModelState.IsValid)
             {
                 var (isSuccess, errorMessage, posts) = postService.GetPosts();
                 return View(posts);
             }
-
+            
             var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);
             if (!isSuccessAdd)
             {
                 ModelState.AddModelError(string.Empty, errorMessageAdd);
             }
-
+            
             return RedirectToAction("Index"); 
         }
         [HttpGet]
@@ -129,10 +138,10 @@
             if(result.Item1 == true)
             {
                 ViewBag.Message = "Post Deleted Successfully";
-                return RedirectToAction("GetAllPosts");
+                return RedirectToAction("Index");
             }
             ModelState.AddModelError(string.Empty, result.Item2);
-            return RedirectToAction("GetAllPosts");
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public IActionResult ToggleSavedPosts(int id)
