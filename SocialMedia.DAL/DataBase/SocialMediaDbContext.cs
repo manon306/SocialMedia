@@ -1,4 +1,4 @@
-﻿
+
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SocialMedia.DAL.Entity;
@@ -16,6 +16,5 @@ namespace SocialMedia.DAL.DataBase
        public DbSet<Reply> Reply { get; set; }
         public DbSet<React> Reacts { get; set; }
         public DbSet<Job> Jobs { get; set; }
-
     }
 }

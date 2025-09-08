@@ -1,4 +1,4 @@
-﻿
+
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
@@ -22,7 +22,7 @@ namespace SocialMedia.BLL.Service.Implementation
             string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
 
             // Mapping
-            var postEntity = new Post(post.Content, imagePath, videoPath, post.UserId);
+            var postEntity = new Post(post.Content, imagePath, videoPath,post.UserId);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");
@@ -77,16 +77,16 @@ namespace SocialMedia.BLL.Service.Implementation
             }
             return (true, null);
         }
-        public (bool, string, Post) GetById(int id)
+        public (bool , string ,Post) GetById(int id)
         {
             if (id <= 0)
             {
-                return (false, "Invalid PostId", null);
+                return (false, "Invalid PostId",null);
             }
             var result = postsRepo.GetPostById(id);
-            if (result.Item1 == false)
+            if(result.Item1 == false)
             {
-                return (false, result.Item2, null);
+                return (false , result.Item2 , null);  
             }
             return (true, null, result.Item3);
         }
@@ -164,12 +164,12 @@ namespace SocialMedia.BLL.Service.Implementation
                 return (false, result.Item2);
             }
 
-
+            
             return (true, null);
         }
         public void UnArchiveAllPosts()
         {
-
+            
             postsRepo.unArchive();
         }
         public void UseHangfire()
