@@ -12,6 +12,8 @@
         (bool, string) toggleSaved(int PostId);
         (bool, string) toggleArchive(int PostId);
         void UnArchiveAllPosts();
+
         void UseHangfire();
     }
 }
+

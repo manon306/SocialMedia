@@ -1,8 +1,10 @@
-﻿namespace SocialMedia.DAL.Entity
+﻿
+namespace SocialMedia.DAL.Entity
 {
     public class Comment
     {
         //constractor
+
         public Comment(string Content,int PostID, string CreatedBy)
         {
             this.Content = Content;
@@ -24,12 +26,12 @@
         public string? UpdatedBy { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
         //navigation properties
+
         public int PostID { get; set; }
         public virtual Post Post { get; set; }
         public List<React> Reacts { get; set; }
-        public List<Reply> Replies { get;  set; }
-
         //Methods
+
         public void Update(string UpdatedBy, string content)
         {
             if (!string.IsNullOrEmpty(content)) this.Content = content;
