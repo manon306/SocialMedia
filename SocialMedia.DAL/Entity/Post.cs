@@ -1,9 +1,9 @@
-﻿namespace SocialMedia.DAL.Entity
+namespace SocialMedia.DAL.Entity
 {
     public class Post
     {
         //constructors
-        public Post(string Content, string? Image, string? Videos)
+        public Post(string Content, string? Image, string? Videos, string userId)
         {
             this.Content = Content;
             this.Image = Image;
@@ -15,7 +15,7 @@
             this.CreatedBy = "Menna";
             this.Comments = new List<Comment>();
             this.Reacts = new List<React>();
-            this.UserID = 1; // to be changed later
+            this.UserId = userId;
         }
         // Properties
         public int ID { get; private set; }
@@ -32,8 +32,8 @@
         public string? UpdatedBy { get; private set; }
         public DateTime? UpdatedAt { get; private set; }
         // Foreign Key
-        public int UserID { get; private set; }
-        ///public User User { get; set; }
+        public string UserId { get; private set; }
+        public User User { get; set; }
 
         // Relations
         public List<Comment> Comments { get; private set; }
@@ -70,3 +70,4 @@
 
     }
 }
+

@@ -1,4 +1,4 @@
-﻿namespace SocialMedia.DAL.Entity
+namespace SocialMedia.DAL.Entity
 {
     public class React
     {
@@ -32,3 +32,4 @@
         }
     }
 }
+
