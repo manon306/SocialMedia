@@ -5,7 +5,7 @@
 namespace SocialMedia.DAL.Migrations
 {
     /// <inheritdoc />
-    public partial class initAddUserProfile : Migration
+    public partial class initAddConsToUserProfile : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

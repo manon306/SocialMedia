@@ -22,6 +22,7 @@ namespace SocialMedia.DAL.Entity
           
         }
 
+
         
         public string? Name { get; set; }
         public int? Age { get; set; }
@@ -29,7 +30,10 @@ namespace SocialMedia.DAL.Entity
         public string? Headline { get; set; }   
         public string? Location { get; set; }
         public string? ImagePath { get; set; }
+        public string Education { get; set; }
+        public string Language { get; set; }
 
+        public UserProfile UserProfile { get; set; }
 
         public string? CreatedBy { get; private set; }//Identity
         public DateTime? CreatedOn { get; private set; }
@@ -56,7 +60,7 @@ namespace SocialMedia.DAL.Entity
             return true;
         }
 
-        internal bool ToggelStatus(string v)
+        public bool ToggelStatus(string v)
         {
             throw new NotImplementedException();
         }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
 namespace SocialMedia.DAL.REPO.Abstraction
 {
@@ -13,6 +9,11 @@ namespace SocialMedia.DAL.REPO.Abstraction
 
         Task Create(UserProfile profile);
         Task<UserProfile> GetByUserId(string userId);
+
+        //bool Create(User user);
+        Task Update(UserProfile profile);
+        Task Delete(UserProfile profile);
+        List<User> GetUsers(Expression<Func<User, bool>>? filter = null);
 
     }
 }

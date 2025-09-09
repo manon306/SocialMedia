@@ -3,6 +3,12 @@
     ViewData["Title"] = "Create Profile";
     Layout = "_NewLayout";
 }
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
 
 <div class="container mt-4">
     <h2 class="mb-4 text-white">Create Your Profile</h2>
@@ -24,6 +30,14 @@
                 <label asp-for="Bio" class="form-label"></label>
                 <textarea asp-for="Bio" class="form-control custom-input" rows="3"></textarea>
             </div>
+            <div class="mb-3">
+                <label asp-for="Language" class="form-label"></label>
+                <textarea asp-for="Language" class="form-control custom-input" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Education" class="form-label"></label>
+                <textarea asp-for="Education" class="form-control custom-input" rows="3"></textarea>
+            </div>
         </div>
 
         <!-- Location -->
@@ -42,6 +56,11 @@
             <div id="skillsContainer" class="d-flex flex-wrap"></div>
             <input type="hidden" asp-for="Skills" id="Skills" />
         </div>
+       @*  <div class="form-group">
+            <label for="Skills">Skills</label>
+            <input type="text" name="Skills" class="form-control" />
+        </div> *@
+
 
         <!-- Profile Image -->
         <div class="profile-section mb-4">
@@ -50,6 +69,7 @@
         </div>
 
         <!-- Save -->
+
         <div class="text-center">
             <button type="submit" class="btn btn-gradient px-5 py-2">Save Profile</button>
         </div>

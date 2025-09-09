@@ -1,0 +1,40 @@
+﻿@model IEnumerable<SocialMedia.BLL.ModelVM.Connect.FriendVM>
+@{
+    ViewData["Title"] = "My Connections";
+    Layout = "_NewLayout";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">My Connections</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">You don’t have any connections yet.</div>
+    }
+    else
+    {
+        @foreach (var user in Model) // user هنا FriendVM
+        {
+            <div class="card mb-2 p-2">
+                <div class="d-flex align-items-center">
+                    <img src="~/Files/@user.ImagePath" class="rounded-circle me-2" width="50" height="50" />
+                    <div>
+                        <strong>@user.Name</strong><br />
+                        <small>@user.Headline</small>
+                    </div>
+                    <div class="ms-auto">
+                        @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value != user.Id)
+                        {
+                            <form asp-controller="Connection" asp-action="SendRequest" method="post" class="d-inline">
+                                <input type="hidden" name="receiverId" value="@user.Id" />
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-primary btn-sm">Connect</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+
+    }
+</div>

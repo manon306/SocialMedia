@@ -11,6 +11,7 @@ using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
 using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
+using SocialMedia.PL.Factories;
 using SocialMedia.PL.Language;
 using System.Globalization;
 
@@ -22,6 +23,8 @@ namespace SocialMedia.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+          
 
             // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
@@ -35,6 +38,10 @@ namespace SocialMedia.PL
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
+
+            builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
+
 
 
             // Add services to the container.
