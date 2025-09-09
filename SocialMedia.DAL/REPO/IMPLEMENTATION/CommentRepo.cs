@@ -28,7 +28,7 @@
 
             existing.Update(Updatedby,Content);
 
-            existing.Update(comment.UpdatedBy, comment.Content);
+            existing.Update(UpdatedBy, Content);
             DB.SaveChanges();
 
             return (true, null);
