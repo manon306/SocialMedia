@@ -9,6 +9,7 @@
         }
         public (bool, string) AddPost(Post post)
         {
+            
             if(post == null)
             {
                 return (false, "Post cannot be null");

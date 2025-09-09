@@ -37,7 +37,8 @@
                             <a class="nav-link text-white" href="#"><i class="bi bi-people fs-5"></i><br /><small>Network</small></a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link text-white" href="#"><i class="bi bi-briefcase fs-5"></i><br /><small>Jobs</small></a>
+
+                            <a class="nav-link text-white" asp-area="" asp-controller="Jobs" asp-action="Index"><i class="bi bi-briefcase fs-5"></i><br /><small>Jobs</small></a>
                         </li>
                         <li class="nav-item mx-2">
                             <a class="nav-link text-white" href="#"><i class="bi bi-chat-dots fs-5"></i><br /><small>Messaging</small></a>
@@ -50,6 +51,7 @@
                                 <img src="https://via.placeholder.com/32" class="rounded-circle" width="24" height="24" />
                                 <br /><small>Me</small>
                             </a>
+
                         </li>
                     </ul>
                 </div>
@@ -67,7 +69,9 @@
                     <div class="rounded-circle overflow-hidden mx-auto mb-3 border border-3 border-primary" style="width: 80px; height: 80px;">
                         <img src="https://via.placeholder.com/80" class="w-100 h-100" alt="Profile">
                     </div>
-                    <h6 class="fw-bold">أحمد محمد</h6>
+                    <h6 class="fw-bold">
+                        @User.Identity.Name
+                    </h6>
                     <p class="text-muted small">مطور تطبيقات ويب</p>
                 </div>
                 <div class="mb-4 p-3 rounded-4">

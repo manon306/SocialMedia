@@ -58,7 +58,7 @@ namespace SocialMedia.BLL.Service.Implementation
             }
             var entity = mapper.Map<Comment>(comment);
             //repo
-            var result = repo.UpdateComment(entity);
+            var result = repo.UpdateComment(comment.ID , comment.Content ,comment.UpdatedBy);
             if (result.Item1 == false)
             {
                 return (false, result.Item2);

@@ -1,4 +1,5 @@
-﻿namespace SocialMedia.BLL.Service.Implementation
+
+namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
     {
@@ -21,7 +22,7 @@
             string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
 
             // Mapping
-            var postEntity = new Post(post.Content, imagePath, videoPath);
+            var postEntity = new Post(post.Content, imagePath, videoPath,post.UserId);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");
@@ -181,3 +182,4 @@
     }
 }
     
+

@@ -75,7 +75,8 @@ namespace SocialMedia.PL.Controllers
                 );
 
                 if (result.Succeeded)
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Post");
+
             }
 
             ModelState.AddModelError("", "Invalid Email or Password");
@@ -109,13 +110,22 @@ namespace SocialMedia.PL.Controllers
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null) return RedirectToAction(nameof(Login));
 
-            // if user is here
             var result = await signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false);
             if (result.Succeeded) return LocalRedirect(returnUrl);
 
-            //create account
-            var email = info.Principal.FindFirstValue(System.Security.Claims.ClaimTypes.Email);
-            var user = new User { UserName = email, Email = email };
+            // create account
+            var fullName = info.Principal.FindFirstValue(ClaimTypes.Name);
+            var email = info.Principal.FindFirstValue(ClaimTypes.Email);
+
+            // للتأكد من التفرد
+            var userName = fullName.Replace(" ", "") + "_" + info.ProviderKey.Substring(0, 5);
+
+            var user = new User
+            {
+                UserName = userName, // الاسم الكامل + جزء من الـ provider key لتجنب التكرار
+                Email = email
+            };
+
 
             var createResult = await userManager.CreateAsync(user);
             if (createResult.Succeeded)
@@ -130,6 +140,7 @@ namespace SocialMedia.PL.Controllers
 
             ModelState.AddModelError("", "Error creating user from external login.");
             return RedirectToAction(nameof(Login));
+
         }
 
     }
