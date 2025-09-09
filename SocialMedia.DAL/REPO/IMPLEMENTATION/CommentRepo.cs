@@ -28,6 +28,7 @@
 
             existing.Update(Updatedby,Content);
 
+            existing.Update(comment.UpdatedBy, comment.Content);
             DB.SaveChanges();
 
             return (true, null);

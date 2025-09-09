@@ -46,13 +46,13 @@ namespace SocialMedia.PL.Controllers
                 var (isSuccess, errorMessage, posts) = postService.GetPosts();
                 return View(posts);
             }
-            
+
             var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);
             if (!isSuccessAdd)
             {
                 ModelState.AddModelError(string.Empty, errorMessageAdd);
             }
-            
+
             return RedirectToAction("Index"); 
         }
         [HttpGet]

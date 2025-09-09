@@ -16,6 +16,7 @@ namespace SocialMedia.DAL.Entity
 
         
         //Properties
+
         public int ID { get; private set; }
         public string Content { get; private set; }
         public DateTime CreatedAt { get; private set; } = DateTime.Now;

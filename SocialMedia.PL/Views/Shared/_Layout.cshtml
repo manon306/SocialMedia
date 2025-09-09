@@ -51,6 +51,7 @@
                                 <img src="https://via.placeholder.com/32" class="rounded-circle" width="24" height="24" />
                                 <br /><small>Me</small>
                             </a>
+
                         </li>
                     </ul>
                 </div>
@@ -77,13 +78,6 @@
                     <span class="small text-muted">من يشاهدونك: <b>12</b></span><br />
                     <span class="small text-muted">زوار الملف: <b>45</b></span>
                 </div>
-                <ul>
-                    @foreach (var claim in User.Claims)
-                    {
-                        <li>@claim.Type : @claim.Value</li>
-                    }
-                </ul>
-
             </aside>
 
             <!-- Main Content -->

@@ -115,7 +115,7 @@
                             
                             <!-- الكومنتات هتيجي هنا -->
                         </div>
-                        
+
 
 
                     </div>
@@ -138,16 +138,16 @@
 </script>
 
 <script>
-    function loadComments(postId) {
-        $.ajax({
-            url: `/Comment/GetAllComments?id=${postId}`,
-            type: "GET",
-            success: function (data) {
-                let container = $(`#comments-${postId}`);
-                container.empty();
-                if (data && data.length > 0) {
-                    data.forEach(c => {
-                        container.append(`
+function loadComments(postId) {
+    $.ajax({
+        url: `/Comment/GetAllComments?id=${postId}`,
+        type: "GET",
+        success: function (data) {
+            let container = $(`#comments-${postId}`);
+            container.empty();
+            if (data && data.length > 0) {
+                data.forEach(c => {
+                    container.append(`
                             <div class="d-flex mb-3" id="comment-${c.id}">
         <div class="flex-grow-1">
             <div class="p-2 bg-white rounded shadow-sm border" id="comment-text-${c.id}">
@@ -184,18 +184,18 @@
                     </form>
 
             </div>
-        </div>
     </div>
-                        `);
+</div>
+                    `);
                         loadReplies(c.id);
-                    });
-                } else {
-                    container.append(`<p class="text-muted">No comments yet.</p>`);
-                }
-            },
-            error: function () {
-                console.log("Error loading comments.");
+                });
+            } else {
+                container.append(`<p class="text-muted">No comments yet.</p>`);
             }
+        },
+        error: function () {
+            console.log("Error loading comments.");
+        }
         });
     }
     // إظهار الفورم عند الضغط على Edit
@@ -230,7 +230,7 @@
                     },
             error: function () {
                 alert("Error updating comment");
-                    }
+}
                 });
     });
     $(document).on("click", ".delete-comment-btn", function () {

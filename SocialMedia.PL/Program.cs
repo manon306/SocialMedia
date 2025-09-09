@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SocialMedia.BLL.Mapper;
+using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
@@ -71,7 +72,7 @@ namespace SocialMedia.PL
 
             // DbContext & AutoMapper
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString));
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             //dependancy injection
             // Dependency Injection
@@ -81,14 +82,31 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<ICommentRepo, CommentRepo>();
             builder.Services.AddScoped<IReplyService, ReplyService>();
             builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
-            builder.Services.AddScoped<IJobsService, JobsService>();
-            builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+           builder.Services.AddScoped<IJobsService, JobsService>();
+			     builder.Services.AddScoped<IJobsRepo, JobsRepo>();
 
-            // Hangfire configuration
+
+            //Hangfire
+          // Hangfire (disabled unless packages and config are added)
+          var enableHangfire = false;
+          bool canConnectToSql = false;
+          try
+          {
+            using var sqlConn = new SqlConnection(connectionString);
+            sqlConn.Open();
+            canConnectToSql = true;
+          }
+          catch
+          {
+            canConnectToSql = false;
+          }
             builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
-
+            
             // MVC + Localization
+
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews()
@@ -100,8 +118,8 @@ namespace SocialMedia.PL
                         factory.Create(typeof(Resource));
                 }); ;
 
-
-
+            
+            
 
             var app = builder.Build();
 
@@ -113,13 +131,18 @@ namespace SocialMedia.PL
                 app.UseHsts();
             }
 
+
+
+
+
+
             /////////////////////////////////////////////////////////////Middleware///////////////////////////////////////////////////////
             // Localization configuration middleware
             var supportedCultures = new[] {
                       new CultureInfo("ar-EG"),
                       new CultureInfo("en-US"),
                 };
-
+            
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture("en-US"),
@@ -127,8 +150,8 @@ namespace SocialMedia.PL
                 SupportedUICultures = supportedCultures,
                 RequestCultureProviders = new List<IRequestCultureProvider>
                 {
-                    new QueryStringRequestCultureProvider(),
-                    new CookieRequestCultureProvider()
+                new QueryStringRequestCultureProvider(),
+                new CookieRequestCultureProvider()
                 }
             });
 
@@ -193,15 +216,15 @@ namespace SocialMedia.PL
             //        }
             //    }
             //}
-            // if (enableHangfire && canConnectToSql) { /* register Hangfire services */ }
+// if (enableHangfire && canConnectToSql) { /* register Hangfire services */ }
 
 
-            // Hangfire dashboard middleware
-            // if (enableHangfire && canConnectToSql) app.UseHangfireDashboard("/SocialMedia");
+			// Hangfire dashboard middleware
+			// if (enableHangfire && canConnectToSql) app.UseHangfireDashboard("/SocialMedia");
 
-            // if (enableHangfire && canConnectToSql) { /* schedule recurring jobs */ }
+			// if (enableHangfire && canConnectToSql) { /* schedule recurring jobs */ }
 
-            // Seed Jobs data in Development if empty
+			// Seed Jobs data in Development if empty
 
             app.Run();
         }
