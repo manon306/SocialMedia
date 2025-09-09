@@ -76,6 +76,7 @@ namespace SocialMedia.PL.Controllers
 
                 if (result.Succeeded)
                     return RedirectToAction("Index", "Post");
+
             }
 
             ModelState.AddModelError("", "Invalid Email or Password");
@@ -105,6 +106,7 @@ namespace SocialMedia.PL.Controllers
                 ModelState.AddModelError("", $"Error from external provider: {remoteError}");
                 return RedirectToAction(nameof(Login));
             }
+
             var info = await signInManager.GetExternalLoginInfoAsync();
             if (info == null) return RedirectToAction(nameof(Login));
 
@@ -123,6 +125,7 @@ namespace SocialMedia.PL.Controllers
                 UserName = userName, // الاسم الكامل + جزء من الـ provider key لتجنب التكرار
                 Email = email
             };
+
 
             var createResult = await userManager.CreateAsync(user);
             if (createResult.Succeeded)

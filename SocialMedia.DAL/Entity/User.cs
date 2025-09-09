@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using SocialMedia.DAL.Entity;
+
 
 namespace SocialMedia.DAL.Entity
 {
@@ -45,6 +46,7 @@ namespace SocialMedia.DAL.Entity
 
 
          public virtual List<Post> Post { get; private set; }
+
         public bool Update(string modifierUser, string name, int age)
         {
             if (string.IsNullOrEmpty(modifierUser))
