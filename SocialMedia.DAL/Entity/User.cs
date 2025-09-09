@@ -45,6 +45,7 @@ namespace SocialMedia.DAL.Entity
 
 
          public virtual List<Post> Post { get; private set; }
+
         public bool Update(string modifierUser, string name, int age)
         {
             if (string.IsNullOrEmpty(modifierUser))
