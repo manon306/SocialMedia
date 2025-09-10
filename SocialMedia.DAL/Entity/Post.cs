@@ -38,7 +38,7 @@
         // Relations
         public List<Comment> Comments { get; private set; }
         public List<React> Reacts { get; private set; }
-        //public List<PostShare> PostShares { get; set; }
+        public ICollection<Share> Shares { get; set; } = new List<Share>();
 
         // Methods
         public void Update(string UpdatedBy, string content, string? Image, string? Videos)

@@ -1,0 +1,31 @@
+﻿﻿
+@model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
+
+@{
+    ViewData["Title"] = "ViewProfile";
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+
+
+<div class="container mt-4">
+    <div class="card bg-dark text-light">
+        <div class="card-body text-center">
+            <img src="~/Files/@Model.ProfileImagePath" class="rounded-circle mb-3" width="120" height="120" />
+            <h3>@Model.Name</h3>
+            <h5 class="text-muted">@Model.Headline</h5>
+            <p>@Model.Bio</p>
+            <p><i class="fa-solid fa-location-dot"></i> @Model.Location</p>
+            <p><strong>Skills:</strong> @Model.Skills</p>
+
+
+
+             @* <form asp-controller="Connection" asp-action="Requests" method="post" class="d-inline"></form> *@
+            <button class="btn btn-success">Connect</button>
+            <button class="btn btn-outline-light">Message</button>
+        </div>
+    </div>
+</div>

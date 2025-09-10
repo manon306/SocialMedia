@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 using SocialMedia.DAL.Entity;
 
 namespace SocialMedia.PL.Controllers
@@ -55,16 +56,45 @@ namespace SocialMedia.PL.Controllers
 
             return RedirectToAction("Index"); 
         }
+        [HttpPost]
+        public async Task<IActionResult> SharePost(int postId, string content)
+        {
+            var user = await userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var result = postService.SharePost(postId, user.Id, content);
+
+            if (!result.Item1)
+            {
+                TempData["Error"] = result.Item2;
+            }
+            else
+            {
+                TempData["Success"] = "Post shared successfully!";
+            }
+
+            return RedirectToAction("Index");
+        }
         [HttpGet]
         public IActionResult GetAllPosts()
         {
-            var (isSuccess, ErrorMessage, posts) = postService.GetPosts();
-            if (isSuccess)
+            var (isSuccess, errorMessage, posts) = postService.GetPosts();
+            if (!isSuccess)
             {
-                return View(posts);
+                ModelState.AddModelError("", errorMessage);
+                posts = new List<PostVm>();
             }
-            ModelState.AddModelError(string.Empty, ErrorMessage);
-            return View();
+
+            var viewModel = new Tuple<CreateVm, List<PostVm>>(
+                new CreateVm(),
+                posts
+            );
+
+            return View(viewModel);
         }
         [HttpGet]
         public IActionResult GetAllSavedPosts()

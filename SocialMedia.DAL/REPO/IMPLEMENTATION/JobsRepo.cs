@@ -44,6 +44,7 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
         {
             return _dbContext.Jobs.AsNoTracking().Where(j => j.IsSaved).OrderByDescending(j => j.PostedAt).ToListAsync();
         }
+
     }
 }
 

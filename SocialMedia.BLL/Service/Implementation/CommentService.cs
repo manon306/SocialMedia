@@ -56,7 +56,6 @@ namespace SocialMedia.BLL.Service.Implementation
             {
                 return (false, "Cannot be null");
             }
-            var entity = mapper.Map<Comment>(comment);
             //repo
             var result = repo.UpdateComment(comment.ID , comment.Content ,comment.UpdatedBy);
             if (result.Item1 == false)

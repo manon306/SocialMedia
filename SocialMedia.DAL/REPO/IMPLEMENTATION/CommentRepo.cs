@@ -25,9 +25,6 @@
             var existing = DB.Comments.Where(a=>a.ID == commentId).FirstOrDefault();
             if (existing == null)
                 return (false, "Comment not found");
-
-            existing.Update(Updatedby,Content);
-
             existing.Update(Updatedby,Content);
             DB.SaveChanges();
 

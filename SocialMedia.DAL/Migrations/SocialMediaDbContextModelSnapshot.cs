@@ -243,6 +243,38 @@ namespace SocialMedia.DAL.Migrations
                     b.ToTable("Comments");
                 });
 
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Connection", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceiverId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId", "ReceiverId")
+                        .IsUnique();
+
+                    b.ToTable("Connections");
+                });
+
             modelBuilder.Entity("SocialMedia.DAL.Entity.Job", b =>
                 {
                     b.Property<int>("Id")
@@ -385,6 +417,36 @@ namespace SocialMedia.DAL.Migrations
                     b.ToTable("Reacts");
                 });
 
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Share", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PostId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SharedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Shares");
+                });
+
             modelBuilder.Entity("SocialMedia.DAL.Entity.User", b =>
                 {
                     b.Property<string>("Id")
@@ -415,6 +477,10 @@ namespace SocialMedia.DAL.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Education")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -436,6 +502,10 @@ namespace SocialMedia.DAL.Migrations
 
                     b.Property<bool?>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Language")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")
                         .HasColumnType("nvarchar(max)");
@@ -493,6 +563,54 @@ namespace SocialMedia.DAL.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.UserProfile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Bio")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Education")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Headline")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Language")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Skills")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserProfiles");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -568,6 +686,25 @@ namespace SocialMedia.DAL.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Connection", b =>
+                {
+                    b.HasOne("SocialMedia.DAL.Entity.User", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SocialMedia.DAL.Entity.User", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Receiver");
+
+                    b.Navigation("Sender");
+                });
+
             modelBuilder.Entity("SocialMedia.DAL.Entity.Post", b =>
                 {
                     b.HasOne("SocialMedia.DAL.Entity.User", "User")
@@ -594,6 +731,36 @@ namespace SocialMedia.DAL.Migrations
                     b.Navigation("Post");
                 });
 
+            modelBuilder.Entity("SocialMedia.DAL.Entity.Share", b =>
+                {
+                    b.HasOne("SocialMedia.DAL.Entity.Post", "Post")
+                        .WithMany("Shares")
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("SocialMedia.DAL.Entity.User", "User")
+                        .WithMany("Shares")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("SocialMedia.DAL.Entity.UserProfile", b =>
+                {
+                    b.HasOne("SocialMedia.DAL.Entity.User", "User")
+                        .WithOne("UserProfile")
+                        .HasForeignKey("SocialMedia.DAL.Entity.UserProfile", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("SocialMedia.DAL.Entity.Comment", b =>
                 {
                     b.Navigation("Reacts");
@@ -604,11 +771,18 @@ namespace SocialMedia.DAL.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("Reacts");
+
+                    b.Navigation("Shares");
                 });
 
             modelBuilder.Entity("SocialMedia.DAL.Entity.User", b =>
                 {
                     b.Navigation("Post");
+
+                    b.Navigation("Shares");
+
+                    b.Navigation("UserProfile")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

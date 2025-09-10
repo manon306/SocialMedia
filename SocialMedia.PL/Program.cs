@@ -1,16 +1,17 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SocialMedia.BLL.Mapper;
-using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
 using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
+using SocialMedia.PL.Factories;
 using SocialMedia.PL.Language;
 using System.Globalization;
 using System.Security.Claims;
@@ -27,9 +28,24 @@ namespace SocialMedia.PL
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
             // Identity configuration
-            builder.Services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<SocialMediaDbContext>()
-                .AddDefaultTokenProviders();
+            builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                            .AddEntityFrameworkStores<SocialMediaDbContext>()
+                            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/Login";
+                });
+
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+            })
+            .AddEntityFrameworkStores<SocialMediaDbContext>()
+            .AddDefaultTokenProviders();
+
 
 
             builder.Services.Configure<IdentityOptions>(options =>
@@ -74,7 +90,6 @@ namespace SocialMedia.PL
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
             options.UseSqlServer(connectionString));
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-            //dependancy injection
             // Dependency Injection
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
@@ -82,13 +97,17 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<ICommentRepo, CommentRepo>();
             builder.Services.AddScoped<IReplyService, ReplyService>();
             builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
-           builder.Services.AddScoped<IJobsService, JobsService>();
-			     builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+            builder.Services.AddScoped<IJobsService, JobsService>();
+			builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+            builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+            builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
 
+            builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
             //Hangfire
-          // Hangfire (disabled unless packages and config are added)
-          var enableHangfire = false;
+            // Hangfire (disabled unless packages and config are added)
+            var enableHangfire = false;
           bool canConnectToSql = false;
           try
           {

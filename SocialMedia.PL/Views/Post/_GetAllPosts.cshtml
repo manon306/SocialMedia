@@ -10,7 +10,22 @@
                 <h3 class="mb-0">Posts </h3>
                 <span class="badge bg-accent rounded-pill">@Model.Count Post</span>
             </div>
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @TempData["Success"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
 
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @TempData["Error"]
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            }
+           
             @foreach (var post in Model)
             {
                 <div class="card post-card">
@@ -18,18 +33,35 @@
                         <div class="d-flex align-items-center">
                             <img src="https://via.placeholder.com/48" class="rounded-circle user-avatar me-3" alt="Profile Image">
                             <div class="flex-grow-1">
-                                <div class="user-name">عمر أحمد</div>
+                                <div class="user-name">@User.Identity.Name</div>
                                 <div class="user-title">مطور واجهات أمامية</div>
+                                @if (post.Shares != null && post.Shares.Any())
+                                {
+                                    <div class="mt-2">
+                                        @foreach (var share in post.Shares.Take(3))
+                                        {
+                                            <small class="text-muted">
+                                                <i class="bi bi-share-fill text-success me-1"></i>
+                                                Shared by @share.User?.UserName on @share.SharedAt.ToString("MMM dd")
+                                            </small>
+                                            <br>
+                                        }
+                                        @if (post.Shares.Count > 3)
+                                        {
+                                            <small class="text-muted">and @(post.Shares.Count - 3) more</small>
+                                        }
+                                    </div>
+                                }
                             </div>
                             <div class="dropdown">
                                 <button class="btn btn-sm text-muted" type="button" data-bs-toggle="dropdown">
                                     <i class="bi bi-three-dots"></i>
                                 </button>
-                                <ul class="dropdown-menu">
+                                <ul class="dropdown-menu dropdown-menu-end">
                                     <li>
                                         <form asp-controller="Post" asp-action="ToggleSavedPosts" method="post" style="display:inline;">
                                             <input type="hidden" name="id" value="@post.ID" />
-                                            <button type="submit" class="dropdown-item text-danger">
+                                            <button type="submit" class="dropdown-item">
                                                 <i class="bi bi-bookmark-check me-2"></i>Save
                                             </button>
                                         </form>
@@ -37,15 +69,16 @@
                                     <li>
                                         <form asp-controller="Post" asp-action="ToggleArchivePosts" method="post" style="display:inline;">
                                             <input type="hidden" name="id" value="@post.ID" />
-                                            <button type="submit" class="dropdown-item text-danger">
-                                                <i class="bi bi-bookmark-check me-2"></i>Archive
+                                            <button type="submit" class="dropdown-item">
+                                                <i class="bi bi-archive me-2"></i>Archive
                                             </button>
                                         </form>
                                     </li>
                                     <li>
-                                        <a asp-action="UpdatePost" asp-route-id="@post.ID" asp-controller="Post" class="btn btn-sm btn-warning">Edit</a>
+                                        <a asp-action="UpdatePost" asp-route-id="@post.ID" asp-controller="Post" class="dropdown-item">
+                                            <i class="bi bi-pencil me-2"></i>Edit
+                                        </a>
                                     </li>
-                                    
                                     <li><a class="dropdown-item" href="#"><i class="bi bi-link-45deg me-2"></i>Copy Link</a></li>
                                     <li>
                                         <form asp-controller="Post" asp-action="DeletePost" method="post" style="display:inline;">
@@ -55,9 +88,6 @@
                                             </button>
                                         </form>
                                     </li>
-                                    
-                                    
-                                    
                                 </ul>
                             </div>
                         </div>
@@ -66,25 +96,32 @@
                     <div class="card-body">
                         <p class="post-content">@post.Content</p>
 
-                        @if (!string.IsNullOrEmpty(post.Image))
+                        @if (!string.IsNullOrEmpty(post.Image) || !string.IsNullOrEmpty(post.Videos))
                         {
-                            <img src="~/Images/@post.Image" class="post-image" alt="Image" />
-                        }
+                            <div class="media-container d-flex flex-wrap gap-2 mb-3">
+                                @if (!string.IsNullOrEmpty(post.Image))
+                                {
+                                    <div class="media-item">
+                                        <img src="~/Images/@post.Image" class="post-image" alt="Image" />
+                                    </div>
+                                }
 
-                        @if (!string.IsNullOrEmpty(post.Videos))
-                        {
-                            <video controls class="post-video">
-                                <source src="~/Videos/@post.Videos" type="video/mp4" />
-                                Not Allowed
-                            </video>
+                                @if (!string.IsNullOrEmpty(post.Videos))
+                                {
+                                    <div class="media-item">
+                                        <video controls class="post-video">
+                                            <source src="~/Videos/@post.Videos" type="video/mp4" />
+                                            Not Allowed
+                                        </video>
+                                    </div>
+                                }
+                            </div>
                         }
-
-                        <div class="engagement-stats">
-                            <span><i class="bi bi-heart-fill text-danger me-1"></i> 245 Like</span>
-                            <span><i class="bi bi-chat-fill text-info me-1"></i> 43 Comments</span>
-                            <span><i class="bi bi-share-fill text-success me-1"></i> 12 Share</span>
+                        <div class="engagement-stats text-muted mb-3">
+                            <span class="me-3"><i class="bi bi-heart-fill text-danger me-1"></i> 245 Like</span>
+                            <span class="me-3"><i class="bi bi-chat-fill text-info me-1"></i> @post.Comments.Count Comments</span>
+                            <span><i class="bi bi-share-fill text-success me-1"></i> @post.Shares.Count Share</span>
                         </div>
-
                         <div class="post-actions">
                             <button class="btn action-btn">
                                 <i class="bi bi-heart"></i> Like
@@ -92,11 +129,18 @@
                             <button class="btn action-btn">
                                 <i class="bi bi-chat"></i> Comment
                             </button>
-                            <button class="btn action-btn">
+                            <button class="btn action-btn share-btn" data-postid="@post.ID">
                                 <i class="bi bi-share"></i> Share
                             </button>
-                        </div>
 
+                        </div>
+                        <!-- فورم المشاركة مخفي -->
+                        <form class="share-form d-none mt-2" asp-controller="Post" asp-action="SharePost" method="post">
+                            <input type="hidden" name="PostId" value="@post.ID" />
+                            <input type="text" name="Content" class="form-control mb-2" placeholder="Add a message to your share..." />
+                            <button type="submit" class="btn btn-sm btn-success">Share</button>
+                            <button type="button" class="btn btn-sm btn-secondary cancel-share" data-postid="@post.ID">Cancel</button>
+                        </form>
                         <div class="d-flex align-items-center mt-3">
                             <img src="https://via.placeholder.com/40" class="rounded-circle me-2 border" width="40" height="40" alt="Profile Image">
                             <div class="flex-grow-1">
@@ -132,6 +176,178 @@
         </div>
     </div>
 </div>
+<style>
+    :root {
+        --primary-color: #131a2a;
+        --secondary-color: #202938;
+        --header-color: #3a4354;
+        --accent-color: #4e57d4;
+        --text-color: #ffffff;
+        --muted-text: #a8b3cf;
+    }
+
+    body {
+        background-color: var(--primary-color);
+        color: var(--text-color);
+    }
+
+    .bg-header {
+        background-color: var(--header-color) !important;
+    }
+
+    .bg-secondary {
+        background-color: var(--secondary-color) !important;
+    }
+
+    .bg-accent {
+        background-color: var(--accent-color) !important;
+    }
+
+    .btn-accent {
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+    }
+
+        .btn-accent:hover {
+            background-color: #3f47b3;
+            color: white;
+        }
+
+    .text-muted {
+        color: var(--muted-text) !important;
+    }
+
+    .post-card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-btn:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-control {
+        color: var(--text-color);
+    }
+
+        .form-control:focus {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 0.25rem rgba(78, 87, 212, 0.25);
+        }
+
+    .dropdown-menu {
+        background-color: var(--header-color);
+        border: none;
+    }
+
+    .dropdown-item {
+        color: var(--muted-text);
+    }
+
+        .dropdown-item:hover {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+
+    .border-accent {
+        border-color: var(--accent-color) !important;
+    }
+
+    .media-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .media-item {
+        flex: 1 1 200px;
+        max-width: 300px;
+    }
+
+    .post-image, .post-video {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        transition: transform 0.2s ease;
+    }
+
+        .post-image:hover, .post-video:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+    .post-video {
+        background-color: #000;
+    }
+
+    .comments-container {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+
+        /* تخصيص شريط التمرير */
+        .comments-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .comments-container::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+            border-radius: 10px;
+        }
+
+        .comments-container::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 10px;
+        }
+
+    .comment-item {
+        padding: 8px 0;
+    }
+
+    .comment-content {
+        background-color: var(--header-color);
+        border-radius: 16px;
+        position: relative;
+    }
+
+        .comment-content:after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 12px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid var(--header-color);
+        }
+
+    .comment-actions .btn-link:hover {
+        color: var(--accent-color) !important;
+        background-color: rgba(78, 87, 212, 0.1);
+        border-radius: 4px;
+    }
+
+    .replies .reply {
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+        .replies .reply:last-child {
+            border-bottom: none;
+        }
+
+    .reply-form, .edit-comment-form {
+        transition: all 0.3s ease;
+    }
+</style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var currentUser = '@User.Identity.Name';
@@ -148,44 +364,57 @@ function loadComments(postId) {
             if (data && data.length > 0) {
                 data.forEach(c => {
                     container.append(`
-                            <div class="d-flex mb-3" id="comment-${c.id}">
-        <div class="flex-grow-1">
-            <div class="p-2 bg-white rounded shadow-sm border" id="comment-text-${c.id}">
-                <strong class="d-block">${currentUser}</strong>
-                <span id="comment-content-${c.id}">${c.content}</span>
+                                    <div class="d-flex mb-3 comment-item" id="comment-${c.id}">
+        <div class="flex-shrink-0">
+            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+        </div>
+        <div class="flex-grow-1 ms-2">
+            <div class="comment-content p-3 rounded" id="comment-text-${c.id}">
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <strong class="d-block text-white">${currentUser}</strong>
+                    <span class="text-muted small">Just now</span>
+                </div>
+                <p class="mb-0 text-white" id="comment-content-${c.id}">${c.content}</p>
             </div>
 
             <!-- فورم التعديل -->
             <form class="edit-comment-form d-none mt-2" data-id="${c.id}">
                 <input type="hidden" name="ID" value="${c.id}" />
-                <input type="text" name="Content" class="form-control mb-2" value="${c.content}" />
-                <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                <button type="button" class="btn btn-sm btn-secondary cancel-edit" data-id="${c.id}">Cancel</button>
+                <input type="text" name="Content" class="form-control mb-2 bg-secondary text-white border-0" value="${c.content}" />
+                <div class="d-flex">
+                    <button type="submit" class="btn btn-sm btn-accent me-2">Save</button>
+                    <button type="button" class="btn btn-sm btn-outline-light cancel-edit" data-id="${c.id}">Cancel</button>
+                </div>
             </form>
 
-            <div class="d-flex align-items-center mt-1 small text-muted">
-                <button class="btn btn-link btn-sm p-0 me-3 text-decoration-none">Like</button>
-                <button class="btn btn-link btn-sm p-0 me-3 text-decoration-none">Reply</button>
-                <button class="btn btn-link btn-sm p-0 me-3 text-decoration-none edit-btn" data-id="${c.id}">Edit</button>
-                <span>· Just now</span>
+            <div class="comment-actions mt-2">
+                <button class="btn btn-sm btn-link text-muted p-0 me-3 text-decoration-none">Like</button>
+                <button class="btn btn-sm btn-link text-muted p-0 me-3 text-decoration-none reply-btn" data-id="${c.id}">Reply</button>
+                <button class="btn btn-sm btn-link text-muted p-0 me-3 text-decoration-none edit-btn" data-id="${c.id}">Edit</button>
+                <button type="button" class="btn btn-sm btn-link text-danger p-0 delete-comment-btn" data-id="${c.id}">
+                    <i class="bi bi-trash me-1"></i> Delete
+                </button>
             </div>
-                <button type="button" class="btn btn-link text-danger delete-comment-btn" data-id="${c.id}">
-        <i class="bi bi-trash me-2"></i> Delete
-    </button>
 
-
-            <div class="replies mt-2 ps-4 border-start" id="replies-${c.id}">
-                    <form class="reply-form d-flex mt-2" data-commentid="${c.id}">
-                        <input type="hidden" name="ParentCommentID" value="${c.id}" />
-                        <input type="text" name="Content" class="form-control form-control-sm rounded-pill me-2" placeholder="Write a reply..." />
-                        <button type="submit" class="btn btn-sm btn-primary rounded-pill">
-                            <i class="bi bi-send"></i>
-                        </button>
-                    </form>
-
+            <!-- الردود -->
+            <div class="replies mt-2 ms-3 ps-3 border-start border-secondary" id="replies-${c.id}">
+                <!-- سيتم إضافة الردود هنا -->
             </div>
+
+            <!-- نموذج الرد (مخفي افتراضيًا) -->
+            <form class="reply-form d-none mt-2" data-commentid="${c.id}">
+                <div class="d-flex align-items-center">
+                    <img src="https://via.placeholder.com/32" class="rounded-circle me-2" width="32" height="32" alt="Profile">
+                    <input type="hidden" name="ParentCommentID" value="${c.id}" />
+                    <input type="text" name="Content" class="form-control form-control-sm rounded-pill bg-secondary text-white border-0 me-2" placeholder="Write a reply..." />
+                    <button type="submit" class="btn btn-sm btn-accent rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                        <i class="bi bi-send"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-light ms-2 cancel-reply" data-commentid="${c.id}">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
                     `);
                         loadReplies(c.id);
                 });
@@ -307,6 +536,29 @@ function loadComments(postId) {
         });
     }
 
+        // إظهار فورم المشاركة عند الضغط على Share
+    $(document).on("click", ".share-btn", function() {
+        var postId = $(this).data("postid");
+        $(this).closest(".card-body").find(".share-form").removeClass("d-none");
+    });
+
+    // إلغاء المشاركة
+    $(document).on("click", ".cancel-share", function() {
+        $(this).closest(".share-form").addClass("d-none");
+    });
+        // إظهار نموذج الرد عند الضغط على Reply
+    $(document).on("click", ".reply-btn", function () {
+        let id = $(this).data("id");
+        $(`form[data-commentid='${id}']`).removeClass("d-none");
+        $(this).addClass("d-none");
+    });
+
+    // إخفاء نموذج الرد عند الضغط على Cancel
+    $(document).on("click", ".cancel-reply", function () {
+        let id = $(this).data("commentid");
+        $(`form[data-commentid='${id}']`).addClass("d-none");
+        $(`button.reply-btn[data-id='${id}']`).removeClass("d-none");
+    });
 
     $(document).ready(function () {
         @foreach (var post in Model)

@@ -1,4 +1,6 @@
 
+using System.Collections.Generic;
+
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
@@ -36,6 +38,23 @@ namespace SocialMedia.BLL.Service.Implementation
             //return result
             return (true, null);
 
+        }
+        public (bool, string, PostVm) SharePost(int postId, string userId, string? content)
+        {
+            if (postId <= 0 || string.IsNullOrEmpty(userId))
+            {
+                return (false, "Invalid postId or userId", null);
+            }
+
+            var result = postsRepo.SharePost(postId, userId, content);
+            if (!result.Item1)
+            {
+                return (false, result.Item2, null);
+            }
+
+            // ????? ??????? ??? ViewModel
+            var sharedPostVm = mapper.Map<PostVm>(result.Item3);
+            return (true, null, sharedPostVm);
         }
         public (bool, string) DeletePost(int postId, string deletedBy)
         {
@@ -98,12 +117,25 @@ namespace SocialMedia.BLL.Service.Implementation
             {
                 return (false, result.Item2, null);
             }
+
             //mapping
             var postsVm = mapper.Map<List<PostVm>>(result.Item3);
+
+            // ???? ?? ?? ????? Shares ????? ???? ????
+            foreach (var postVm in postsVm)
+            {
+                var postEntity = result.Item3.FirstOrDefault(p => p.ID == postVm.ID);
+                if (postEntity != null && postEntity.Shares != null)
+                {
+                    postVm.Shares = mapper.Map<ICollection<Share>>(postEntity.Shares);
+                }
+            }
+
             if (postsVm == null || postsVm.Count == 0)
             {
                 return (false, "Mapping failed or no posts found", null);
             }
+
             //return result
             return (true, null, postsVm);
         }

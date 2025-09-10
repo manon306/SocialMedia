@@ -12,6 +12,7 @@
         (bool, string) toggleSaved(int PostId);
         (bool, string) toggleArchive(int PostId);
         void UnArchiveAllPosts();
+        (bool, string, PostVm) SharePost(int postId, string userId, string? content);
 
         void UseHangfire();
     }

@@ -1,0 +1,158 @@
+﻿
+﻿
+@model SocialMedia.BLL.ModelVM.Profile.EditProfileVM
+@{
+    ViewData["Title"] = "Edit Profile";
+
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-white">Edit Your Profile</h2>
+
+    <form asp-action="Edit" asp-controller="UserProfile" enctype="multipart/form-data" method="post">
+
+        <!-- Basic Info -->
+        <div class="profile-section mb-4">
+            <h5>Basic Information</h5>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control custom-input" placeholder="Enter your full name" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Headline" class="form-label"></label>
+                <input asp-for="Headline" class="form-control custom-input" placeholder="e.g. Software Engineer" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="Bio" class="form-label"></label>
+                <textarea asp-for="Bio" class="form-control custom-input" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Language" class="form-label"></label>
+                <textarea asp-for="Language" class="form-control custom-input" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Education" class="form-label"></label>
+                <textarea asp-for="Education" class="form-control custom-input" rows="3"></textarea>
+            </div>
+        </div>
+
+        <!-- Location -->
+        <div class="profile-section mb-4">
+            <h5>Location</h5>
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control custom-input" placeholder="Enter your location" />
+            </div>
+        </div>
+
+        <!-- Skills -->
+        <div class="profile-section mb-4">
+            <h5>Skills</h5>
+            <input type="text" id="skillInput" class="form-control custom-input mb-2" placeholder="Type a skill and press Enter" />
+            <div id="skillsContainer" class="d-flex flex-wrap"></div>
+            <input type="hidden" asp-for="Skills" id="Skills" />
+        </div>
+       @*  <div class="form-group">
+            <label for="Skills">Skills</label>
+            <input type="text" name="Skills" class="form-control" />
+        </div> *@
+
+
+        <!-- Profile Image -->
+        <div class="profile-section mb-4">
+            <h5>Profile Image</h5>
+            <input asp-for="ProfileImage" type="file" class="form-control custom-input" />
+        </div>
+
+        <!-- Save -->
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-gradient px-5 py-2">Save Profile</button>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        const skillInput = document.getElementById("skillInput");
+        const skillsContainer = document.getElementById("skillsContainer");
+        const hiddenSkills = document.getElementById("Skills");
+        let skills = [];
+
+        skillInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                const skill = skillInput.value.trim();
+                if (skill && !skills.includes(skill)) {
+                    skills.push(skill);
+                    renderSkills();
+                    hiddenSkills.value = skills.join(",");
+                }
+                skillInput.value = "";
+            }
+        });
+
+        function renderSkills() {
+            skillsContainer.innerHTML = "";
+            skills.forEach(s => {
+                const badge = document.createElement("span");
+                badge.className = "badge bg-accent m-1";
+                badge.textContent = s;
+                skillsContainer.appendChild(badge);
+            });
+        }
+    </script>
+}
+
+<style>
+    .profile-section {
+        background-color: var(--secondary-color);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        color: var(--text-color);
+    }
+
+        .profile-section h5 {
+            margin-bottom: 15px;
+            color: var(--accent-color);
+        }
+
+    .custom-input {
+        background-color: #1a2233;
+        color: var(--text-color);
+        border: 1px solid #2e3a55;
+    }
+
+        .custom-input:focus {
+            background-color: #1e2a3d;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 5px var(--accent-color);
+        }
+
+    .btn-gradient {
+        background: linear-gradient(45deg, #4e57d4, #258cfb);
+        border: none;
+        border-radius: 25px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+    .bg-accent {
+        background-color: var(--accent-color) !important;
+        color: white;
+        font-weight: 500;
+    }
+</style>

@@ -9,8 +9,8 @@
         }
         public (bool, string) AddPost(Post post)
         {
-            
-            if(post == null)
+
+            if (post == null)
             {
                 return (false, "Post cannot be null");
             }
@@ -20,18 +20,18 @@
         }
         public (bool, string) DeletePost(int postId, string deletedBy)
         {
-            if(postId <= 0 || string.IsNullOrEmpty(deletedBy))
+            if (postId <= 0 || string.IsNullOrEmpty(deletedBy))
             {
                 return (false, "Invalid postId or deletedBy");
             }
-            var post = DB.Posts.FirstOrDefault(p=>p.ID == postId);
+            var post = DB.Posts.FirstOrDefault(p => p.ID == postId);
             post.Delete(deletedBy);
             DB.SaveChanges();
             return (true, null);
         }
         public (bool, string) UpdatePost(Post post)
         {
-            if(post == null)
+            if (post == null)
             {
                 return (false, "Post cannot be null");
             }
@@ -59,7 +59,7 @@
             try
             {
                 var posts = DB.Posts
-                              .Where(p => !p.IsDeleted)  
+                              .Where(p => !p.IsDeleted)
                               .Where(filter)
                               .OrderByDescending(p => p.ID)
                               .ToList();
@@ -74,7 +74,12 @@
                 return (false, $"Error: {ex.Message}", new List<Post>());
             }
         }
-        public (bool , string ) ToggleSavePost(int postId)
+        public (bool ,string , List<Share>) GetAll()
+        { 
+            var shared = DB.Shares.OrderByDescending(x=>x.ID).ToList();
+            return (false, null, shared);
+        }
+        public (bool, string) ToggleSavePost(int postId)
         {
             if (postId <= 0)
             {
@@ -104,7 +109,7 @@
             DB.SaveChanges();
             return (true, null);
         }
-        public (bool, string,List<Post>) unArchive()
+        public (bool, string, List<Post>) unArchive()
         {
             var post = DB.Posts.Where(x => x.IsArchived == true).ToList();
             if (post == null)
@@ -126,8 +131,48 @@
         }
         public (bool, string, List<Post>) GetPosts()
         {
-            return GetFilteredPosts(p => true, "No posts found"); // كل البوستات غير المحذوفة
+            try
+            {
+                var posts = DB.Posts
+                    .Where(p => !p.IsDeleted)
+                    .Include(p => p.Comments)
+                    .Include(p => p.Shares) // تأكد من تضمين المشاركات
+                    .ThenInclude(s => s.User) // وتضمين بيانات المستخدم للمشارك
+                    .OrderByDescending(p => p.ID)
+                    .ToList();
+
+                if (!posts.Any())
+                    return (false, "No posts found", new List<Post>());
+
+                return (true, null, posts);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error: {ex.Message}", new List<Post>());
+            }
         }
 
+        public (bool, string, Post) SharePost(int postId, string userId, string? content)
+        {
+            if (postId <= 0 || string.IsNullOrEmpty(userId))
+            {
+                return (false, "Invalid postId or userId", null);
+            }
+
+            var post = DB.Posts
+                .Include(p => p.Shares) // تأكد من تضمين المشاركات
+                .FirstOrDefault(p => p.ID == postId && !p.IsDeleted);
+
+            if (post == null)
+            {
+                return (false, "Post not found", null);
+            }
+
+            var share = new Share(content, postId, userId);
+            DB.Shares.Add(share);
+            DB.SaveChanges();
+
+            return (true, null, post);
+        }
     }
 }

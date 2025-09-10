@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="ENUM\" />
     <Folder Include="Views\" />
     <Folder Include="SP\" />
   </ItemGroup>

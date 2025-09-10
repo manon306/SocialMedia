@@ -29,7 +29,10 @@ namespace SocialMedia.DAL.Entity
         public string? Headline { get; set; }   
         public string? Location { get; set; }
         public string? ImagePath { get; set; }
+        public string Education { get; set; }
+        public string Language { get; set; }
 
+        public UserProfile UserProfile { get; set; }
 
         public string? CreatedBy { get; private set; }//Identity
         public DateTime? CreatedOn { get; private set; }
@@ -38,6 +41,7 @@ namespace SocialMedia.DAL.Entity
         public string? ModifiedBy { get; private set; }//Identity
         public DateTime? ModifiedOn { get; private set; }
 
+        public ICollection<Share> Shares { get; set; } = new List<Share>();
 
         public int ConnectionsCount { get; set; }
         public int FollowersCount { get; set; }

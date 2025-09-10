@@ -1,0 +1,43 @@
+﻿﻿
+@model IEnumerable<SocialMedia.BLL.ModelVM.Connect.ConnectionRequestVM>
+@{
+    ViewData["Title"] = "Connection Requests";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">Connection Requests</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">No pending requests.</div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var r in Model)
+            {
+                <div class="list-group-item d-flex align-items-center"
+                     style="background-color: var(--secondary-color); color: var(--text-color); border: none; margin-bottom: 10px; border-radius: 10px;">
+
+                    <img src="~/Files/@r.SenderImage" class="rounded-circle me-3" width="56" height="56" />
+
+                    <div class="flex-grow-1">
+                        <div class="fw-bold">@r.SenderName</div>
+                        <div class="text-muted">@r.SenderHeadline</div>
+                    </div>
+
+                    <form asp-action="AcceptRequest" method="post" class="me-2">
+                        <input type="hidden" name="requestId" value="@r.Id" />
+                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                    <form asp-action="RejectRequest" method="post">
+                        <input type="hidden" name="requestId" value="@r.Id" />
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

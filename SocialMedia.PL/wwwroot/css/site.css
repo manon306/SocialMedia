@@ -25,6 +25,14 @@ html {
     --text-color: #ffffff;
     --muted-text: #a8b3cf;
 }
+.profile-sidebar img {
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+    object-fit: cover;
+    border: 4px solid var(--accent-color);
+    margin-bottom: 15px;
+}
 nav,footer {
     background-color: var(--secondary-color);
 }
