@@ -1,4 +1,6 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
+
 namespace SocialMedia.DAL.DataBase
 {
     public class SocialMediaDbContext :IdentityDbContext<User>
@@ -15,7 +17,7 @@ namespace SocialMedia.DAL.DataBase
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Connection> Connections { get; set; }
 
-
+        public DbSet<Follow> Follows { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -35,6 +37,23 @@ namespace SocialMedia.DAL.DataBase
             builder.Entity<Connection>()
                 .HasIndex(c => new { c.SenderId, c.ReceiverId })
                 .IsUnique();
+
+
+            //follow
+
+            builder.Entity<Follow>()
+                .HasOne(f => f.Follower)
+                .WithMany()
+                .HasForeignKey(f => f.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict); 
+
+            builder.Entity<Follow>()
+                .HasOne(f => f.Following)
+                .WithMany()
+                .HasForeignKey(f => f.FollowingId)
+                .OnDelete(DeleteBehavior.Restrict); // 
         }
+      
+
     }
 }

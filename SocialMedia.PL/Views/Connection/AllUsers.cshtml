@@ -1,0 +1,67 @@
+﻿@using SocialMedia.BLL.ModelVM.Connect
+@* @model List<FriendVM>
+
+ *@
+@model IEnumerable<SocialMedia.BLL.ModelVM.Connect.FriendVM>
+@{
+    ViewData["Title"] = "AllUsers";
+    Layout = "_NewLayout";
+}
+
+<h2 class="text-light">People You May Know</h2>
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">@ViewBag.Message</div>
+}
+
+<form asp-controller="Connection" asp-action="Search" method="get" class="d-flex ms-auto">
+    <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" />
+    <button class="btn btn-outline-light" type="submit"><i class="fa fa-search"></i></button>
+</form>
+
+
+@foreach (var user in Model)
+{
+    <div class="card mb-2 p-2 bg-dark text-light">
+        <div class="d-flex align-items-center">
+            <img src="~/Files/@user.ProfileImagePath" class="rounded-circle me-2" width="50" height="50" />
+            <div>
+                <strong>@(string.IsNullOrEmpty(user.Name) ? user.Email : user.Name )</strong><br />
+                <small>@user.Headline</small>
+            </div>
+            <div class="ms-auto">
+                <!--connect -->
+                <form asp-controller="Connection" asp-action="SendRequest" method="post" class="d-inline">
+                    <input type="hidden" name="receiverId" value="@user.Id" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-primary btn-sm">Connect</button>
+                </form>
+          
+                <!--unfollow-->
+                @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value != user.Id)
+                {
+                    <form asp-controller="Follow" asp-action="FollowUser" method="post" class="d-inline">
+                        <input type="hidden" name="followingId" value="@user.Id" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success btn-sm">Follow</button>
+                    </form>
+
+                    <!--unfollow-->
+                    <form asp-controller="Follow" asp-action="UnfollowUser" method="post" class="d-inline">
+                        <input type="hidden" name="followingId" value="@user.Id" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm">Unfollow</button>
+                    </form>
+
+                    <form asp-controller="Connection" asp-action="Unblock" method="post" class="d-inline">
+                        <input type="hidden" name="friendId" value="@user.Id" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                    </form>
+                }
+
+
+            </div>
+        </div>
+    </div>
+}

@@ -9,6 +9,7 @@
 
         public string ReceiverId { get; set; }
         public User Receiver { get; set; }
+        public bool IsBlocked { get; set; } = false;
 
         public ConnectionStatus Status { get; set; } = ConnectionStatus.Pending;
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
@@ -18,6 +19,7 @@
     {
         Pending = 0,
         Accepted = 1,
-        Rejected = 2
+        Rejected = 2,
+        Blocked = 3
     }
 }

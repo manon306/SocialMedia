@@ -16,5 +16,7 @@ namespace SocialMedia.BLL.Service.Abstraction
         Task<List<ConnectionRequestVM>> GetRequests(string userId);
         Task<List<FriendVM>> GetFriends(string userId);
         Task<bool> AreConnected(string userA, string userB);
+        Task<List<FriendVM>> GetMyFriends(string userId);
+        Task<bool> BlockFriend(string userId, string friendId);
     }
 }

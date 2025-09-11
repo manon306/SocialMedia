@@ -103,17 +103,25 @@
     </style>
 </head>
 <body>
+   
     <!-- ✅ Navbar -->
     <nav class="navbar navbar-dark px-3">
         <a class="navbar-brand fw-bold" href="#"><i class="fa-brands fa-linkedin"></i> LinkAI OR LinkQ </a>
 
-        <form class="d-flex mx-auto w-50">
-            Search
+       @*  <form class="d-flex mx-auto w-50"> *@
+            
             @* <input class="form-control me-2" type="search" placeholder="Search..." aria-label="Search"> *@
-            <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" aria-label="Search">
+            @* <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" aria-label="Search"> *@
            @*  <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" />
             <button type="submit">Search</button> *@
-        </form>
+
+        <form asp-controller="Connection" asp-action="Search" method="get" class="d-flex mx-auto w-50">
+Search
+                <input class="form-control me-2" type="text" name="keyword" placeholder="Search by name or email" />
+                <button class="btn btn-outline-light" type="submit"><i class="fa fa-search"></i></button>
+            </form>
+
+      @*   </form> *@
 
         <div>
            <!--Notifaction-->
@@ -156,6 +164,9 @@
                      </a>
                     <a asp-action="Requests" asp-controller="Connection" @* asp-route-id="@User.ID" *@>
                         Requests
+                    </a>
+                    <a asp-action="AllUsers" asp-controller="Connection" @* asp-route-id="@User.ID" *@>
+                        AllUsers
                     </a>
 
                 </aside>

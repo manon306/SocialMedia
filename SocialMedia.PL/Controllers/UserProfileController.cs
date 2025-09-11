@@ -1,10 +1,14 @@
 ﻿
 
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SocialMedia.BLL.ModelVM.Profile;
 using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
+using SocialMedia.DAL.Entity;
 using System.Security.Claims;
 
 namespace SocialMedia.PL.Controllers
@@ -13,9 +17,12 @@ namespace SocialMedia.PL.Controllers
     public class UserProfileController : Controller
     {
         private readonly IUserProfileService service;
-
-        public UserProfileController(IUserProfileService service)
+        private readonly UserManager<User> _userManager;
+        private readonly IMapper mapper;
+        public UserProfileController(IMapper mapper,IUserProfileService service, UserManager<User> _userManager)
         {
+            this._userManager = _userManager;
+            this.mapper = mapper;
             this.service = service;
         }
 
@@ -31,7 +38,7 @@ namespace SocialMedia.PL.Controllers
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(userId))
             {
-                ViewBag.Error = "⚠️ UserId is NULL — مشكلة في الـ Login أو Claims.";
+                ViewBag.Error = "⚠️ UserId is NULL Login أو Claims.";
                 return View(model);
             }
             var (success, error) = await service.CreateProfile(model, userId);
@@ -44,20 +51,6 @@ namespace SocialMedia.PL.Controllers
             ViewBag.Error = error;
             return View(model);
         }
-
-
-
-
-        //public async Task<IActionResult> ViewProfile()
-        //{
-        //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //    var profile = await _service.GetProfile(userId);
-
-        //    if (profile == null)
-        //        return RedirectToAction("Create");
-
-        //    return View(profile);
-        //}
 
         public async Task<IActionResult> MyProfile()
         {
@@ -80,6 +73,8 @@ namespace SocialMedia.PL.Controllers
 
             return View(profile);
         }
+
+
 
 
         [HttpGet]

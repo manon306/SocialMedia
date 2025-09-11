@@ -21,6 +21,8 @@ namespace SocialMedia.BLL.Service.Implementation
             _mapper = mapper;
         }
 
+
+        //send request
         public async Task<bool> SendRequest(string senderId, string receiverId)
         {
             if (senderId == receiverId) return false;
@@ -42,6 +44,8 @@ namespace SocialMedia.BLL.Service.Implementation
             return true;
         }
 
+
+        //Accept request
         public async Task<bool> AcceptRequest(int requestId, string receiverId)
         {
             var req = await _db.Connections.FirstOrDefaultAsync(c => c.Id == requestId && c.ReceiverId == receiverId);
@@ -52,6 +56,8 @@ namespace SocialMedia.BLL.Service.Implementation
             return true;
         }
 
+
+        //rject
         public async Task<bool> RejectRequest(int requestId, string receiverId)
         {
             var req = await _db.Connections.FirstOrDefaultAsync(c => c.Id == requestId && c.ReceiverId == receiverId);
@@ -62,6 +68,8 @@ namespace SocialMedia.BLL.Service.Implementation
             return true;
         }
 
+
+        //get requests
         public async Task<List<ConnectionRequestVM>> GetRequests(string userId)
         {
             return await _db.Connections
@@ -72,6 +80,8 @@ namespace SocialMedia.BLL.Service.Implementation
                 .ToListAsync();
         }
 
+
+        //get friend see all friend ,show all pepole
         public async Task<List<FriendVM>> GetFriends(string userId)
         {
             var q = _db.Connections.AsNoTracking()
@@ -82,6 +92,8 @@ namespace SocialMedia.BLL.Service.Implementation
             return await q.ProjectTo<FriendVM>(_mapper.ConfigurationProvider).ToListAsync();
         }
 
+
+
         public async Task<bool> AreConnected(string userA, string userB)
         {
             return await _db.Connections.AnyAsync(c =>
@@ -90,7 +102,53 @@ namespace SocialMedia.BLL.Service.Implementation
                  (c.SenderId == userB && c.ReceiverId == userA)));
         }
 
-       
+
+        //get friend see your friend ,show only pepole are connected
+
+        public async Task<List<FriendVM>> GetMyFriends(string userId)
+        {
+            var connections = await _db.Connections
+                .Where(c => (c.SenderId == userId || c.ReceiverId == userId) && c.Status == ConnectionStatus.Accepted)
+                .Include(c => c.Sender)
+                .Include(c => c.Receiver)
+                .ToListAsync();
+
+            var friends = connections.Select(c =>
+            {
+                var friend = c.SenderId == userId ? c.Receiver : c.Sender;
+                return new FriendVM
+                {
+                    Id = friend.Id,
+                    Name = friend.Name,
+                   // Email = friend.Email,
+                    Headline = friend.Headline,
+                     ProfileImagePath = friend.ImagePath
+                  
+                };
+            }).ToList();
+
+            return friends;
+        }
+
+
+
+
+        //block friend
+        public async Task<bool> BlockFriend(string userId, string friendId)
+        {
+            var connection = await _db.Connections
+                .FirstOrDefaultAsync(c =>
+                    (c.SenderId == userId && c.ReceiverId == friendId) ||
+                    (c.SenderId == friendId && c.ReceiverId == userId));
+
+            if (connection == null)
+                return false;
+
+            connection.Status = ConnectionStatus.Blocked;
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
     }
 
 }

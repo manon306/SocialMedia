@@ -4,7 +4,43 @@
     Layout = "_NewLayout";
 }
 
-<div class="container mt-4">
+
+<h2 class="text-light">My Friends</h2>
+
+@foreach (var friend in Model)
+{
+    <div class="card mb-2 p-2 bg-dark text-light">
+        <div class="d-flex align-items-center">
+            <img src="~/Files/@friend.ProfileImagePath" class="rounded-circle me-2" width="50" height="50" />
+            <div>
+                <strong>@friend.Name</strong><br />
+                <small>@friend.Email</small>
+              @*   <form asp-controller="Connection" asp-action="Block" method="post" class="d-inline">
+                    <input type="hidden" name="friendId" value="@friend.Id" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                </form> *@
+                <form asp-controller="Connection" asp-action="Unblock" method="post" class="d-inline">
+                        <input type="hidden" name="friendId" value="@friend.Id" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                    </form>
+               
+                    <form asp-controller="Connection" asp-action="Block" method="post" class="d-inline">
+                        <input type="hidden" name="friendId" value="@friend.Id" />
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm">Block</button>
+                    </form>
+                
+
+            </div>
+           
+        </div>
+    </div>
+}
+
+
+@* <div class="container mt-4">
     <h2 class="mb-4">My Connections</h2>
 
     @if (!Model.Any())
@@ -38,3 +74,4 @@
 
     }
 </div>
+ *@

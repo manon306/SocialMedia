@@ -1,23 +1,4 @@
-﻿@* @model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
-@{
-    ViewData["Title"] = "Login";
-    Layout = "_NewLayout";
-}
-<div class="container mt-4">
-    <div class="card bg-dark text-light">
-        <div class="card-body text-center">
-            <img src="~/Files/@Model.ProfileImagePath" class="rounded-circle mb-3" width="120" height="120" />
-            <h3>@Model.Name</h3>
-            <h5 class="text-muted">@Model.Headline</h5>
-            <p>@Model.Bio</p>
-            <p><i class="fa-solid fa-location-dot"></i> @Model.Location</p>
-            <p><strong>Skills:</strong> @Model.Skills</p>
-
-            <a asp-controller="UserProfile" asp-action="Edit" class="btn btn-warning">Edit Profile</a>
-        </div>
-    </div>
-</div>
- *@
+﻿
 
 @model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
 @{
