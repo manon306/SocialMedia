@@ -1,10 +1,4 @@
-﻿using AutoMapper;
-using SocialMedia.BLL.ModelVM.Comment;
-using SocialMedia.BLL.ModelVM.Connect;
-using SocialMedia.BLL.ModelVM.Profile;
-using SocialMedia.BLL.ModelVM.User;
-
-namespace SocialMedia.BLL.Mapper
+﻿namespace SocialMedia.BLL.Mapper
 {
     public class DomainProfile : Profile
     {

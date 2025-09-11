@@ -43,17 +43,32 @@
                     <div class="card-body">
                         <p class="post-content">@post.Content</p>
 
-                        @if (!string.IsNullOrEmpty(post.Image))
+                        @if (post.Image != null && post.Image.Any() || post.Videos != null && post.Videos.Any())
                         {
-                            <img src="~/Images/@post.Image" class="post-image" alt="Image" />
-                        }
+                            <div class="media-container d-flex flex-wrap gap-2 mb-3">
+                                @if (post.Image != null)
+                                {
+                                    @foreach (var image in post.Image)
+                                    {
+                                        <div class="media-item">
+                                            <img src="~/@image" class="post-image" alt="Image" />
+                                        </div>
+                                    }
+                                }
 
-                        @if (!string.IsNullOrEmpty(post.Videos))
-                        {
-                            <video controls class="post-video">
-                                <source src="~/Videos/@post.Videos" type="video/mp4" />
-                                Not Allowed
-                            </video>
+                                @if (post.Videos != null)
+                                {
+                                    @foreach (var video in post.Videos)
+                                    {
+                                        <div class="media-item">
+                                            <video controls class="post-video">
+                                                <source src="~/@video" type="video/mp4" />
+                                                Not Allowed
+                                            </video>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         }
 
                         <div class="engagement-stats">

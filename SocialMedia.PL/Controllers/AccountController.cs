@@ -1,10 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using SocialMedia.BLL.ModelVM.Account;
-using SocialMedia.DAL.Entity;
-using System.Security.Claims;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     [AllowAnonymous]
     public class AccountController : Controller
@@ -74,7 +68,7 @@ namespace SocialMedia.PL.Controllers
                 );
 
                 if (result.Succeeded)
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Post");
 
 
 

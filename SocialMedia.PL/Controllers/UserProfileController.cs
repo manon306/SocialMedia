@@ -1,13 +1,4 @@
-﻿
-
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.BLL.ModelVM.Profile;
-using SocialMedia.BLL.Service.Abstraction;
-using SocialMedia.BLL.Service.Implementation;
-using System.Security.Claims;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     [Authorize]
     public class UserProfileController : Controller

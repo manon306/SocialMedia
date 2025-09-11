@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Hosting;
-using SocialMedia.DAL.Entity;
+﻿using AutoMapper;
 
 namespace SocialMedia.PL.Controllers
 {
@@ -8,28 +6,47 @@ namespace SocialMedia.PL.Controllers
     {
         private readonly UserManager<User> userManager;  
         
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var profile = await service.GetProfile(user.Id.ToString());
+            if (profile != null)
+            {
+                ViewBag.ProfileImage = profile.ProfileImagePath;
+            }
+            else
+            {
+                ViewBag.ProfileImage = "default-profile.jpg"; // صورة افتراضية
+            }
             var (isSuccess, errorMessage, posts) = postService.GetPosts();
             if (!isSuccess)
             {
                 ModelState.AddModelError("", errorMessage);
                 posts = new List<PostVm>();
+                
             }
 
             // رجع الموديل اللي يحتوي على CreateVm + List<PostVm>
-            var viewModel = new Tuple<CreateVm, List<PostVm>>(
+            var viewModel = (
                 new CreateVm(),
-                posts
+                posts,
+                profile
+
             );
 
             return View(viewModel);
         }
         private readonly IPostService postService;
-        public PostController(IPostService postService, UserManager<User> userManager)
+        private readonly IUserProfileService service;
+        public PostController(IPostService postService, UserManager<User> userManager, IUserProfileService service)
         {
             this.postService = postService;
             this.userManager = userManager;
+            this.service = service;
         }
         [HttpGet]
         public IActionResult AddPost()
@@ -40,6 +57,7 @@ namespace SocialMedia.PL.Controllers
         public async Task<IActionResult> AddPost(CreateVm post)
         {
             var user = await userManager.GetUserAsync(User);
+            var profile = await service.GetProfile(user.Id.ToString());
             post.UserId = user.Id;
             ModelState.Remove("UserId");
             if (!ModelState.IsValid)
@@ -80,33 +98,58 @@ namespace SocialMedia.PL.Controllers
             return RedirectToAction("Index");
         }
         [HttpGet]
-        public IActionResult GetAllPosts()
+        public async Task<IActionResult> GetAllPosts()
         {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var (isSuccess, errorMessage, posts) = postService.GetPosts();
+            var profile = await service.GetProfile(user.Id.ToString());
+            ViewBag.ProfileImage = profile.ProfileImagePath;
+
             if (!isSuccess)
             {
                 ModelState.AddModelError("", errorMessage);
                 posts = new List<PostVm>();
             }
-
-            var viewModel = new Tuple<CreateVm, List<PostVm>>(
-                new CreateVm(),
-                posts
+            ViewData["ProfileImage"] = profile.ProfileImagePath;
+            var viewModel = (
+                
+                posts,
+                profile
+                , new CreateVm()
             );
 
             return View(viewModel);
         }
         [HttpGet]
-        public IActionResult GetAllSavedPosts()
+        public async Task<IActionResult> GetAllSavedPosts()
         {
-            var (isSuccess, ErrorMessage ,posts) = postService.GetSavedPosts();
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var (isSuccess, ErrorMessage, posts) = postService.GetSavedPosts();
+            var profile = await service.GetProfile(user.Id.ToString()); 
+
             if (isSuccess)
             {
-                return View(posts);
+                var viewModel = (
+                    posts,
+                    profile
+                );
+                return View(viewModel);
             }
+
             ModelState.AddModelError(string.Empty, ErrorMessage);
             return View();
         }
+
         [HttpGet]
         public IActionResult GetAllArchivedPosts()
         {

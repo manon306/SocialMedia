@@ -1,11 +1,4 @@
-﻿using AutoMapper.QueryableExtensions;
-using Microsoft.EntityFrameworkCore;
-using SocialMedia.BLL.ModelVM.Connect;
-using SocialMedia.DAL.DataBase;
-using System.Data;
-
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class ConnectionSerives : IConnectionSerives
     {

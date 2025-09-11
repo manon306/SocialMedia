@@ -102,23 +102,26 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
+            builder.Services.AddScoped<IReactService, ReactService>();
+            builder.Services.AddScoped<IReactRepo, ReactRepo>();
+
 
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
             //Hangfire
             // Hangfire (disabled unless packages and config are added)
             var enableHangfire = false;
-          bool canConnectToSql = false;
-          try
-          {
-            using var sqlConn = new SqlConnection(connectionString);
-            sqlConn.Open();
-            canConnectToSql = true;
-          }
-          catch
-          {
-            canConnectToSql = false;
-          }
+              bool canConnectToSql = false;
+              try
+              {
+                using var sqlConn = new SqlConnection(connectionString);
+                sqlConn.Open();
+                canConnectToSql = true;
+              }
+              catch
+              {
+                canConnectToSql = false;
+              }
             builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
             builder.Services.AddHangfireServer();
             

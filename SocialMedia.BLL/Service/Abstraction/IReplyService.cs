@@ -1,6 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Comment;
-
-namespace SocialMedia.BLL.Service.Abstraction
+﻿namespace SocialMedia.BLL.Service.Abstraction
 {
    public interface IReplyService
     {

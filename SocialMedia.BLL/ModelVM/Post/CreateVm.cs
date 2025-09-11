@@ -4,8 +4,8 @@
     {
         [Required(ErrorMessage ="This Field is required")]
         public string Content { get; set; }
-        public IFormFile? Image { get; set; }
-        public IFormFile? Videos { get; set; }
+        public List<IFormFile>? Image { get; set; }
+        public List<IFormFile>? Videos { get; set; }
         public string UserId { get;  set; }
     }
 }

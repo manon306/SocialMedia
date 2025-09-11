@@ -1,8 +1,4 @@
-﻿
-
-using Microsoft.EntityFrameworkCore;
-
-namespace SocialMedia.DAL.REPO.IMPLEMENTATION
+﻿namespace SocialMedia.DAL.REPO.IMPLEMENTATION
 {
     public class UserProfileRepo : IUserProfileRepo
     {

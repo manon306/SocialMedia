@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.BLL.Service.Abstraction;
-
 namespace SocialMedia.PL.Controllers
 {
     public class JobsController : Controller

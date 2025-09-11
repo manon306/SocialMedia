@@ -336,7 +336,7 @@ namespace SocialMedia.DAL.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Image")
+                    b.PrimitiveCollection<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsArchived")
@@ -358,7 +358,7 @@ namespace SocialMedia.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Videos")
+                    b.PrimitiveCollection<string>("Videos")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -398,9 +398,8 @@ namespace SocialMedia.DAL.Migrations
                     b.Property<int>("PostID")
                         .HasColumnType("int");
 
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Type")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -478,7 +477,6 @@ namespace SocialMedia.DAL.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Education")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -504,7 +502,6 @@ namespace SocialMedia.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("Language")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Location")

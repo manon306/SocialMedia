@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using SocialMedia.BLL.ModelVM.Comment;
-using SocialMedia.DAL.Entity;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     public class CommentController : Controller
     {
@@ -15,6 +11,7 @@ namespace SocialMedia.PL.Controllers
         }
         public IActionResult Index()
         {
+
             return View();
         }
         [HttpPost]

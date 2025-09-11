@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.DAL.Entity;
-using System.Security.Claims;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     public class ConnectionController : Controller
     {

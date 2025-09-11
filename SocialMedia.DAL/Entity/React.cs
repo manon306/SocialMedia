@@ -2,34 +2,51 @@
 {
     public class React
     {
+        public React() { }
+        public React(reactType type, string createdBy, int postID)
+        {
+            Type = type;
+            CreatedBy = createdBy;
+            IsDeleted = false;
+            PostID = postID;
+            CreatedAt = DateTime.Now;
+        }
+
         //Properties
         public int ID { get; set; }
-        public string Type { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
-        public string CreatedBy { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
-        public string? DeletedBy { get; set; }
-        public string? UpdatedBy { get; set; }
-        public DateTime? UpdatedAt { get; set; }
+        public reactType Type { get; private set; }
+        public string CreatedBy { get; private set; }
+        public DateTime CreatedAt { get; private set; }
+        public bool IsDeleted { get; private set; }
+        public string? DeletedBy { get; private set; }
+        public DateTime? DeletedAt { get; private set; }
+        public string? UpdatedBy { get; private set; }
+        public DateTime? UpdatedAt { get; private set; }
 
         //navigation properties
         public int PostID { get; set; }
         public virtual Post Post { get; set; }
 
         //Methods
-        public void Update(string UpdatedBy, string rection)
+        public void Update(string updatedBy, reactType reaction)
         {
-            if (!string.IsNullOrEmpty(rection)) this.Type = rection;
+            this.Type = reaction;
+            this.UpdatedBy = updatedBy;
             this.UpdatedAt = DateTime.Now;
-            this.UpdatedBy = UpdatedBy;
         }
+
         public void Delete(string deletedBy)
         {
             this.IsDeleted = true;
-            this.DeletedAt = DateTime.Now;
             this.DeletedBy = deletedBy;
+            this.DeletedAt = DateTime.Now;
+        }
+
+        public void Restore()
+        {
+            this.IsDeleted = false;
+            this.DeletedBy = null;
+            this.DeletedAt = null;
         }
     }
 }
-

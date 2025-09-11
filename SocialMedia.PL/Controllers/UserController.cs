@@ -1,9 +1,4 @@
-﻿
-
-
-using SocialMedia.BLL.ModelVM.User;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     // [Authorize(Roles = "User")]
     public class UserController : Controller

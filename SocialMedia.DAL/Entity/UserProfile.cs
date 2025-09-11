@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-
-namespace SocialMedia.DAL.Entity
+﻿namespace SocialMedia.DAL.Entity
 {
 
     [Table("UserProfiles")]

@@ -136,6 +136,7 @@
                 var posts = DB.Posts
                     .Where(p => !p.IsDeleted)
                     .Include(p => p.Comments)
+                    .Include(p => p.Reacts)
                     .Include(p => p.Shares) // تأكد من تضمين المشاركات
                     .ThenInclude(s => s.User) // وتضمين بيانات المستخدم للمشارك
                     .OrderByDescending(p => p.ID)

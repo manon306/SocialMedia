@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using System.Security.Claims;
-
-namespace SocialMedia.PL.Factories
+﻿namespace SocialMedia.PL.Factories
 {
     public class CustomClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, IdentityRole>
     {

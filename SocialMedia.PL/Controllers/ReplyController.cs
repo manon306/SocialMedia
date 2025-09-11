@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using SocialMedia.BLL.ModelVM.Comment;
-using SocialMedia.DAL.Entity;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     public class ReplyController : Controller
     {

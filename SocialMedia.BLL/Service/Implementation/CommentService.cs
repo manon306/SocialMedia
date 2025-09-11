@@ -1,7 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Comment;
-using SocialMedia.DAL.Entity;
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class CommentService : ICommentService
     {

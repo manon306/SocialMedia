@@ -1,4 +1,4 @@
-﻿@model List<PostVm>
+﻿@model (List<PostVm>,SocialMedia.BLL.ModelVM.Profile.ViewProfileVM)
 @{
     ViewData["Title"] = "Saved Posts";
 }
@@ -7,15 +7,15 @@
         <div class="col-md-8 col-lg-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="mb-0">Saved </h3>
-                <span class="badge bg-accent rounded-pill">@Model.Count Post</span>
+                <span class="badge bg-accent rounded-pill">@Model.Item1.Count Post</span>
             </div>
 
-            @foreach (var post in Model)
+            @foreach (var post in Model.Item1)
             {
                 <div class="card post-card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <img src="https://via.placeholder.com/48" class="rounded-circle user-avatar me-3" alt="Profile Image">
+                            <img src="~/Files/@Model.Item2.ProfileImagePath" class="rounded-circle user-avatar me-3" alt="Profile Image">
                             <div class="flex-grow-1">
                                 <div class="user-name">عمر أحمد</div>
                                 <div class="user-title">مطور واجهات أمامية</div>
@@ -50,17 +50,32 @@
                     <div class="card-body">
                         <p class="post-content">@post.Content</p>
 
-                        @if (!string.IsNullOrEmpty(post.Image))
+                        @if (post.Image != null && post.Image.Any() || post.Videos != null && post.Videos.Any())
                         {
-                            <img src="~/Images/@post.Image" class="post-image" alt="Image" />
-                        }
+                            <div class="media-container d-flex flex-wrap gap-2 mb-3">
+                                @if (post.Image != null)
+                                {
+                                    @foreach (var image in post.Image)
+                                    {
+                                        <div class="media-item">
+                                            <img src="~/@image" class="post-image" alt="Image" />
+                                        </div>
+                                    }
+                                }
 
-                        @if (!string.IsNullOrEmpty(post.Videos))
-                        {
-                            <video controls class="post-video">
-                                <source src="~/Videos/@post.Videos" type="video/mp4" />
-                                Not Allowed
-                            </video>
+                                @if (post.Videos != null)
+                                {
+                                    @foreach (var video in post.Videos)
+                                    {
+                                        <div class="media-item">
+                                            <video controls class="post-video">
+                                                <source src="~/@video" type="video/mp4" />
+                                                Not Allowed
+                                            </video>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         }
 
                         <div class="engagement-stats">
@@ -95,7 +110,7 @@
                 </div>
             }
 
-            @if (Model.Count == 0)
+            @if (Model.Item1.Count == 0)
             {
                 <div class="text-center py-5">
                     <i class="bi bi-bookmark-x" style="font-size: 3rem; color: var(--muted-text);"></i>

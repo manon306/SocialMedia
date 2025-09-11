@@ -3,7 +3,7 @@
     public class Post
     {
         //constructors
-        public Post(string Content, string? Image, string? Videos, string userId)
+        public Post(string Content, List<string>? Image, List<string>? Videos, string userId)
         {
             this.Content = Content;
             this.Image = Image;
@@ -20,8 +20,8 @@
         // Properties
         public int ID { get; private set; }
         public string Content { get; private set; }
-        public string? Image { get; private set; }
-        public string? Videos { get; private set; }
+        public List<string>? Image { get; private set; }
+        public List<string>? Videos { get; private set; }
         public DateTime CreatedAt { get; private set; } = DateTime.Now;
         public string CreatedBy { get; private set; }
         public bool IsDeleted { get; private set; }
@@ -41,11 +41,11 @@
         public ICollection<Share> Shares { get; set; } = new List<Share>();
 
         // Methods
-        public void Update(string UpdatedBy, string content, string? Image, string? Videos)
+        public void Update(string UpdatedBy, string content, List<string>? Image, List<string>? Videos)
         {
             if (!string.IsNullOrEmpty(content)) this.Content = content;
-            if (!string.IsNullOrEmpty(Image)) this.Image = Image;
-            if (!string.IsNullOrEmpty(Videos)) this.Videos = Videos;
+            if (Image != null) this.Image = Image;
+            if (Videos != null) this.Videos = Videos;
             this.UpdatedAt = DateTime.Now;
             this.UpdatedBy = UpdatedBy;
         }

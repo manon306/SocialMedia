@@ -1,7 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Profile;
-
-
-namespace SocialMedia.BLL.Service.Abstraction
+﻿namespace SocialMedia.BLL.Service.Abstraction
 {
     public interface IUserSerives
     {

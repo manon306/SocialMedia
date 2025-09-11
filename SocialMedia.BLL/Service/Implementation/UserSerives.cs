@@ -1,9 +1,4 @@
-﻿
-using SocialMedia.BLL.ModelVM.Profile;
-
-
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class UserSerives : IUserSerives
     {

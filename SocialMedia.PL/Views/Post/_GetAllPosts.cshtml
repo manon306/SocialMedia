@@ -1,14 +1,16 @@
-﻿@* _GetAllPosts *@
-@model List<PostVm>
+﻿
+@* _GetAllPosts *@
+@model (List<PostVm>,ViewProfileVM)
 @{
     ViewData["Title"] = "Posts";
+    var profileImagePath = ViewData["ProfileImage"] as string ?? "default-profile.jpg";
 }
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-md-8 col-lg-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="mb-0">Posts </h3>
-                <span class="badge bg-accent rounded-pill">@Model.Count Post</span>
+                <span class="badge bg-accent rounded-pill">@Model.Item1.Count Post</span>
             </div>
             @if (TempData["Success"] != null)
             {
@@ -26,12 +28,12 @@
                 </div>
             }
            
-            @foreach (var post in Model)
+            @foreach (var post in Model.Item1)
             {
                 <div class="card post-card">
                     <div class="card-header">
                         <div class="d-flex align-items-center">
-                            <img src="https://via.placeholder.com/48" class="rounded-circle user-avatar me-3" alt="Profile Image">
+                            <img src="~/Files/@(Model.Item2?.ProfileImagePath ?? "default-profile.jpg")" class="rounded-circle user-avatar me-3" alt="Profile Image">
                             <div class="flex-grow-1">
                                 <div class="user-name">@User.Identity.Name</div>
                                 <div class="user-title">مطور واجهات أمامية</div>
@@ -96,36 +98,71 @@
                     <div class="card-body">
                         <p class="post-content">@post.Content</p>
 
-                        @if (!string.IsNullOrEmpty(post.Image) || !string.IsNullOrEmpty(post.Videos))
+                        @if (post.Image != null && post.Image.Any() || post.Videos != null && post.Videos.Any())
                         {
                             <div class="media-container d-flex flex-wrap gap-2 mb-3">
-                                @if (!string.IsNullOrEmpty(post.Image))
+                                @if (post.Image != null)
                                 {
-                                    <div class="media-item">
-                                        <img src="~/Images/@post.Image" class="post-image" alt="Image" />
-                                    </div>
+                                    @foreach (var image in post.Image)
+                                    {
+                                        <div class="media-item">
+                                            <img src="~/@image" class="post-image" alt="Image" />
+                                        </div>
+                                    }
                                 }
 
-                                @if (!string.IsNullOrEmpty(post.Videos))
+                                @if (post.Videos != null)
                                 {
-                                    <div class="media-item">
-                                        <video controls class="post-video">
-                                            <source src="~/Videos/@post.Videos" type="video/mp4" />
-                                            Not Allowed
-                                        </video>
-                                    </div>
+                                    @foreach (var video in post.Videos)
+                                    {
+                                        <div class="media-item">
+                                            <video controls class="post-video">
+                                                <source src="~/@video" type="video/mp4" />
+                                                Not Allowed
+                                            </video>
+                                        </div>
+                                    }
                                 }
                             </div>
                         }
                         <div class="engagement-stats text-muted mb-3">
-                            <span class="me-3"><i class="bi bi-heart-fill text-danger me-1"></i> 245 Like</span>
+                            <span class="me-3"><i class="bi bi-heart-fill text-danger me-1"></i> @post.Reacts.Count Like</span>
                             <span class="me-3"><i class="bi bi-chat-fill text-info me-1"></i> @post.Comments.Count Comments</span>
                             <span><i class="bi bi-share-fill text-success me-1"></i> @post.Shares.Count Share</span>
                         </div>
                         <div class="post-actions">
-                            <button class="btn action-btn">
-                                <i class="bi bi-heart"></i> Like
-                            </button>
+                            <div class="btn-group react-btn-group" data-postid="@post.ID">
+                                <button type="button" class="btn action-btn react-main-btn">
+                                    <i class="bi bi-heart react-icon"></i> 
+                                    <span class="react-text">Like</span>
+                                </button>
+                                <button type="button" class="btn action-btn dropdown-toggle dropdown-toggle-split" 
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    <span class="visually-hidden">Toggle Reacts</span>
+                                </button>
+                                <ul class="dropdown-menu react-dropdown">
+                                    <li>
+                                        <a class="dropdown-item react-option" data-type="@reactType.Love">
+                                            <i class="bi bi-heart-fill text-danger me-2"></i> Love
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item react-option" data-type="@reactType.Like">
+                                            <i class="bi bi-hand-thumbs-up-fill text-primary me-2"></i> Like
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item react-option" data-type="@reactType.Care">
+                                            <i class="bi bi-emoji-heart-eyes-fill text-warning me-2"></i> Care
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item react-option" data-type="@reactType.angry">
+                                            <i class="bi bi-emoji-angry-fill text-danger me-2"></i> Angry
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
                             <button class="btn action-btn">
                                 <i class="bi bi-chat"></i> Comment
                             </button>
@@ -137,12 +174,13 @@
                         <!-- فورم المشاركة مخفي -->
                         <form class="share-form d-none mt-2" asp-controller="Post" asp-action="SharePost" method="post">
                             <input type="hidden" name="PostId" value="@post.ID" />
+
                             <input type="text" name="Content" class="form-control mb-2" placeholder="Add a message to your share..." />
                             <button type="submit" class="btn btn-sm btn-success">Share</button>
                             <button type="button" class="btn btn-sm btn-secondary cancel-share" data-postid="@post.ID">Cancel</button>
                         </form>
                         <div class="d-flex align-items-center mt-3">
-                            <img src="https://via.placeholder.com/40" class="rounded-circle me-2 border" width="40" height="40" alt="Profile Image">
+                            <img src="~/Files/@(Model.Item2?.ProfileImagePath ?? "default-profile.jpg")" class="rounded-circle me-2 border" width="40" height="40" alt="Profile Image">
                             <div class="flex-grow-1">
                                 <form asp-controller="Comment" asp-action="AddComment" method="post" class="d-flex">
                                     <input type="hidden" name="PostID" value="@post.ID" />
@@ -166,7 +204,7 @@
                 </div>
             }
 
-            @if (Model.Count == 0)
+            @if (Model.Item1.Count == 0)
             {
                 <div class="text-center py-5">
                     <i class="bi bi-bookmark-x" style="font-size: 3rem; color: var(--muted-text);"></i>
@@ -347,13 +385,175 @@
     .reply-form, .edit-comment-form {
         transition: all 0.3s ease;
     }
+    /* تنسيقات إضافية للتفاعلات */
+    .react-btn-group .btn.active {
+        background-color: rgba(78, 87, 212, 0.1);
+    }
+
+    .react-dropdown {
+        background-color: var(--header-color);
+        border: none;
+    }
+
+        .react-dropdown .dropdown-item {
+            color: var(--muted-text);
+            padding: 0.5rem 1rem;
+        }
+
+            .react-dropdown .dropdown-item:hover {
+                background-color: var(--secondary-color);
+                color: var(--text-color);
+            }
+
+    .react-btn-group .dropdown-toggle::after {
+        margin-left: 0.25rem;
+    }
+
+    /* تأثيرات عند التمرير على خيارات التفاعل */
+    .react-option:hover {
+        transform: scale(1.05);
+        transition: transform 0.2s ease;
+    }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var currentUser = '@User.Identity.Name';
 </script>
-
 <script>
+        $(document).ready(function () {
+            // تحميل معلومات التفاعلات لكل منشور
+            @foreach (var post in Model.Item1)
+            {
+                    <text>
+                    loadReactsInfo(@post.ID);
+                    </text>
+            }
+
+            // إضافة تفاعل جديد
+            $(document).on('click', '.react-option', function() {
+                var postId = $(this).closest('.react-btn-group').data('postid');
+                var reactType = $(this).data('type');
+
+                toggleReact(postId, reactType);
+            });
+
+            // إزالة التفاعل عند الضغط على الزر الرئيسي
+            $(document).on('click', '.react-main-btn', function() {
+                var postId = $(this).closest('.react-btn-group').data('postid');
+                var currentReact = $(this).find('.react-icon').data('current-react');
+
+                if (currentReact) {
+                    // إذا كان هناك تفاعل موجود، إزالته
+                    toggleReact(postId, currentReact);
+                } else {
+                    // إذا لم يكن هناك تفاعل، إضافة Like افتراضي
+                    toggleReact(postId, @((int)reactType.Like));
+                }
+            });
+        });
+
+        function toggleReact(postId, reactType) {
+            $.ajax({
+                url: '/React/ToggleReact',
+                type: 'POST',
+                data: {
+                    postId: postId,
+                    type: reactType
+                },
+                success: function(response) {
+                    if (response.success) {
+                        updateReactUI(postId, response);
+                    } else {
+                        showAlert('Error', response.message, 'danger');
+                    }
+                },
+                error: function() {
+                    showAlert('Error', 'An error occurred while reacting', 'danger');
+                }
+            });
+        }
+
+        function loadReactsInfo(postId) {
+            $.ajax({
+                url: '/React/GetReactsInfo',
+                type: 'GET',
+                data: { postId: postId },
+                success: function(response) {
+                    if (response.success) {
+                        updateReactUI(postId, response);
+                    }
+                },
+                error: function() {
+                    console.log('Error loading reacts info for post ' + postId);
+                }
+            });
+        }
+
+        function updateReactUI(postId, data) {
+            // تحديث العدد الإجمالي
+            $('.reacts-count[data-postid="' + postId + '"]').text(data.count);
+
+            // تحديث الزر الرئيسي بناءً على تفاعل المستخدم
+            var reactBtn = $('.react-btn-group[data-postid="' + postId + '"] .react-main-btn');
+            var reactIcon = reactBtn.find('.react-icon');
+            var reactText = reactBtn.find('.react-text');
+
+            if (data.userReactType !== null) {
+                // إذا كان المستخدم متفاعل
+                reactBtn.addClass('active');
+
+                // تحديث الأيقونة والنص بناءً على نوع التفاعل
+                switch (data.userReactType) {
+                    case @((int)reactType.Love):
+                        reactIcon.removeClass().addClass('bi bi-heart-fill text-danger');
+                        reactText.text('Love');
+                        break;
+                    case @((int)reactType.Like):
+                        reactIcon.removeClass().addClass('bi bi-hand-thumbs-up-fill text-primary');
+                        reactText.text('Like');
+                        break;
+                    case @((int)reactType.Care):
+                        reactIcon.removeClass().addClass('bi bi-emoji-heart-eyes-fill text-warning');
+                        reactText.text('Care');
+                        break;
+                    case @((int)reactType.angry):
+                        reactIcon.removeClass().addClass('bi bi-emoji-angry-fill text-danger');
+                        reactText.text('Angry');
+                        break;
+                }
+
+                // حفظ نوع التفاعل الحالي
+                reactIcon.data('current-react', data.userReactType);
+            } else {
+                // إذا لم يكن المستخدم متفاعل
+                reactBtn.removeClass('active');
+                reactIcon.removeClass().addClass('bi bi-heart');
+                reactText.text('Like');
+                reactIcon.data('current-react', null);
+            }
+
+            // تحديث الملخص (يمكنك إضافة هذا لاحقاً إذا أردت عرض تفاصيل أكثر)
+            console.log('React summary for post ' + postId + ':', data.summary);
+        }
+
+        function showAlert(title, message, type) {
+            // دالة لعرض التنبيهات
+            var alertClass = 'alert-' + type;
+            var alertHtml = `
+                <div class="alert ${alertClass} alert-dismissible fade show" role="alert">
+                    <strong>${title}</strong> ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+
+            // إضافة التنبيه في أعلى الصفحة
+            $('.container.py-4').prepend(alertHtml);
+
+            // إزالة التنبيه تلقائياً بعد 3 ثواني
+            setTimeout(function() {
+                $('.alert').alert('close');
+            }, 3000);
+        }
 function loadComments(postId) {
     $.ajax({
         url: `/Comment/GetAllComments?id=${postId}`,
@@ -365,9 +565,9 @@ function loadComments(postId) {
                 data.forEach(c => {
                     container.append(`
                                     <div class="d-flex mb-3 comment-item" id="comment-${c.id}">
-        <div class="flex-shrink-0">
-            <img src="https://via.placeholder.com/40" class="rounded-circle me-2" width="40" height="40" alt="Profile">
-        </div>
+                                    <div class="flex-shrink-0">
+                                        <img src="~/Files/@(Model.Item2?.ProfileImagePath ?? "default-profile.jpg")" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+                                    </div>
         <div class="flex-grow-1 ms-2">
             <div class="comment-content p-3 rounded" id="comment-text-${c.id}">
                 <div class="d-flex justify-content-between align-items-start mb-1">
@@ -404,7 +604,8 @@ function loadComments(postId) {
             <!-- نموذج الرد (مخفي افتراضيًا) -->
             <form class="reply-form d-none mt-2" data-commentid="${c.id}">
                 <div class="d-flex align-items-center">
-                    <img src="https://via.placeholder.com/32" class="rounded-circle me-2" width="32" height="32" alt="Profile">
+                                                    <img src="/Files/@profileImagePath" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+
                     <input type="hidden" name="ParentCommentID" value="${c.id}" />
                     <input type="text" name="Content" class="form-control form-control-sm rounded-pill bg-secondary text-white border-0 me-2" placeholder="Write a reply..." />
                     <button type="submit" class="btn btn-sm btn-accent rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
@@ -561,13 +762,12 @@ function loadComments(postId) {
     });
 
     $(document).ready(function () {
-        @foreach (var post in Model)
+        @foreach (var post in Model.Item1)
     {
             <text>loadComments(@post.ID);</text>
     }
     });
-</script>
-
+</script> 
 
 
 

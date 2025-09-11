@@ -4,5 +4,6 @@
     {
         public CreateVm NewPost { get; set; }
         public List<PostVm> Posts { get; set; }
+        public ViewProfileVM Profile { get; set; }
     }
 }

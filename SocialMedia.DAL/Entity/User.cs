@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using SocialMedia.DAL.Entity;
-
+﻿
 namespace SocialMedia.DAL.Entity
 {
     public class User:IdentityUser
@@ -29,8 +25,8 @@ namespace SocialMedia.DAL.Entity
         public string? Headline { get; set; }   
         public string? Location { get; set; }
         public string? ImagePath { get; set; }
-        public string Education { get; set; }
-        public string Language { get; set; }
+        public string? Education { get; set; }
+        public string? Language { get; set; }
 
         public UserProfile UserProfile { get; set; }
 

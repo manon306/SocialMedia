@@ -2,51 +2,56 @@
 {
     public class Upload
     {
-        public static string UploadFile(string FolderName, IFormFile File)
+        public static List<string> UploadFile(string FolderName, List<IFormFile> Files)
         {
+            var savedFiles = new List<string>();
 
             try
             {
-                //catch the folder Path and the file name in server
-                // 1 ) Get Directory
-                string FolderPath = Directory.GetCurrentDirectory() + "/wwwroot/" + FolderName;
+                // 1) Get Directory
+                string FolderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FolderName);
 
                 if (!Directory.Exists(FolderPath))
                 {
                     Directory.CreateDirectory(FolderPath);
                 }
 
-
-                //2) Get File Name
-                string FileName = Guid.NewGuid() + Path.GetFileName(File.FileName);
-                //Guid => Word contain from 36 character
-
-                // 3) Merge Path with File Name
-                string FinalPath = Path.Combine(FolderPath, FileName);
-                //combine put /
-
-                //4) Save File As Streams "Data Overtime"
-                using (var Stream = new FileStream(FinalPath, FileMode.Create))
+                // 2) Loop through files
+                foreach (var file in Files)
                 {
-                    File.CopyTo(Stream);
+                    if (file != null && file.Length > 0)
+                    {
+                        // unique file name
+                        string fileName = Guid.NewGuid() + Path.GetExtension(file.FileName);
+
+                        // final path
+                        string finalPath = Path.Combine(FolderPath, fileName);
+
+                        // save file
+                        using (var stream = new FileStream(finalPath, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
+
+                        // relative path (علشان تخزني في الداتابيز)
+                        savedFiles.Add(Path.Combine(FolderName, fileName));
+                    }
                 }
 
-                return FileName;
+                return savedFiles;
             }
             catch (Exception ex)
             {
-                return ex.Message;
+                // ممكن ترجع List فاضية أو ترمي exception
+                throw new Exception("Error while uploading files: " + ex.Message);
             }
-
         }
-
 
         public static string RemoveFile(string FolderName, string fileName)
         {
-
             try
             {
-                var directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/", FolderName, fileName);
+                var directory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", FolderName, fileName);
 
                 if (File.Exists(directory))
                 {
@@ -55,13 +60,11 @@
                 }
 
                 return "File Not Deleted";
-
             }
             catch (Exception ex)
             {
                 return ex.Message;
             }
         }
-
     }
 }

@@ -1,11 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Connect;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SocialMedia.BLL.Service.Abstraction
+﻿namespace SocialMedia.BLL.Service.Abstraction
 {
     public interface IConnectionSerives
 

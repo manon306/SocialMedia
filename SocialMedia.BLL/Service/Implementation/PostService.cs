@@ -1,6 +1,3 @@
-
-using System.Collections.Generic;
-
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
@@ -20,11 +17,21 @@ namespace SocialMedia.BLL.Service.Implementation
             {
                 return (false, "Post cannot be null");
             }// Upload files (store file name or path)
-            string? imagePath = post.Image != null ? Upload.UploadFile("Images", post.Image) : null;
-            string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
+            // ??? ???????
+            List<string>? imagePaths = null;
+            List<string>? videoPaths = null;
 
+            if (post.Image != null && post.Image.Count > 0)
+            {
+                imagePaths = Upload.UploadFile("Images", post.Image);
+            }
+
+            if (post.Videos != null && post.Videos.Count > 0)
+            {
+                videoPaths = Upload.UploadFile("Videos", post.Videos);
+            }
             // Mapping
-            var postEntity = new Post(post.Content, imagePath, videoPath,post.UserId);
+            var postEntity = new Post(post.Content, imagePaths, videoPaths,post.UserId);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");

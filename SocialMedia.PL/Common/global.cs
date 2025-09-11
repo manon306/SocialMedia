@@ -4,4 +4,12 @@ global using SocialMedia.BLL.Service.Abstraction;
 global using Microsoft.AspNetCore.Localization;
 global using SocialMedia.PL.Models;
 global using System.Diagnostics;
-
+global using Microsoft.AspNetCore.Authorization;
+global using Microsoft.AspNetCore.Identity;
+global using SocialMedia.BLL.ModelVM.Account;
+global using SocialMedia.DAL.Entity;
+global using System.Security.Claims;
+global using SocialMedia.BLL.ModelVM.Comment;
+global using SocialMedia.BLL.ModelVM.React;
+global using SocialMedia.DAL.ENUM;
+global using SocialMedia.BLL.ModelVM.Profile;

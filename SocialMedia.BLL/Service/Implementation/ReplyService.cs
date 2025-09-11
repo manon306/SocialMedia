@@ -1,6 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Comment;
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class ReplyService : IReplyService
     {

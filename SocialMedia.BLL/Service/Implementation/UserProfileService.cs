@@ -1,8 +1,4 @@
-﻿using SocialMedia.BLL.ModelVM.Profile;
-using SocialMedia.DAL.REPO.Abstraction;
-using SocialMedia.DAL.REPO.IMPLEMENTATION;
-
-namespace SocialMedia.BLL.Service.Implementation
+﻿namespace SocialMedia.BLL.Service.Implementation
 {
     public class UserProfileService : IUserProfileService
     {

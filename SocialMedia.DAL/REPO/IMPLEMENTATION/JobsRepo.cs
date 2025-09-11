@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using SocialMedia.DAL.DataBase;
-using SocialMedia.DAL.Entity;
-using SocialMedia.DAL.REPO.Abstraction;
-
 namespace SocialMedia.DAL.REPO.IMPLEMENTATION
 {
     public class JobsRepo : IJobsRepo
