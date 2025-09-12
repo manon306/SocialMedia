@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SocialMedia.BLL.Mapper;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
@@ -38,6 +39,8 @@ namespace SocialMedia.PL
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
             builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
+            builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
             builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
 
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
@@ -82,6 +85,7 @@ namespace SocialMedia.PL
                 {
                     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
                     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+                    googleOptions.CallbackPath = "/signin-google";
                 })
                 // Facebook Auth
                 .AddFacebook(facebookOptions =>

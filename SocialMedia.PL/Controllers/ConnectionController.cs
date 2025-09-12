@@ -15,14 +15,12 @@ namespace SocialMedia.PL.Controllers
     {
         private readonly IConnectionSerives _service;
         private readonly UserManager<User> _userManager;
-        private readonly SocialMediaDbContext _db;
 
 
-        public ConnectionController(IConnectionSerives service, UserManager<User> userManager, SocialMediaDbContext _db)
+        public ConnectionController(IConnectionSerives service, UserManager<User> userManager)
         {
             _service = service;
             _userManager = userManager;
-            this._db = _db;
         }
 
 
@@ -45,6 +43,9 @@ namespace SocialMedia.PL.Controllers
         //    await _service.SendRequest(me, receiverId);
         //    return Redirect(Request.Headers["Referer"].ToString());
         //}
+
+
+        //send request
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SendRequest(string receiverId)
@@ -63,6 +64,8 @@ namespace SocialMedia.PL.Controllers
         }
 
 
+        //accerpt
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AcceptRequest(int requestId)
@@ -72,6 +75,8 @@ namespace SocialMedia.PL.Controllers
             return RedirectToAction(nameof(Requests));
         }
 
+
+        //reject
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectRequest(int requestId)
@@ -111,6 +116,9 @@ namespace SocialMedia.PL.Controllers
             var model = await _service.GetFriends(me);
             return View(model); // Views/Connection/Friends.cshtml
         }
+
+
+        //search
         [HttpGet]
         public async Task<IActionResult> Search(string keyword)
         {
@@ -140,6 +148,8 @@ namespace SocialMedia.PL.Controllers
             return View("AllUsers", model);
         }
 
+
+        //block
         [HttpPost]
         public async Task<IActionResult> Block(string friendId)
         {
@@ -152,29 +162,23 @@ namespace SocialMedia.PL.Controllers
             return RedirectToAction("Friends"); 
         }
 
+      
+        //un block
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Unblock(string friendId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var result = await _service.UnblockFriend(userId, friendId);
 
-            var connection = await _db.Connections
-                .FirstOrDefaultAsync(c =>
-                    (c.SenderId == userId && c.ReceiverId == friendId) ||
-                    (c.ReceiverId == userId && c.SenderId == friendId));
-
-            if (connection == null)
-            {
-                return NotFound();
-            }
-
-            //connection.IsBlocked = false;       //to delete blolck
-            connection.Status = ConnectionStatus.Pending;
-            _db.Connections.Update(connection);
-            await _db.SaveChangesAsync();
+            if (!result)
+                return BadRequest("Could not unblock user.");
 
             return RedirectToAction("Requests");
         }
+
+
 
 
     }

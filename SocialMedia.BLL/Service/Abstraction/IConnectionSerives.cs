@@ -18,5 +18,6 @@ namespace SocialMedia.BLL.Service.Abstraction
         Task<bool> AreConnected(string userA, string userB);
         Task<List<FriendVM>> GetMyFriends(string userId);
         Task<bool> BlockFriend(string userId, string friendId);
+        Task<bool> UnblockFriend(string userId, string friendId);
     }
 }
