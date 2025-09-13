@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "المساعد الذكي";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header  text-white text-center rounded-top-4" style="background: linear-gradient(90deg, #007bff, #6610f2);">
+                    <h4 class="mb-0">🤖  AI Assistance </h4>
+                </div>
+                <div class="card-body" style="height: 500px; overflow-y: auto;">
+
+                    <!-- مكان المحادثة -->
+                    <div id="chat-box">
+                        @if (ViewBag.UserInput != null)
+                        {
+                            <div class="d-flex justify-content-end mb-3">
+                                <div class="p-3 rounded-3" style="background-color:#007bff; color:white; max-width:70%;">
+                                    <strong>أنت:</strong>
+                                    <p class="mb-0">@ViewBag.UserInput</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if (ViewBag.Response != null)
+                        {
+                            <div class="d-flex justify-content-start mb-3">
+                                <div class="p-3 rounded-3 shadow-sm"
+                                     style="max-width:70%; background: linear-gradient(135deg, #fdfbfb, #ebedee); border:1px solid #dee2e6;">
+                                    <strong style="color:#6c63ff;">Ai 🤖:</strong>
+                                    <p class="mb-0 text-dark">@ViewBag.Response</p>
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- إدخال الرسالة -->
+                <div class="card-footer bg-white border-0">
+                    <form method="post" asp-controller="Ai" asp-action="Ask" class="d-flex">
+                        <input type="text" name="userInput" class="form-control rounded-start-3" placeholder="اكتب رسالتك..." required />
+                        <button type="submit" class="btn btn-primary rounded-end-3">Send</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

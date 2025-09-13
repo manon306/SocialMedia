@@ -105,10 +105,21 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
             builder.Services.AddScoped<IReactService, ReactService>();
             builder.Services.AddScoped<IReactRepo, ReactRepo>();
-
-
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
+
+            //AI INTEGRATION SERVICE
+            builder.Services.AddHttpClient();
+            //builder.Services.AddHttpClient<AiService>();
+            // إضافة خدمات HttpClient
+            //builder.Services.AddHttpClient<AiService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
+            //    client.DefaultRequestHeaders.Authorization =
+            //        new System.Net.Http.Headers.AuthenticationHeaderValue(
+            //            "Bearer", "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");
+            //    client.Timeout = TimeSpan.FromSeconds(30);
+            //});
             //Hangfire
             // Hangfire (disabled unless packages and config are added)
             var enableHangfire = false;
