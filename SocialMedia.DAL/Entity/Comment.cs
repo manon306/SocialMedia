@@ -4,22 +4,25 @@
     {
         //constractor
 
-        public Comment(string Content,int PostID, string CreatedBy)
+        public Comment(string content, int postID, string createdById)
         {
-            this.Content = Content;
-            this.PostID = PostID;
-            this.CreatedBy = CreatedBy;
+            this.Content = content;
+            this.PostID = postID;
+            this.CreatedById = createdById;
             CreatedAt = DateTime.Now;
             IsDeleted = false;
         }
 
-        
+
+
         //Properties
 
         public int ID { get; private set; }
         public string Content { get; private set; }
         public DateTime CreatedAt { get; private set; } = DateTime.Now;
-        public string CreatedBy { get; private set; }
+        public string? CreatedById { get; set; }   // مفتاح أجنبي (FK)
+        public virtual User? CreatedBy { get; set; } // علاقة باليوزر
+
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedAt { get; private set; }
         public string? DeletedBy { get; private set; }

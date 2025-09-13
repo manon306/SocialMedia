@@ -18,7 +18,7 @@
                 return (false, "Cannot be null");
             }
             //Mapping
-            var commentEntity = new Comment(comment.Content, comment.PostID, comment.CreatedBy);
+            var commentEntity = new Comment(comment.Content, comment.PostID, comment.CreatedById);
             if (commentEntity == null)
             {
                 return (false, "faild to create new Object");
@@ -61,20 +61,32 @@
             }
             return (true ,null);
         }
-        public (bool , string ,List<GetCommentVm>) GetAllComment(int postId)
+        public (bool, string, List<GetCommentVm>) GetAllComment(int postId)
         {
             //validation
-            if(postId <= 0)
+            if (postId <= 0)
             {
                 return (false, "No Post Found", null);
             }
+
             //repo
             var result = repo.GetAllComments(postId);
-            var entity = mapper.Map<List<GetCommentVm>>(result.Item3);
+
             if (result.Item1 == false)
             {
                 return (false, result.Item2, null);
             }
+
+            // Mapping يدوي لضمان الحصول على جميع البيانات المطلوبة
+            var entity = result.Item3.Select(c => new GetCommentVm
+            {
+                ID = c.ID,
+                Content = c.Content,
+                CreatedAt = c.CreatedAt,
+                CreatedByUserName = c.CreatedBy?.UserName ?? "Unknown",
+                CreatedByProfileImage = c.CreatedBy?.ImagePath ?? "default-profile.jpg"
+            }).ToList();
+
             return (true, null, entity);
         }
     }

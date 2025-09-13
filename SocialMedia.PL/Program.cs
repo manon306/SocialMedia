@@ -101,6 +101,7 @@ namespace SocialMedia.PL
 			builder.Services.AddScoped<IJobsRepo, JobsRepo>();
             builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
             builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
             builder.Services.AddScoped<IReactService, ReactService>();
             builder.Services.AddScoped<IReactRepo, ReactRepo>();

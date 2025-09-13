@@ -13,6 +13,7 @@
             {
                 return (false, "comment is required");
             }
+
             DB.Comments.Add(comment);
             DB.SaveChanges();
             return (true, null);
@@ -48,7 +49,10 @@
         }
         public (bool , string , List<Comment>) GetAllComments(int PostId)
         {
-            var result = DB.Comments.Where(x=>x.PostID ==  PostId && x.IsDeleted == false).ToList();
+            var result = DB.Comments
+                .Where(x=>x.PostID ==  PostId && x.IsDeleted == false)
+                .Include(c => c.CreatedBy)
+                .ToList();
             if (!result.Any())
             {
                 return (false, "there is no comment yet", null);

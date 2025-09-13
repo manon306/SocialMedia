@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Identity;
+
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService
@@ -20,7 +22,6 @@ namespace SocialMedia.BLL.Service.Implementation
             // ??? ???????
             List<string>? imagePaths = null;
             List<string>? videoPaths = null;
-
             if (post.Image != null && post.Image.Count > 0)
             {
                 imagePaths = Upload.UploadFile("Images", post.Image);
@@ -31,7 +32,7 @@ namespace SocialMedia.BLL.Service.Implementation
                 videoPaths = Upload.UploadFile("Videos", post.Videos);
             }
             // Mapping
-            var postEntity = new Post(post.Content, imagePaths, videoPaths,post.UserId);
+            var postEntity = new Post(post.Content, imagePaths, videoPaths,post.UserId,post.CreatedBy);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");
@@ -134,6 +135,7 @@ namespace SocialMedia.BLL.Service.Implementation
                 var postEntity = result.Item3.FirstOrDefault(p => p.ID == postVm.ID);
                 if (postEntity != null && postEntity.Shares != null)
                 {
+                    postVm.CreatedByUserName = postEntity.User.UserName;
                     postVm.Shares = mapper.Map<ICollection<Share>>(postEntity.Shares);
                 }
             }

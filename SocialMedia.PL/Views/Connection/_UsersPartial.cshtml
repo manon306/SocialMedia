@@ -1,0 +1,54 @@
+﻿@using SocialMedia.BLL.ModelVM.Connect
+@model IEnumerable<SocialMedia.BLL.ModelVM.Connect.FriendVM>
+
+@foreach (var user in Model)
+{
+    <div class="col-md-6 col-lg-4">
+        <div class="card bg-dark text-light shadow-sm h-100">
+            <div class="card-body d-flex align-items-center">
+                <img src="~/Files/@user.ProfileImagePath"
+                     class="rounded-circle me-3 border border-secondary"
+                     width="60" height="60"
+                     alt="Profile Image" />
+
+                <div class="flex-grow-1">
+                    <h6 class="mb-0">@(!string.IsNullOrEmpty(user.Name) ? user.Name : user.Email)</h6>
+                    <small class="text-muted">@user.Headline</small>
+                </div>
+            </div>
+            <div class="card-footer bg-transparent d-flex justify-content-between">
+                <!-- Connect -->
+                <form asp-controller="Connection" asp-action="SendRequest" method="post" class="d-inline">
+                    <input type="hidden" name="receiverId" value="@user.Id" />
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-user-plus me-1"></i> Connect
+                    </button>
+                </form>
+
+                @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value != user.Id)
+                {
+                    <div class="d-flex gap-2">
+                        <!-- Follow -->
+                        <form asp-controller="Follow" asp-action="FollowUser" method="post" class="d-inline">
+                            <input type="hidden" name="followingId" value="@user.Id" />
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-success btn-sm">
+                                <i class="fa fa-plus me-1"></i> Follow
+                            </button>
+                        </form>
+
+                        <!-- Unfollow -->
+                        <form asp-controller="Follow" asp-action="UnfollowUser" method="post" class="d-inline">
+                            <input type="hidden" name="followingId" value="@user.Id" />
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                <i class="fa fa-times me-1"></i> Unfollow
+                            </button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}

@@ -99,46 +99,52 @@
             <div class="container">
                 <a class="navbar-brand fw-bold text-primary" href="#">ConnectPro</a>
 
-                <!-- Search -->
-                <form class="d-none d-md-flex flex-grow-1 mx-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-0">
-                            <i class="bi bi-search text-muted"></i>
-                        </span>
-                        <input type="search" class="form-control bg-light border-0" placeholder="Search">
-                    </div>
-                </form>
+                <!-- ✅ زرار الهامبرجر للموبايل -->
+                <button class="navbar-toggler navbar-dark bg-dark" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
                 <!-- Menu -->
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item mx-2">
-                            <a asp-controller="Post" asp-action="Index" class="nav-link text-white"><i class="bi bi-house-door fs-5"></i><br /><small>Home</small></a>
+                            <a asp-controller="Post" asp-action="Index" class="nav-link text-white">
+                                <i class="bi bi-house-door fs-5"></i><br /><small>Home</small>
+                            </a>
                         </li>
                         <li class="nav-item mx-2">
-
-                            <a class="nav-link text-white" asp-area="" asp-controller="Jobs" asp-action="Index"><i class="bi bi-briefcase fs-5"></i><br /><small>Jobs</small></a>
+                            <a class="nav-link text-white" asp-area="" asp-controller="Jobs" asp-action="Index">
+                                <i class="bi bi-briefcase fs-5"></i><br /><small>Jobs</small>
+                            </a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link text-white" href="#"><i class="bi bi-chat-dots fs-5"></i><br /><small>Messaging</small></a>
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-chat-dots fs-5"></i><br /><small>Messaging</small>
+                            </a>
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link text-white" href="#"><i class="bi bi-bell fs-5"></i><br /><small>Notifications</small></a>
+                            <a class="nav-link text-white" href="#">
+                                <i class="bi bi-bell fs-5"></i><br /><small>Notifications</small>
+                            </a>
                         </li>
                         <li class="nav-item mx-2">
                             <a asp-area="" asp-controller="UserProfile" asp-action="MyProfile" class="nav-link text-white">
-                                <img src="@Url.Content("~/Files/" + ViewData["LayoutProfileImage"])" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+                                <img src="@Url.Content("~/Files/" + ViewData["LayoutProfileImage"])"
+                                     class="rounded-circle me-2" width="40" height="40" alt="Profile">
                                 <br /><small>Me</small>
                             </a>
-
                         </li>
                         <li class="nav-item mx-2">
-                            <a class="nav-link text-white" asp-action="LogOff" asp-controller="Account"><i class="bi bi-box-arrow-right fs-5"></i><br /><small>LogOut</small> </a>
+                            <a class="nav-link text-white" asp-action="LogOff" asp-controller="Account">
+                                <i class="bi bi-box-arrow-right fs-5"></i><br /><small>LogOut</small>
+                            </a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
+
     </header>
 
     <!-- ✅ Page Layout -->
@@ -204,6 +210,16 @@
                         </div>
                         <div class="modern-content">
                             <div class="modern-title text-white">Requests</div>
+                            <div class="modern-subtitle" style="color: var(--muted-text);">5 pending</div>
+                        </div>
+                        <div class="modern-badge">5</div>
+                    </a>
+                    <a class="modern-item" asp-action="AllUsers" asp-controller="Connection" style="background-color: var(--header-color);">
+                        <div class="modern-icon" style="background: linear-gradient(135deg, var(--accent-color), #764ba2);">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title text-white">AllUsers</div>
                             <div class="modern-subtitle" style="color: var(--muted-text);">5 pending</div>
                         </div>
                         <div class="modern-badge">5</div>

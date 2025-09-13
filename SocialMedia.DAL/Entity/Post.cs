@@ -3,16 +3,16 @@
     public class Post
     {
         //constructors
-        public Post(string Content, List<string>? Image, List<string>? Videos, string userId)
+        public Post(string content, List<string>? image, List<string>? videos, string userId, string createdBy)
         {
-            this.Content = Content;
-            this.Image = Image;
-            this.Videos = Videos;
+            this.Content = content;
+            this.Image = image;
+            this.Videos = videos;
             this.IsDeleted = false;
             this.CreatedAt = DateTime.Now;
             this.IsArchived = false;
             this.IsSaved = false;
-            this.CreatedBy = "Menna";
+            this.CreatedBy = createdBy; // استخدام الاسم الحقيقي للمستخدم
             this.Comments = new List<Comment>();
             this.Reacts = new List<React>();
             this.UserId = userId;

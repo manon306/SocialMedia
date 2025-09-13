@@ -4,36 +4,50 @@
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">My Connections</h2>
+    <h2 class="text-light mb-4">My Friends</h2>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">You don’t have any connections yet.</div>
+        <div class="alert alert-info">You don’t have any friends yet.</div>
     }
     else
     {
-        @foreach (var user in Model) // user هنا FriendVM
-        {
-            <div class="card mb-2 p-2">
-                <div class="d-flex align-items-center">
-                    <img src="~/Files/@user.ImagePath" class="rounded-circle me-2" width="50" height="50" />
-                    <div>
-                        <strong>@user.Name</strong><br />
-                        <small>@user.Headline</small>
-                    </div>
-                    <div class="ms-auto">
-                        @if (User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value != user.Id)
-                        {
-                            <form asp-controller="Connection" asp-action="SendRequest" method="post" class="d-inline">
-                                <input type="hidden" name="receiverId" value="@user.Id" />
-                                @Html.AntiForgeryToken()
-                                <button type="submit" class="btn btn-primary btn-sm">Connect</button>
-                            </form>
-                        }
+        <div class="row">
+            @foreach (var friend in Model)
+            {
+                <div class="col-md-6">
+                    <div class="card mb-3 shadow-sm bg-dark text-light">
+                        <div class="card-body d-flex align-items-center">
+                            <img src="@Url.Content("~/Files/" + friend.ProfileImagePath)"
+                                 class="rounded-circle me-3 border border-secondary"
+                                 width="60" height="60" alt="Profile Image" />
+
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1">@friend.Name</h5>
+                                <small class="text-muted">@friend.Email</small>
+                            </div>
+
+                            <div class="ms-auto">
+                                <form asp-controller="Connection" asp-action="Unblock" method="post" class="d-inline">
+                                    <input type="hidden" name="friendId" value="@friend.Id" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-success btn-sm me-1">
+                                        <i class="bi bi-unlock-fill"></i> Unblock
+                                    </button>
+                                </form>
+
+                                <form asp-controller="Connection" asp-action="Block" method="post" class="d-inline">
+                                    <input type="hidden" name="friendId" value="@friend.Id" />
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-danger btn-sm">
+                                        <i class="bi bi-slash-circle-fill"></i> Block
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-
+            }
+        </div>
     }
 </div>

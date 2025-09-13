@@ -18,17 +18,19 @@
             // CreateProfileVM -> UserProfile
             CreateMap<CreateProfileVM, UserProfile>();
 
-            CreateMap<User, FriendVM>()
-            .ForMember(d => d.ImagePath, o => o.MapFrom(s => s.ImagePath))
-            .ForMember(d => d.Headline, o => o.MapFrom(s => s.Headline));
+            //CreateMap<User, FriendVM>()
+            //.ForMember(d => d.ImagePath, o => o.MapFrom(s => s.ImagePath))
+            //.ForMember(d => d.Headline, o => o.MapFrom(s => s.Headline));
 
             CreateMap<Connection, ConnectionRequestVM>()
                 .ForMember(d => d.SenderName, o => o.MapFrom(s => s.Sender.Name))
                 .ForMember(d => d.SenderHeadline, o => o.MapFrom(s => s.Sender.Headline))
                 .ForMember(d => d.SenderImage, o => o.MapFrom(s => s.Sender.ImagePath));
+
+            CreateMap<User, FriendVM>()
+               .ForMember(d => d.ProfileImagePath, o => o.MapFrom(s => s.ImagePath))
+               .ForMember(d => d.Headline, o => o.MapFrom(s => s.Headline));
         }
-
-
     }
 }
 

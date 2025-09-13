@@ -6,6 +6,8 @@
         public string Content { get; set; }
         public List<string>? Image { get; set; }
         public List<string>? Videos { get; set; }
+        public string CreatedByUserName { get; set; } // اسم منشئ المنشور
+        public string CreatedByProfileImage { get; set; }
         public ICollection<Share> Shares { get; set; } = new List<Share>();
         public List<SocialMedia.DAL.Entity.Comment> Comments { get;  set; } = new List<SocialMedia.DAL.Entity.Comment>();
         public ICollection<SocialMedia.DAL.Entity.React> Reacts { get; set; } = new List<SocialMedia.DAL.Entity.React>();

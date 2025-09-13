@@ -135,6 +135,7 @@
             {
                 var posts = DB.Posts
                     .Where(p => !p.IsDeleted)
+                    .Include(p => p.User)
                     .Include(p => p.Comments)
                     .Include(p => p.Reacts)
                     .Include(p => p.Shares) // تأكد من تضمين المشاركات

@@ -5,6 +5,6 @@
         [Required(ErrorMessage ="u must add content:(")]
         public string Content { get; set; }
         public int PostID { get; set; }
-        public string? CreatedBy { get;  set; }
+        public string CreatedById { get; set; }
     }
 }

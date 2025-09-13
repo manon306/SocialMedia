@@ -57,9 +57,15 @@ namespace SocialMedia.PL.Controllers
         public async Task<IActionResult> AddPost(CreateVm post)
         {
             var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            post.UserId = user.Id.ToString();
             var profile = await service.GetProfile(user.Id.ToString());
-            post.UserId = user.Id;
+            post.CreatedBy = user.UserName ?? string.Empty; // Fixes CS8601: Possible null reference assignment.
             ModelState.Remove("UserId");
+            ModelState.Remove("CreatedBy");
             if (!ModelState.IsValid)
             {
                 var (isSuccess, errorMessage, posts) = postService.GetPosts();
@@ -72,7 +78,7 @@ namespace SocialMedia.PL.Controllers
                 ModelState.AddModelError(string.Empty, errorMessageAdd);
             }
 
-            return RedirectToAction("Index"); 
+            return RedirectToAction("Index");
         }
         [HttpPost]
         public async Task<IActionResult> SharePost(int postId, string content)

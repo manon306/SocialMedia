@@ -22,8 +22,8 @@
             {
                 return RedirectToAction("Login", "Account");
             }
-            cm.CreatedBy = user.UserName;
-            ModelState.Remove("CreatedBy");
+            cm.CreatedById = user.Id;
+            ModelState.Remove("CreatedById");
 
             if (!ModelState.IsValid)
             {
@@ -80,7 +80,7 @@
 
 
         [HttpGet]
-        public IActionResult GetAllComments(int id ,int? limit = null )
+        public IActionResult GetAllComments(int id)
         {
             var result = commentService.GetAllComment(id);
             if (!result.Item1)

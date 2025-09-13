@@ -1,0 +1,45 @@
+﻿@using SocialMedia.BLL.ModelVM.Connect
+@model IEnumerable<SocialMedia.BLL.ModelVM.Connect.FriendVM>
+
+@{
+    ViewData["Title"] = "People You May Know";
+}
+
+<div class="container my-4">
+    <h3 class="text-light mb-4">People You May Know</h3>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning">@ViewBag.Message</div>
+    }
+
+    <form method="get" class="input-group mb-4">
+        <input id="searchBox" class="form-control" type="text" name="keyword" placeholder="Search by name or email" />
+        <button class="btn btn-outline-light" type="submit">
+            <i class="bi bi-search"></i>
+        </button>
+    </form>
+
+    <div id="usersList" class="row g-3">
+        @Html.Partial("_UsersPartial", Model)
+    </div>
+</div>
+<script>
+        $(document).ready(function () {
+            $("form").on("submit", function (e) {
+            e.preventDefault(); 
+        });
+        $("#searchBox").on("keyup", function () {
+            var keyword = $(this).val();
+
+            $.ajax({
+                url: '/Connection/Search',
+                type: 'GET',
+                data: { keyword: keyword },
+                success: function (result) {
+                    $("#usersList").html(result);
+                }
+            });
+        });
+    });
+</script>
