@@ -1,8 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using SocialMedia.DAL.DataBase;
-using SocialMedia.DAL.Entity;
-using SocialMedia.DAL.REPO.Abstraction;
-
 namespace SocialMedia.DAL.REPO.IMPLEMENTATION
 {
     public class JobsRepo : IJobsRepo
@@ -44,6 +39,7 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
         {
             return _dbContext.Jobs.AsNoTracking().Where(j => j.IsSaved).OrderByDescending(j => j.PostedAt).ToListAsync();
         }
+
     }
 }
 

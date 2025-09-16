@@ -1,7 +1,3 @@
-using SocialMedia.BLL.Service.Abstraction;
-using SocialMedia.DAL.Entity;
-using SocialMedia.DAL.REPO.Abstraction;
-
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class JobsService : IJobsService

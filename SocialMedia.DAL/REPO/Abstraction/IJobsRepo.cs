@@ -1,5 +1,3 @@
-using SocialMedia.DAL.Entity;
-
 namespace SocialMedia.DAL.REPO.Abstraction
 {
     public interface IJobsRepo

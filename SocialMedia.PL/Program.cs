@@ -1,17 +1,20 @@
 using Hangfire;
-using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using SocialMedia.BLL.Mapper;
-using SocialMedia.BLL.Service.Abstraction;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
 using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
+using SocialMedia.PL.Factories;
 using SocialMedia.PL.Language;
 using System.Globalization;
+using System.Security.Claims;
 
 namespace SocialMedia.PL
 {
@@ -21,38 +24,124 @@ namespace SocialMedia.PL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            //connection string configuration
+            // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
-            //Auto Mapper Configuration
+
+            // Identity configuration
+            builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                            .AddEntityFrameworkStores<SocialMediaDbContext>()
+                            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Account/Login";
+                });
+
+            builder.Services.AddIdentity<User, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = false;
+            })
+            .AddEntityFrameworkStores<SocialMediaDbContext>()
+            .AddDefaultTokenProviders();
+
+
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Name;
+                options.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
+            });
+
+            // Authentication: Google & Facebook
+            builder.Services.AddAuthentication()
+                .AddGoogle(googleOptions =>
+                {
+                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+
+                    googleOptions.Scope.Add("email");
+                    googleOptions.Scope.Add("profile");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
+
+
+                })
+                .AddFacebook(facebookOptions =>
+                {
+                    facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+                    facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+
+                    facebookOptions.Fields.Add("name");
+                    facebookOptions.Fields.Add("email");
+                    facebookOptions.Fields.Add("first_name");
+                    facebookOptions.Fields.Add("last_name");
+
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "first_name");
+                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
+                });
+
+            // DbContext & AutoMapper
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
             options.UseSqlServer(connectionString));
             builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
-            //dependancy injection
+            // Dependency Injection
             builder.Services.AddScoped<IPostService, PostService>();
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ICommentRepo, CommentRepo>();
-           builder.Services.AddScoped<IJobsService, JobsService>();
-			     builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+            builder.Services.AddScoped<IReplyService, ReplyService>();
+            builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
+            builder.Services.AddScoped<IJobsService, JobsService>();
+			builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+            builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+            builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
+            builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
+            builder.Services.AddScoped<IReactService, ReactService>();
+            builder.Services.AddScoped<IReactRepo, ReactRepo>();
+            builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
 
+            //AI INTEGRATION SERVICE
+            builder.Services.AddHttpClient();
+            //builder.Services.AddHttpClient<AiService>();
+            // إضافة خدمات HttpClient
+            //builder.Services.AddHttpClient<AiService>(client =>
+            //{
+            //    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
+            //    client.DefaultRequestHeaders.Authorization =
+            //        new System.Net.Http.Headers.AuthenticationHeaderValue(
+            //            "Bearer", "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");
+            //    client.Timeout = TimeSpan.FromSeconds(30);
+            //});
             //Hangfire
-          // Hangfire (disabled unless packages and config are added)
-          var enableHangfire = false;
-          bool canConnectToSql = false;
-          try
-          {
-            using var sqlConn = new SqlConnection(connectionString);
-            sqlConn.Open();
-            canConnectToSql = true;
-          }
-          catch
-          {
-            canConnectToSql = false;
-          }
-            builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
-            builder.Services.AddHangfireServer();
+            // Hangfire (disabled unless packages and config are added)
+            var enableHangfire = builder.Configuration.GetValue<bool>("EnableHangfire");
+            bool canConnectToSql = false;
+            try
+            {
+                using var sqlConn = new SqlConnection(connectionString);
+                sqlConn.Open();
+                canConnectToSql = true;
+            }
+            catch
+            {
+                canConnectToSql = false;
+            }
             
+            if (enableHangfire && canConnectToSql)
+            {
+                builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+                builder.Services.AddHangfireServer();
+            }
+            
+            // MVC + Localization
 
 
 
@@ -104,50 +193,82 @@ namespace SocialMedia.PL
                 }
             });
 
-            // Hangfire dashboard middleware
-            app.UseHangfireDashboard("/SocialMedia");
+            //Hangfire dashboard middleware
+            if (enableHangfire && canConnectToSql)
+            {
+                app.UseHangfireDashboard("/SocialMedia");
+            }
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
-            app.UseRouting();
+            // Hangfire dashboard middleware
+            // if (enableHangfire && canConnectToSql) app.UseHangfireDashboard("/SocialMedia");
 
+
+            app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            // Hangfire Dashboard
+            //app.UseHangfireDashboard("/SocialMedia");
+
+            // Default route
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Post}/{action=Index}/{id?}");
 
-            using (var scope = app.Services.CreateScope())
+            // Hangfire jobs
+            if (enableHangfire && canConnectToSql)
             {
-                var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
-                postService.UseHangfire();
-            }
-            if (app.Environment.IsDevelopment())
-            {
-              using (var scope = app.Services.CreateScope())
-              {
-                var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
-                if (!db.Jobs.Any())
+                using (var scope = app.Services.CreateScope())
                 {
-                  db.Jobs.AddRange(
-                    new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
-                    new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
-                    new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
-                    new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
-                  );
-                  db.SaveChanges();
+                    var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
+                    postService.UseHangfire();
                 }
-              }
             }
+
+            // Seed Jobs data in Development
+                //if (app.Environment.IsDevelopment())
+                //{
+                //    var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
+                //    if (!db.Jobs.Any())
+                //    {
+                //        db.Jobs.AddRange(
+                //            new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
+                //            new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
+                //            new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
+                //            new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
+                //        );
+                //        db.SaveChanges();
+                //    }
+                //}
+            //if (app.Environment.IsDevelopment())
+            //{
+            //    using (var scope = app.Services.CreateScope())
+            //    {
+            //        var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
+            //        if (!db.Jobs.Any())
+            //        {
+            //            db.Jobs.AddRange(
+            //              new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
+            //              new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
+            //              new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
+            //              new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
+            //            );
+            //            db.SaveChanges();
+            //        }
+            //    }
+            //}
 // if (enableHangfire && canConnectToSql) { /* register Hangfire services */ }
+
 
 			// Hangfire dashboard middleware
 			// if (enableHangfire && canConnectToSql) app.UseHangfireDashboard("/SocialMedia");
 
-			// if (enableHangfire && canConnectToSql) { /* schedule recurring jobs */ }
+            // if (enableHangfire && canConnectToSql) { /* schedule recurring jobs */ }
 
-			// Seed Jobs data in Development if empty
+            // Seed Jobs data in Development if empty
 
             app.Run();
         }

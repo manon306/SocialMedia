@@ -1,5 +1,3 @@
-using SocialMedia.DAL.Entity;
-
 namespace SocialMedia.BLL.Service.Abstraction
 {
     public interface IJobsService
