@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "AI Post Suggestion";
+}
+
+<h2>AI Post Suggestion</h2>
+
+<form asp-action="SuggestPost" method="post">
+    <label>Enter a topic:</label>
+    <input type="text" name="topic" required class="form-control" />
+    <button type="submit" class="btn btn-primary mt-2">Generate</button>
+</form>
+
+@if (ViewBag.Suggestion != null)
+{
+    <div class="alert alert-success mt-3">
+        <strong>AI Suggestion:</strong> @ViewBag.Suggestion
+    </div>
+}

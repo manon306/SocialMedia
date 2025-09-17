@@ -1,0 +1,33 @@
+﻿@model SocialMedia.DAL.Entity.User
+@{
+    ViewData["Title"] = "Profile Details";
+    var apiKey = ViewBag.GoogleMapsApiKey as string ?? "";
+}
+
+<h2>@Model.UserName's Profile</h2>
+
+<p><strong>Address:</strong> @Model.Address</p>
+
+@if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+{
+    <div id="map" style="height:400px; width:100%;"></div>
+
+    <script>
+        function initMap() {
+            const location = { lat: @Model.Latitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture), lng: @Model.Longitude.Value.ToString(System.Globalization.CultureInfo.InvariantCulture) };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 14,
+                center: location
+            });
+            new google.maps.Marker({ position: location, map: map });
+        }
+    </script>
+
+    <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=@(apiKey)&callback=initMap">
+    </script>
+}
+else
+{
+    <p>No location set.</p>
+}

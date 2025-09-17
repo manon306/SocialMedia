@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Buy Premium";
+    var publishableKey = ViewBag.PublishableKey as string ?? "";
+}
+
+<h2>Buy Premium Membership</h2>
+
+<form asp-controller="Payment" asp-action="CreateCheckoutSession" method="post">
+    <div class="form-group">
+        <label>Amount (USD)</label>
+        <input name="amountUsd" value="50.00" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Pay with Card (Stripe Checkout)</button>
+</form>
+
+<p class="mt-3">After successful payment you will be redirected to the success page. The server webhook will mark your account as Premium.</p>
