@@ -11,7 +11,6 @@ using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
 using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
-using SocialMedia.PL.Factories;
 using SocialMedia.PL.Language;
 using System.Globalization;
 using System.Security.Claims;
@@ -54,37 +53,7 @@ namespace SocialMedia.PL
                 options.ClaimsIdentity.EmailClaimType = ClaimTypes.Email;
             });
 
-            // Authentication: Google & Facebook
-            builder.Services.AddAuthentication()
-                .AddGoogle(googleOptions =>
-                {
-                    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-                    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-
-                    googleOptions.Scope.Add("email");
-                    googleOptions.Scope.Add("profile");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-
-
-                })
-                .AddFacebook(facebookOptions =>
-                {
-                    facebookOptions.AppId = builder.Configuration["Authentication:Facebook:AppId"];
-                    facebookOptions.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
-
-                    facebookOptions.Fields.Add("name");
-                    facebookOptions.Fields.Add("email");
-                    facebookOptions.Fields.Add("first_name");
-                    facebookOptions.Fields.Add("last_name");
-
-                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "first_name");
-                    facebookOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "last_name");
-                });
+            // Authentication: External providers disabled on this branch (Google/Facebook packages not referenced)
 
             // DbContext & AutoMapper
             builder.Services.AddDbContext<SocialMediaDbContext>(options =>
@@ -95,17 +64,18 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IPostsRepo, PostsRepo>();
             builder.Services.AddScoped<ICommentService, CommentService>();
             builder.Services.AddScoped<ICommentRepo, CommentRepo>();
-            builder.Services.AddScoped<IReplyService, ReplyService>();
-            builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
             builder.Services.AddScoped<IJobsService, JobsService>();
-			builder.Services.AddScoped<IJobsRepo, JobsRepo>();
-            builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
-            builder.Services.AddScoped<IUserProfileService, UserProfileService>();
-            builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
-            builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
-            builder.Services.AddScoped<IReactService, ReactService>();
-            builder.Services.AddScoped<IReactRepo, ReactRepo>();
-            builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
+            builder.Services.AddScoped<IJobsRepo, JobsRepo>();
+            // The following DI registrations are disabled on this branch because their types are missing
+            // builder.Services.AddScoped<IReplyService, ReplyService>();
+            // builder.Services.AddScoped<IReplyRepo, ReplyRepo>();
+            // builder.Services.AddScoped<IUserProfileRepo, UserProfileRepo>();
+            // builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+            // builder.Services.AddScoped<IConnectionRepo, ConnectionRepo>();
+            // builder.Services.AddScoped<IConnectionSerives, ConnectionSerives>();
+            // builder.Services.AddScoped<IReactService, ReactService>();
+            // builder.Services.AddScoped<IReactRepo, ReactRepo>();
+            // builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
 
             //AI INTEGRATION SERVICE

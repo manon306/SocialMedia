@@ -1,4 +1,5 @@
-﻿namespace SocialMedia.PL.Controllers
+﻿using System.Security.Claims;
+namespace SocialMedia.PL.Controllers
 {
     public class PostController : Controller
     {
@@ -36,6 +37,12 @@
             {
                 var (isSuccess, errorMessage, posts) = postService.GetPosts();
                 return View(posts);
+            }
+
+            // Ensure UserId is set from the current authenticated user
+            if (string.IsNullOrWhiteSpace(post.UserId))
+            {
+                post.UserId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
             }
 
             var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);

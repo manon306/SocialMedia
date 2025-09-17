@@ -22,7 +22,7 @@ namespace SocialMedia.BLL.Service.Implementation
             string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
 
             // Mapping
-            var postEntity = new Post(post.Content, imagePath, videoPath);
+            var postEntity = new Post(post.Content, imagePath, videoPath, post.UserId);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");
@@ -172,11 +172,8 @@ namespace SocialMedia.BLL.Service.Implementation
             
             postsRepo.unArchive();
         }
-        public void UseHangfire()
-        {
-            RecurringJob.AddOrUpdate(() => UnArchiveAllPosts(),
-                                            Cron.Monthly);
-        }
+        // Hangfire integration disabled per user request
+        public void UseHangfire() { }
 
 
     }

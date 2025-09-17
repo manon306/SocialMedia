@@ -1,16 +1,5 @@
-﻿@inject IUserProfileService profileService
-@inject UserManager<User> userManager
-
-@{
-    var user = await userManager.GetUserAsync(Context.User);
+﻿@{
     string profileImagePath = "default-profile.jpg";
-
-    if (user != null)
-    {
-        var profile = await profileService.GetProfile(user.Id.ToString());
-        profileImagePath = profile?.ProfileImagePath ?? "default-profile.jpg";
-    }
-
     ViewData["LayoutProfileImage"] = profileImagePath;
 }
 <!DOCTYPE html>

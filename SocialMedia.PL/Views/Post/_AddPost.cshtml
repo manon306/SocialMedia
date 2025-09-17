@@ -20,6 +20,7 @@
 
                 <div class="card-body text-white" style="background-color: var(--secondary-color);">
                     <form asp-action="AddPost" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="UserId" />
                         <textarea asp-for="Content" class="form-control border-0 shadow-none fs-5" placeholder="What's on your mind?" rows="4"></textarea>
                         <span asp-validation-for="Content" class="text-danger small mt-1"></span>
                         
