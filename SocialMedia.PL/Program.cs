@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using SocialMedia.BLL.Mapper;
+using SocialMedia.BLL.ModelVM.Account;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
 using SocialMedia.DAL.Entity;
@@ -27,6 +28,7 @@ namespace SocialMedia.PL
 
           
 
+
             // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
@@ -45,6 +47,9 @@ namespace SocialMedia.PL
 
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
 
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailSerives>();
+
 
 
             // Add services to the container.
@@ -56,24 +61,41 @@ namespace SocialMedia.PL
                         factory.Create(typeof(Resource));
                 });
 
+
+
+
             //  Identity + Authentication BEFORE Build()
-            builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                            .AddEntityFrameworkStores<SocialMediaDbContext>()
-                            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
-
-            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = "/Account/Login";
-                    options.AccessDeniedPath = "/Account/Login";
-                });
-
             builder.Services.AddIdentity<User, IdentityRole>(options =>
             {
-                options.SignIn.RequireConfirmedAccount = false; 
+                options.SignIn.RequireConfirmedAccount = false;
+                options.User.RequireUniqueEmail = true;
+
+                options.Password.RequiredLength = 6;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = true;
             })
 .AddEntityFrameworkStores<SocialMediaDbContext>()
 .AddDefaultTokenProviders();
+
+            //builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+            //                .AddEntityFrameworkStores<SocialMediaDbContext>()
+            //                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+
+            //builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options =>
+            //    {
+            //        options.LoginPath = "/Account/Login";
+            //        options.AccessDeniedPath = "/Account/Login";
+            //    });
+
+//            builder.Services.AddIdentity<User, IdentityRole>(options =>
+//            {
+//                options.SignIn.RequireConfirmedAccount = false; 
+//            })
+//.AddEntityFrameworkStores<SocialMediaDbContext>()
+//.AddDefaultTokenProviders();
 
 
 
