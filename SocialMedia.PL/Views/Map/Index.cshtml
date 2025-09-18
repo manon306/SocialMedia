@@ -1,0 +1,63 @@
+﻿@{
+    ViewData["Title"] = "Your Location Map";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div id="map" style="height: 500px; width: 100%;"></div>
+
+<script>
+    function initMap() {
+        // initial world view (fallback)
+        const map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 20, lng: 0 },
+            zoom: 2
+        });
+
+        const infoWindow = new google.maps.InfoWindow();
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    map.setCenter(pos);
+                    map.setZoom(14);
+
+                    const userMarker = new google.maps.Marker({
+                        position: pos,
+                        map: map,
+                        title: "Your Location",
+                        icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+                    });
+
+                    infoWindow.setContent("<h4>You are here!</h4>");
+                    infoWindow.open(map, userMarker);
+                },
+                (error) => {
+                    console.error("Geolocation error:", error);
+                    infoWindow.setContent("Unable to retrieve your location.");
+                    infoWindow.setPosition(map.getCenter());
+                    infoWindow.open(map);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        } else {
+            infoWindow.setContent("Your browser doesn't support geolocation.");
+            infoWindow.setPosition(map.getCenter());
+            infoWindow.open(map);
+        }
+    }
+</script>
+
+<!-- single script tag that calls initMap after Maps JS loads -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=@ViewBag.GoogleMapsApiKey&callback=initMap">
+</script>
