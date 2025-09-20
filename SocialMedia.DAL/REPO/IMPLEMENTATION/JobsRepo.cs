@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using SocialMedia.DAL.DataBase;
+using SocialMedia.DAL.Entity;
+using SocialMedia.DAL.REPO.Abstraction;
+
 namespace SocialMedia.DAL.REPO.IMPLEMENTATION
 {
     public class JobsRepo : IJobsRepo
@@ -40,6 +45,29 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
             return _dbContext.Jobs.AsNoTracking().Where(j => j.IsSaved).OrderByDescending(j => j.PostedAt).ToListAsync();
         }
 
+        public async Task<Job> CreateAsync(Job job)
+        {
+            _dbContext.Jobs.Add(job);
+            await _dbContext.SaveChangesAsync();
+            return job;
+        }
+
+        public async Task<Job> UpdateAsync(Job job)
+        {
+            _dbContext.Jobs.Update(job);
+            await _dbContext.SaveChangesAsync();
+            return job;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var job = await _dbContext.Jobs.FirstOrDefaultAsync(j => j.Id == id);
+            if (job != null)
+            {
+                _dbContext.Jobs.Remove(job);
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }
 

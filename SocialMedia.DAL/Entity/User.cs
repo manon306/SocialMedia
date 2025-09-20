@@ -11,15 +11,14 @@ namespace SocialMedia.DAL.Entity
         {
 
         }
-        public User(string? name, string?bio, string? createdBy, string? imagePath)
+        public User(string? name, string?bio, string? createdBy, string? imagePath, string role = "User")
         {
             Name = name;
             Bio = bio;
             CreatedBy = createdBy;
             CreatedOn = DateTime.Now;
             ImagePath = imagePath;
-
-          
+            Role = role;
         }
 
         
@@ -29,6 +28,7 @@ namespace SocialMedia.DAL.Entity
         public string? Headline { get; set; }   
         public string? Location { get; set; }
         public string? ImagePath { get; set; }
+        public string Role { get; set; } = "User"; // Default role is User, Admin for administrators
 
 
         public string? CreatedBy { get; private set; }//Identity
@@ -51,6 +51,16 @@ namespace SocialMedia.DAL.Entity
                 return false;
             Name = name;
             Age = age;
+            ModifiedOn = DateTime.Now;
+            ModifiedBy = modifierUser;
+            return true;
+        }
+
+        public bool UpdateRole(string modifierUser, string role)
+        {
+            if (string.IsNullOrEmpty(modifierUser) || string.IsNullOrEmpty(role))
+                return false;
+            Role = role;
             ModifiedOn = DateTime.Now;
             ModifiedBy = modifierUser;
             return true;

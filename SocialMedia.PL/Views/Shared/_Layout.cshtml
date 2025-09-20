@@ -1,5 +1,16 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Identity
+@using SocialMedia.DAL.Entity
+@inject UserManager<User> userManager
+
+@{
+    var user = await userManager.GetUserAsync(Context.User);
     string profileImagePath = "default-profile.jpg";
+
+    if (user != null)
+    {
+        profileImagePath = user.ImagePath ?? "default-profile.jpg";
+    }
+
     ViewData["LayoutProfileImage"] = profileImagePath;
 }
 <!DOCTYPE html>
@@ -242,6 +253,19 @@
                         </div>
                         <div class="modern-badge">5</div>
                     </a>
+
+                    @if (user?.Role == "Admin")
+                    {
+                        <a class="modern-item" asp-action="Dashboard" asp-controller="Admin" style="background-color: var(--header-color);">
+                            <div class="modern-icon" style="background: linear-gradient(135deg, #dc3545, #fd7e14);">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div class="modern-content">
+                                <div class="modern-title text-white">Admin Panel</div>
+                                <div class="modern-subtitle" style="color: var(--muted-text);">Manage system</div>
+                            </div>
+                        </a>
+                    }
                 </div>
             </aside>
 

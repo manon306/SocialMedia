@@ -22,16 +22,16 @@
             if (comment == null)
                 return (false, "Comment cannot be null");
 
-            var existing = DB.Comments.FirstOrDefault(c => c.ID == comment.ID && !c.IsDeleted);
+            var existing = DB.Comments.Where(a=>a.ID == comment.ID).FirstOrDefault();
             if (existing == null)
                 return (false, "Comment not found");
-
 
             existing.Update(comment.UpdatedBy, comment.Content);
             DB.SaveChanges();
 
             return (true, null);
         }
+
         public (bool, string) DeleteComment(int commentId ,string Deletedby)
         {
             if(commentId< 0 || string.IsNullOrEmpty(Deletedby))
@@ -49,7 +49,7 @@
         }
         public (bool , string , List<Comment>) GetAllComments(int PostId)
         {
-            var result = DB.Comments.Where(x=>x.PostID ==  PostId).ToList();
+            var result = DB.Comments.Where(x=>x.PostID ==  PostId && x.IsDeleted == false).ToList();
             if (!result.Any())
             {
                 return (false, "there is no comment yet", null);

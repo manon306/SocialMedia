@@ -1,0 +1,46 @@
+@model List<SocialMedia.DAL.Entity.User>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<h2>User Management</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.Email</td>
+                    <td>
+                        <span class="badge @(user.Role == "Admin" ? "bg-danger" : "bg-primary")">
+                            @user.Role
+                        </span>
+                    </td>
+                    <td>@user.CreatedOn?.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <form asp-action="UpdateUserRole" method="post" style="display: inline;">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <select name="role" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                                <option value="User" selected="@(user.Role == "User")">User</option>
+                                <option value="Admin" selected="@(user.Role == "Admin")">Admin</option>
+                            </select>
+                            <button type="submit" class="btn btn-sm btn-outline-primary">Update</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

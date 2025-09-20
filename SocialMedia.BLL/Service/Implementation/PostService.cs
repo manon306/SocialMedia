@@ -10,7 +10,7 @@ namespace SocialMedia.BLL.Service.Implementation
             this.postsRepo = postsRepo;
             this.mapper = mapper;
         }
-        public (bool, string) AddPost(CreateVm post)
+        public (bool, string) AddPost(CreateVm post, string userId)
         {
 
             //validation
@@ -22,7 +22,7 @@ namespace SocialMedia.BLL.Service.Implementation
             string? videoPath = post.Videos != null ? Upload.UploadFile("Videos", post.Videos) : null;
 
             // Mapping
-            var postEntity = new Post(post.Content, imagePath, videoPath, post.UserId);
+            var postEntity = new Post(post.Content, imagePath, videoPath, userId);
             if (postEntity == null)
             {
                 return (false, "Mapping failed");
@@ -172,8 +172,6 @@ namespace SocialMedia.BLL.Service.Implementation
             
             postsRepo.unArchive();
         }
-        // Hangfire integration disabled per user request
-        public void UseHangfire() { }
 
 
     }

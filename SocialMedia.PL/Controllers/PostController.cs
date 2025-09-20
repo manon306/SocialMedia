@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     public class PostController : Controller
     {
@@ -39,13 +38,9 @@ namespace SocialMedia.PL.Controllers
                 return View(posts);
             }
 
-            // Ensure UserId is set from the current authenticated user
-            if (string.IsNullOrWhiteSpace(post.UserId))
-            {
-                post.UserId = User?.FindFirstValue(ClaimTypes.NameIdentifier);
-            }
-
-            var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);
+            // Get current user ID - for now using a placeholder
+            var userId = User.Identity?.Name ?? "default-user";
+            var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post, userId);
             if (!isSuccessAdd)
             {
                 ModelState.AddModelError(string.Empty, errorMessageAdd);

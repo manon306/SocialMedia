@@ -2,7 +2,7 @@
 {
     public interface IPostService
     {
-        (bool, string) AddPost(CreateVm post);
+        (bool, string) AddPost(CreateVm post, string userId);
         (bool, string) DeletePost(int postId, string deletedBy);
         (bool, string) UpdatePost(updatePostVm post);
         (bool, string, Post) GetById(int id);
@@ -12,8 +12,6 @@
         (bool, string) toggleSaved(int PostId);
         (bool, string) toggleArchive(int PostId);
         void UnArchiveAllPosts();
-
-        void UseHangfire();
     }
 }
 

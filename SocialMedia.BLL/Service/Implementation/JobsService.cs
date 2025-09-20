@@ -1,3 +1,7 @@
+using SocialMedia.BLL.Service.Abstraction;
+using SocialMedia.DAL.Entity;
+using SocialMedia.DAL.REPO.Abstraction;
+
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class JobsService : IJobsService
@@ -32,6 +36,21 @@ namespace SocialMedia.BLL.Service.Implementation
         public Task<List<Job>> GetSavedAsync()
         {
             return _jobsRepo.GetSavedAsync();
+        }
+
+        public Task<Job> CreateAsync(Job job)
+        {
+            return _jobsRepo.CreateAsync(job);
+        }
+
+        public Task<Job> UpdateAsync(Job job)
+        {
+            return _jobsRepo.UpdateAsync(job);
+        }
+
+        public Task DeleteAsync(int id)
+        {
+            return _jobsRepo.DeleteAsync(id);
         }
     }
 }

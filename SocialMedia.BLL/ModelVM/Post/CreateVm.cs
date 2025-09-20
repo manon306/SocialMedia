@@ -6,7 +6,5 @@
         public string Content { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? Videos { get; set; }
-        [Required]
-        public string UserId { get; set; }
     }
 }
