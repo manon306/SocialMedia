@@ -42,9 +42,18 @@ namespace SocialMedia.DAL.Entity
         public int FollowersCount { get; set; }
         public int FollowingCount { get; set; }
 
+        // ✅ New subscription flag
+        public bool IsPremium { get; set; } = false;
 
-         public virtual List<Post> Post { get; private set; }
+
+        public virtual List<Post> Post { get; private set; }
         public virtual ICollection<Comment> Comments { get; set; }
+
+        // New: Google Maps integration fields
+        public string? Address { get; set; }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+
 
 
         public bool Update(string modifierUser, string name, int age)

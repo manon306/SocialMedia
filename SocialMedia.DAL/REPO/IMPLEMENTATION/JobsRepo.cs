@@ -39,7 +39,20 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
         {
             return _dbContext.Jobs.AsNoTracking().Where(j => j.IsSaved).OrderByDescending(j => j.PostedAt).ToListAsync();
         }
+        public async Task AddAsync(Job job)
+        {
+            await _dbContext.Jobs.AddAsync(job);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var job = await _dbContext.Jobs.FindAsync(id);
+            if (job == null) return;
+            _dbContext.Jobs.Remove(job);
+            await _dbContext.SaveChangesAsync();
+        }
+
 
     }
 }
-

@@ -1,26 +1,43 @@
-@model List<SocialMedia.DAL.Entity.Job>
+@model List<SocialMedia.BLL.ModelVM.job.Jobvm>
 
 <h2>Saved Jobs</h2>
 
-@if (Model == null || !Model.Any())
+@if (!Model.Any())
 {
-	<p>No saved jobs yet.</p>
+    <div class="alert alert-info mt-3">
+        No saved jobs yet.
+    </div>
 }
 else
 {
-	<div class="list-group">
-		@foreach (var job in Model)
-		{
-			<div class="list-group-item">
-				<h5 class="mb-1">
-					<a asp-action="Details" asp-route-id="@job.Id">@job.Title</a>
-				</h5>
-				<small>@job.Company @if(!string.IsNullOrWhiteSpace(job.Location)){<text>- @job.Location</text>}</small>
-				<p class="mb-1">@job.Description</p>
-				<small>Posted @job.PostedAt.ToString("yyyy-MM-dd")</small>
-			</div>
-		}
-	</div>
+    <table class="table table-striped mt-3">
+        <thead>
+            <tr class="text-white">
+                <th>Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Posted Date</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var job in Model)
+            {
+                <tr class="text-white">
+                    <td>@job.Title</td>
+                    <td>@job.Company</td>
+                    <td>@job.PostedDate.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-info btn-sm">Details</a>
+                        <form asp-action="ToggleSave" asp-route-id="@job.Id" method="post" style="display:inline">
+                            <button type="submit" class="btn btn-warning btn-sm">
+                                Unsave
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
-
-
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to All Jobs</a>

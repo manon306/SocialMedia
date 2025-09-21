@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using SocialMedia.DAL.DataBase;
-using SocialMedia.DAL.Entity;
-using Microsoft.AspNetCore.Identity;
+﻿global using SocialMedia.DAL.DataBase;
 
 namespace SocialMedia.PL.Controllers
 {

@@ -7,6 +7,8 @@ namespace SocialMedia.DAL.REPO.Abstraction
         Task ToggleSaveAsync(int id);
         Task UpdateReviewAsync(int id, string? review);
         Task<List<Job>> GetSavedAsync();
+        Task AddAsync(Job job);
+        Task DeleteAsync(int id);
     }
 }
 

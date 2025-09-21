@@ -1,0 +1,28 @@
+﻿<input type="text" id="messageInput" placeholder="Message">
+<button id="sendBtn">Send</button>
+<ul id="messagesList"></ul>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+<script>
+    const userId = 1; // ضع ID المستخدم الحالي
+    const recipientId = 2; // ID الشخص الذي ترسل له الرسائل
+
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chathub")
+        .build();
+
+    connection.start();
+
+    connection.on("ReceiveMessage", (fromUserId, message) => {
+        const li = document.createElement("li");
+        li.textContent = `${fromUserId}: ${message}`;
+        document.getElementById("messagesList").appendChild(li);
+    });
+
+    document.getElementById("sendBtn").addEventListener("click", () => {
+        const message = document.getElementById("messageInput").value;
+        if(message) {
+            connection.invoke("SendMessage", userId, recipientId, message);
+        }
+    });
+</script>

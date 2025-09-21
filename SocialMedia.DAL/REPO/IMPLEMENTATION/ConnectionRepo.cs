@@ -50,11 +50,6 @@ namespace SocialMedia.DAL.REPO.IMPLEMENTATION
             await _db.Connections.AddAsync(connection);
         }
 
-        //public async Task Update(Connection connection)
-        //{
-        //    _db.Connections.Update(connection);
-        //    await Task.CompletedTask;
-        //}
         public Task Update(Connection connection)
         {
             _db.Connections.Update(connection);

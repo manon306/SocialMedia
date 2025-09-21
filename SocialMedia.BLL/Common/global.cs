@@ -20,6 +20,11 @@ global using AutoMapper.QueryableExtensions;
 global using Microsoft.EntityFrameworkCore;
 global using SocialMedia.DAL.DataBase;
 global using System.Data;
+global using MailKit.Net.Smtp;
+global using MimeKit;
+global using SocialMedia.BLL.ModelVM.Account;
+global using SocialMedia.BLL.ModelVM.job;
+
 
 
 

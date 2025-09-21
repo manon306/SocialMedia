@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-
-namespace SocialMedia.PL.Controllers
+﻿namespace SocialMedia.PL.Controllers
 {
     public class PostController : Controller
     {
@@ -33,8 +31,8 @@ namespace SocialMedia.PL.Controllers
             // رجع الموديل اللي يحتوي على CreateVm + List<PostVm>
             var viewModel = (
                 new CreateVm(),
-                posts,
-                profile
+                posts?? new List<PostVm>(),
+                profile ?? new ViewProfileVM()
 
             );
 
@@ -146,8 +144,8 @@ namespace SocialMedia.PL.Controllers
             if (isSuccess)
             {
                 var viewModel = (
-                    posts,
-                    profile
+                    posts?? new List<PostVm>(),
+                    profile  ?? new ViewProfileVM()
                 );
                 return View(viewModel);
             }

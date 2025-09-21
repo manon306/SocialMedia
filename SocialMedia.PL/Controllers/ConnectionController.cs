@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using SocialMedia.BLL.ModelVM.Connect;
-
+﻿
 namespace SocialMedia.PL.Controllers
 {
     [Authorize]

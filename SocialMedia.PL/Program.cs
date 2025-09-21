@@ -13,6 +13,7 @@ using SocialMedia.DAL.REPO.Abstraction;
 using SocialMedia.DAL.REPO.IMPLEMENTATION;
 using SocialMedia.PL.Factories;
 using SocialMedia.PL.Language;
+using Stripe;
 using System.Globalization;
 using System.Security.Claims;
 
@@ -23,6 +24,7 @@ namespace SocialMedia.PL
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddSignalR();
 
             // Connection string
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
@@ -45,6 +47,7 @@ namespace SocialMedia.PL
             })
             .AddEntityFrameworkStores<SocialMediaDbContext>()
             .AddDefaultTokenProviders();
+
 
 
 
@@ -106,10 +109,20 @@ namespace SocialMedia.PL
             builder.Services.AddScoped<IReactService, ReactService>();
             builder.Services.AddScoped<IReactRepo, ReactRepo>();
             builder.Services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsPrincipalFactory>();
+            builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+            builder.Services.AddTransient<IEmailService, EmailSerives>();
 
+
+
+
+            // AI service
+            builder.Services.AddSingleton<AiService>();
+
+            // SignalR for chat
+            builder.Services.AddSignalR();
 
             //AI INTEGRATION SERVICE
-            builder.Services.AddHttpClient();
+            //builder.Services.AddHttpClient();
             //builder.Services.AddHttpClient<AiService>();
             // إضافة خدمات HttpClient
             //builder.Services.AddHttpClient<AiService>(client =>
@@ -152,10 +165,15 @@ namespace SocialMedia.PL
                         factory.Create(typeof(Resource));
                 }); ;
 
-            
-            
+            builder.Services.AddHttpClient<PaymobService>(client =>
+            {
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+
 
             var app = builder.Build();
+            
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -189,6 +207,8 @@ namespace SocialMedia.PL
                 }
             });
 
+            
+
             //Hangfire dashboard middleware
             app.UseHangfireDashboard("/SocialMedia");
 
@@ -202,6 +222,8 @@ namespace SocialMedia.PL
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            
+
 
             // Hangfire Dashboard
             //app.UseHangfireDashboard("/SocialMedia");
@@ -210,7 +232,8 @@ namespace SocialMedia.PL
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Post}/{action=Index}/{id?}");
-
+            // SignalR hub endpoint
+            app.MapHub<ChatHub>("/chatHub");
             // Hangfire jobs
             using (var scope = app.Services.CreateScope())
             {

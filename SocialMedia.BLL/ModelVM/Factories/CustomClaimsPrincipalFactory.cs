@@ -1,4 +1,6 @@
-﻿namespace SocialMedia.PL.Factories
+﻿
+//بحط هنا الي عايزة استخدمه من ال          user in Identity
+namespace SocialMedia.PL.Factories
 {
     public class CustomClaimsPrincipalFactory : UserClaimsPrincipalFactory<User, IdentityRole>
     {
@@ -25,6 +27,11 @@
                 identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName ?? user.Email));
             }
 
+            // ✅ الصورة (ImagePath) — هنضيفها كـ Claim مخصص
+            if (!string.IsNullOrEmpty(user.ImagePath))
+            {
+                identity.AddClaim(new Claim("ImagePath", user.ImagePath));
+            }
             return identity;
         }
     }

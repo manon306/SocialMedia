@@ -8,7 +8,5 @@
         public string SenderName { get; set; }
         public string SenderHeadline { get; set; }
         public string SenderImage { get; set; }
-
-
     }
 }

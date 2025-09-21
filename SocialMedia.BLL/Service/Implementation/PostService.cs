@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Identity;
-
 namespace SocialMedia.BLL.Service.Implementation
 {
     public class PostService : IPostService

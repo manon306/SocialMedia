@@ -1,19 +1,18 @@
-@model SocialMedia.DAL.Entity.Job
+@model SocialMedia.BLL.ModelVM.job.Jobvm
 
-<div class="card">
-	<div class="card-body">
-		<h3 class="card-title">@Model.Title</h3>
-		<h6 class="card-subtitle mb-2 text-muted">@Model.Company @if(!string.IsNullOrWhiteSpace(Model.Location)){<text>- @Model.Location</text>}</h6>
-		<p class="card-text">@Model.Description</p>
-		<p class="text-muted">Posted @Model.PostedAt.ToString("yyyy-MM-dd")</p>
-		<form asp-action="ToggleSave" method="post" class="d-inline">
-			<input type="hidden" name="id" value="@Model.Id" />
-			<button class="btn btn-sm @(Model.IsSaved ? "btn-success" : "btn-outline-secondary")" type="submit">
-				@(Model.IsSaved ? "Saved" : "Save")
-			</button>
-		</form>
-		<a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
-	</div>
+<h2>Job Details</h2>
+
+<div class="card mt-3">
+    <div class="card-body">
+        <h4 class="card-title">@Model.Title</h4>
+        <h6 class="card-subtitle mb-2 text-muted">@Model.Company</h6>
+        <p class="card-text">
+            <strong>Description:</strong> @Model.Description
+        </p>
+        <p class="card-text">
+            <strong>Posted Date:</strong> @Model.PostedDate.ToShortDateString()
+        </p>
+    </div>
 </div>
 
-
+<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>

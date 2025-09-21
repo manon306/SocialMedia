@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Text;
-using Newtonsoft.Json.Linq;
-
-namespace YourApp.Controllers
+﻿namespace YourApp.Controllers
 {
     public class AiController : Controller
     {
@@ -23,7 +18,7 @@ namespace YourApp.Controllers
         {
             var requestBody = new
             {
-                model = "command-r-plus",
+                model = "command-r-plus-08-2024",
                 message = userInput   // ✅ Cohere بيستخدم "message" مش "messages"
             };
 
@@ -43,7 +38,7 @@ namespace YourApp.Controllers
             }
 
             var json = JObject.Parse(responseString);
-            var message = json["text"]?.ToString();   // ✅ استخراج الـ Response
+            var message = json["text"]?.ToString();   
 
             ViewBag.Response = message ?? "No response from AI.";
             return View("AITOOL");

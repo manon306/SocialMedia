@@ -13,3 +13,10 @@ global using SocialMedia.BLL.ModelVM.Comment;
 global using SocialMedia.BLL.ModelVM.React;
 global using SocialMedia.DAL.ENUM;
 global using SocialMedia.BLL.ModelVM.Profile;
+global using Microsoft.AspNetCore.WebUtilities;
+global using System.Text;
+global using Newtonsoft.Json.Linq;
+global using Microsoft.EntityFrameworkCore;
+global using SocialMedia.BLL.ModelVM.Connect;
+global using Microsoft.AspNetCore.SignalR;
+

@@ -1,3 +1,5 @@
+using Microsoft.VisualBasic;
+
 namespace SocialMedia.DAL.DataBase
 {
     public class SocialMediaDbContext :IdentityDbContext<User>
@@ -57,6 +59,7 @@ namespace SocialMedia.DAL.DataBase
                 .WithMany()
                 .HasForeignKey(f => f.FollowingId)
                 .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         public DbSet<Post> Posts { get; set; }
@@ -69,7 +72,6 @@ namespace SocialMedia.DAL.DataBase
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Connection> Connections { get; set; }
         public DbSet<Follow> Follows { get; set; }
-
     }
 
 
