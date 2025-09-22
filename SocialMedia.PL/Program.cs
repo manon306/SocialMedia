@@ -19,7 +19,7 @@ namespace SocialMedia.PL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -187,6 +187,20 @@ namespace SocialMedia.PL
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Post}/{action=Index}/{id?}");
+<<<<<<< HEAD
+=======
+            // SignalR hub endpoint
+            app.MapHub<ChatHub>("/chatHub");
+            // Hangfire jobs and role seeding
+            using (var scope = app.Services.CreateScope())
+            {
+                var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
+                postService.UseHangfire();
+                
+                // Seed roles
+                var serviceProvider = scope.ServiceProvider;
+                await SocialMedia.DAL.DataBase.RoleSeeder.SeedRolesAsync(serviceProvider);
+>>>>>>> 5f9945a (admin)
 
             // Hangfire jobs
             if (enableHangfire && canConnectToSql)
