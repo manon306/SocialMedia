@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using SocialMedia.BLL.Mapper;
 using SocialMedia.BLL.Service.Implementation;
 using SocialMedia.DAL.DataBase;
@@ -21,7 +22,7 @@ namespace SocialMedia.PL
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddSignalR();
@@ -30,9 +31,7 @@ namespace SocialMedia.PL
             var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
             // Identity configuration
-            builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
-                            .AddEntityFrameworkStores<SocialMediaDbContext>()
-                            .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
+            
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
@@ -121,20 +120,6 @@ namespace SocialMedia.PL
             // SignalR for chat
             builder.Services.AddSignalR();
 
-            //AI INTEGRATION SERVICE
-            //builder.Services.AddHttpClient();
-            //builder.Services.AddHttpClient<AiService>();
-            // إضافة خدمات HttpClient
-            //builder.Services.AddHttpClient<AiService>(client =>
-            //{
-            //    client.BaseAddress = new Uri("https://api-inference.huggingface.co/");
-            //    client.DefaultRequestHeaders.Authorization =
-            //        new System.Net.Http.Headers.AuthenticationHeaderValue(
-            //            "Bearer", "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");
-            //    client.Timeout = TimeSpan.FromSeconds(30);
-            //});
-            //Hangfire
-            // Hangfire (disabled unless packages and config are added)
             var enableHangfire = false;
               bool canConnectToSql = false;
               try
@@ -239,50 +224,10 @@ namespace SocialMedia.PL
             {
                 var postService = scope.ServiceProvider.GetRequiredService<IPostService>();
                 postService.UseHangfire();
-
-                // Seed Jobs data in Development
-                //if (app.Environment.IsDevelopment())
-                //{
-                //    var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
-                //    if (!db.Jobs.Any())
-                //    {
-                //        db.Jobs.AddRange(
-                //            new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
-                //            new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
-                //            new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
-                //            new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
-                //        );
-                //        db.SaveChanges();
-                //    }
-                //}
+                var services = scope.ServiceProvider;
+                await RoleSeeder.SeedRolesAsync(services);
             }
-            //if (app.Environment.IsDevelopment())
-            //{
-            //    using (var scope = app.Services.CreateScope())
-            //    {
-            //        var db = scope.ServiceProvider.GetRequiredService<SocialMediaDbContext>();
-            //        if (!db.Jobs.Any())
-            //        {
-            //            db.Jobs.AddRange(
-            //              new Job("Junior .NET Developer", "Contoso Ltd", "Cairo, EG", "Build and maintain ASP.NET Core apps."),
-            //              new Job("Frontend Engineer", "Fabrikam", "Remote", "React/TypeScript UI development."),
-            //              new Job("SQL Server DBA", "Northwind Traders", "Alexandria, EG", "Manage SQL Server instances and backups."),
-            //              new Job("Backend Engineer", "Adventure Works", "Giza, EG", "C# microservices and APIs.")
-            //            );
-            //            db.SaveChanges();
-            //        }
-            //    }
-            //}
-// if (enableHangfire && canConnectToSql) { /* register Hangfire services */ }
-
-
-			// Hangfire dashboard middleware
-			// if (enableHangfire && canConnectToSql) app.UseHangfireDashboard("/SocialMedia");
-
-			// if (enableHangfire && canConnectToSql) { /* schedule recurring jobs */ }
-
-			// Seed Jobs data in Development if empty
-
+            
             app.Run();
         }
     }

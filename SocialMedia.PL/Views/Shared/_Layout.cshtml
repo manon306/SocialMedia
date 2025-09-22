@@ -69,11 +69,12 @@
                                 <i class="bi bi-chat-dots fs-5"></i><br /><small>Messaging</small>
                             </a>
                         </li>
-                        <li class="nav-item mx-2">
-                            <a class="nav-link text-white" href="#">
-                                <i class="bi bi-bell fs-5"></i><br /><small>Notifications</small>
-                            </a>
-                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item mx-2">
+                                <a class="nav-link" asp-controller="Admin" asp-action="ManageRoles">Dashboard</a>
+                            </li>
+                        }
                         <li class="nav-item mx-2">
                             <a asp-area="" asp-controller="UserProfile" asp-action="MyProfile" class="nav-link text-white">
                                 <img src="@Url.Content("~/Files/" + ViewData["LayoutProfileImage"])"

@@ -45,7 +45,7 @@ namespace SocialMedia.PL.Controllers
             await _jobsService.UpdateReviewAsync(id, review);
             return RedirectToAction(nameof(Details), new { id });
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -53,6 +53,7 @@ namespace SocialMedia.PL.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create(Jobvm jobVm)
         {
             if (!ModelState.IsValid)

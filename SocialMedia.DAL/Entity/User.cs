@@ -71,14 +71,6 @@ namespace SocialMedia.DAL.Entity
         {
             throw new NotImplementedException();
         }
-        //public bool ToggelStatus(string DeletedUser)
-        //{
-
-        //    if (string.IsNullOrEmpty(DeletedUser))
-        //        return false;
-        //    IsDeleted = !IsDeleted;
-        //    DeletedOn = DateTime.Now;
-        //    return true;
-        //}
+        
     }
 }
