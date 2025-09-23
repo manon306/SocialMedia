@@ -46,19 +46,6 @@ namespace SocialMedia.DAL.DataBase
             modelBuilder.Entity<Connection>()
                 .HasIndex(c => new { c.SenderId, c.ReceiverId })
                 .IsUnique();
-            //follow
-
-            modelBuilder.Entity<Follow>()
-                .HasOne(f => f.Follower)
-                .WithMany()
-                .HasForeignKey(f => f.FollowerId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Follow>()
-                .HasOne(f => f.Following)
-                .WithMany()
-                .HasForeignKey(f => f.FollowingId)
-                .OnDelete(DeleteBehavior.Restrict);
 
         }
 
@@ -71,7 +58,6 @@ namespace SocialMedia.DAL.DataBase
         public DbSet<Share> Shares { get; set; }
         public DbSet<UserProfile> UserProfiles { get; set; }
         public DbSet<Connection> Connections { get; set; }
-        public DbSet<Follow> Follows { get; set; }
     }
 
 

@@ -118,240 +118,240 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>About</value>
+    <value>عن</value>
   </data>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>قبول</value>
   </data>
   <data name="Actions" xml:space="preserve">
-    <value>Actions</value>
+    <value>الإجراءات</value>
   </data>
   <data name="Add New Job" xml:space="preserve">
-    <value>Add New Job</value>
+    <value>اضافه وظيفه جديدة</value>
   </data>
   <data name="Archive" xml:space="preserve">
-    <value>Archive</value>
+    <value>أرشيف</value>
   </data>
   <data name="Archived Posts" xml:space="preserve">
-    <value>Archived Posts</value>
+    <value>بوستات مؤرشفه</value>
   </data>
   <data name="Assign" xml:space="preserve">
-    <value>Assign</value>
+    <value>تعيين</value>
   </data>
   <data name="Assign New Role" xml:space="preserve">
-    <value>Assign New Role</value>
+    <value>تعيين دور جديد</value>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>Back</value>
+    <value>رجوع</value>
   </data>
   <data name="Back to All Jobs" xml:space="preserve">
-    <value>Back to All Jobs</value>
+    <value>العودة للوظائف</value>
   </data>
   <data name="Back to List" xml:space="preserve">
-    <value>Back to List</value>
+    <value>العودة الي القائمة</value>
   </data>
   <data name="Block" xml:space="preserve">
-    <value>Block</value>
+    <value>بلوك</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>الغاء</value>
   </data>
   <data name="Company" xml:space="preserve">
-    <value>Company</value>
+    <value>شركة</value>
   </data>
   <data name="Connect" xml:space="preserve">
-    <value>Connect</value>
+    <value>تواصل</value>
   </data>
   <data name="Connection Requests" xml:space="preserve">
-    <value>Connection Requests</value>
+    <value>طلب تواصل</value>
   </data>
   <data name="Continue with Facebook" xml:space="preserve">
-    <value>Continue with Facebook</value>
+    <value>المتابعه ب فيسبوك</value>
   </data>
   <data name="Continue with Google" xml:space="preserve">
-    <value>Continue with Google</value>
+    <value>المتابعه ب جوجل</value>
   </data>
   <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>انشاء</value>
   </data>
   <data name="Create Account" xml:space="preserve">
-    <value>Create Account</value>
+    <value>إنشاء حساب</value>
   </data>
   <data name="Create Profile" xml:space="preserve">
-    <value>Create Profile</value>
+    <value>اضافه ملف شخصي</value>
   </data>
   <data name="Current Roles" xml:space="preserve">
-    <value>Current Roles</value>
+    <value>الدور الحالي</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
+    <value>لوحة القيادة</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
+    <value>حذف</value>
   </data>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>الوصف</value>
   </data>
   <data name="Details" xml:space="preserve">
-    <value>Details</value>
+    <value>التفاصيل</value>
   </data>
   <data name="Don’t have an account?" xml:space="preserve">
-    <value>Don’t have an account?</value>
+    <value>لا تمتلك حساب؟</value>
   </data>
   <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
+    <value>تعديل</value>
   </data>
   <data name="Education" xml:space="preserve">
-    <value>Education</value>
+    <value>تعليم</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>الايميل</value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>Home</value>
+    <value>الصفحة الرئيسيه</value>
   </data>
   <data name="Image" xml:space="preserve">
-    <value>Image</value>
+    <value>صورة</value>
   </data>
   <data name="Jobs" xml:space="preserve">
-    <value>Jobs</value>
+    <value>وظائف</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>Language</value>
+    <value>لغه</value>
   </data>
   <data name="Location" xml:space="preserve">
-    <value>Location</value>
+    <value>مكان</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>تسجيل دخول</value>
   </data>
   <data name="LogOut" xml:space="preserve">
-    <value>LogOut</value>
+    <value>تسجيل خروج</value>
   </data>
   <data name="Manage User Roles" xml:space="preserve">
-    <value>Manage User Roles</value>
+    <value>ادارة ادوار المستخدمين</value>
   </data>
   <data name="Messaging" xml:space="preserve">
-    <value>Messaging</value>
+    <value>الرسائل</value>
   </data>
   <data name="My Profile" xml:space="preserve">
-    <value>My Profile</value>
+    <value>صفحتي الشخصيه</value>
   </data>
   <data name="No Archiveed Posts yet" xml:space="preserve">
-    <value>No Archiveed Posts yet</value>
+    <value>لا توجد بوستات مؤرشه</value>
   </data>
   <data name="No jobs available yet." xml:space="preserve">
-    <value>No jobs available yet.</value>
+    <value>لا توجد وظائف متاحة</value>
   </data>
   <data name="No pending requests." xml:space="preserve">
-    <value>No pending requests.</value>
+    <value>لا يوجد</value>
   </data>
   <data name="No Posts yet" xml:space="preserve">
-    <value>No Posts yet</value>
+    <value>لا توجد طلبات معلقة.</value>
   </data>
   <data name="No Saved Posts yet" xml:space="preserve">
-    <value>No Saved Posts yet</value>
+    <value>لا توجد مشاركات محفوظة حتى الآن</value>
   </data>
   <data name="Not Allowed" xml:space="preserve">
-    <value>Not Allowed</value>
+    <value>غير مسموح</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>الرقم السري</value>
   </data>
   <data name="People You May Know" xml:space="preserve">
-    <value>People You May Know</value>
+    <value>أصدقاء قد تعرفهم</value>
   </data>
   <data name="Posted Date" xml:space="preserve">
-    <value>Posted Date</value>
+    <value>تاريخ النشر</value>
   </data>
   <data name="Reject" xml:space="preserve">
-    <value>Reject</value>
+    <value>رفض</value>
   </data>
   <data name="Reply" xml:space="preserve">
-    <value>Reply</value>
+    <value>اضافه رد</value>
   </data>
   <data name="Reset Password" xml:space="preserve">
-    <value>Reset Password</value>
+    <value>اعدة تعيين</value>
   </data>
   <data name="Save" xml:space="preserve">
-    <value>Save</value>
+    <value>حفظ</value>
   </data>
   <data name="h" xml:space="preserve">
-    <value>Save Location</value>
+    <value>حفظ مكان</value>
   </data>
   <data name="Save Profile" xml:space="preserve">
-    <value>Save Profile</value>
+    <value>حفظ صفحتك الشخصيه</value>
   </data>
   <data name="Save Review" xml:space="preserve">
-    <value>Save Review</value>
+    <value>حفظ المراجعة</value>
   </data>
   <data name="Saved" xml:space="preserve">
-    <value>Saved</value>
+    <value>المحفوظات</value>
   </data>
   <data name="Saved jobs" xml:space="preserve">
-    <value>Saved jobs</value>
+    <value>الوظائف المحفوظة</value>
   </data>
   <data name="Saved Posts" xml:space="preserve">
-    <value>Saved Posts</value>
+    <value>البوستات المحفوظة</value>
   </data>
   <data name="See others' profiles" xml:space="preserve">
-    <value>See others' profiles</value>
+    <value>مشاهدة ملفات اشخاص اخري</value>
   </data>
   <data name="send" xml:space="preserve">
-    <value>send</value>
+    <value>ارسال</value>
   </data>
   <data name="Send Reset Link" xml:space="preserve">
-    <value>Send Reset Link</value>
+    <value>ارسال لينك اعادة التعين</value>
   </data>
   <data name="Set up your profile" xml:space="preserve">
-    <value>Set up your profile</value>
+    <value>تعيين صفحتك الشخصيه</value>
   </data>
   <data name="Sign Up" xml:space="preserve">
-    <value>Sign Up</value>
+    <value>التسجيل</value>
   </data>
   <data name="Title" xml:space="preserve">
-    <value>Title</value>
+    <value>العنوان</value>
   </data>
   <data name="UnArchived" xml:space="preserve">
-    <value>UnArchived</value>
+    <value>ازاله الارشيف</value>
   </data>
   <data name="Unblock" xml:space="preserve">
-    <value>Unblock</value>
+    <value>ازاله البلوك</value>
   </data>
   <data name="UnSave" xml:space="preserve">
-    <value>UnSave</value>
+    <value>عدم الحفظ</value>
   </data>
   <data name="Update" xml:space="preserve">
-    <value>Update</value>
+    <value>تعديل</value>
   </data>
   <data name="Upgrade To Premium" xml:space="preserve">
-    <value>Upgrade To Premium</value>
+    <value>الترقية إلى الإصدار المميز</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>Username</value>
+    <value>أسمك</value>
   </data>
   <data name="Video" xml:space="preserve">
-    <value>Video</value>
+    <value>فيديو</value>
   </data>
   <data name="View Profile" xml:space="preserve">
-    <value>View Profile</value>
+    <value>مشاهدة الملف الشخصي</value>
   </data>
   <data name="View your profile" xml:space="preserve">
-    <value>View your profile</value>
+    <value>مشاهدة الملف الشخصي</value>
   </data>
   <data name="What's on your mind?" xml:space="preserve">
-    <value>What's on your mind?</value>
+    <value>بماذا تفكر؟</value>
   </data>
   <data name="Your Review" xml:space="preserve">
-    <value>Your Review</value>
+    <value>مراجعتك</value>
   </data>
   <data name="Connections" xml:space="preserve">
-    <value>Connections</value>
+    <value>اصدقائك</value>
   </data>
   <data name="Requests" xml:space="preserve">
-    <value>Requests</value>
+    <value>طلبات</value>
   </data>
   <data name="AllUsers" xml:space="preserve">
-    <value>AllUsers</value>
+    <value>المستخدمين</value>
   </data>
 </root>

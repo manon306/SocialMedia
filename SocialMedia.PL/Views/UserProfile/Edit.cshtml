@@ -58,11 +58,6 @@
             <div id="skillsContainer" class="d-flex flex-wrap"></div>
             <input type="hidden" asp-for="Skills" id="Skills" />
         </div>
-       @*  <div class="form-group">
-            <label for="Skills">Skills</label>
-            <input type="text" name="Skills" class="form-control" />
-        </div> *@
-
 
         <!-- Profile Image -->
         <div class="profile-section mb-4">
@@ -70,10 +65,11 @@
             <input asp-for="ProfileImage" type="file" class="form-control custom-input" />
         </div>
 
+
         <!-- Save -->
 
         <div class="text-center">
-            <button type="submit" class="btn btn-gradient px-5 py-2">Save Profile</button>
+            <button type="submit" class="btn btn-gradient px-5 py-2">@SharedLocalizer["Save Profile"]</button>
         </div>
     </form>
 </div>

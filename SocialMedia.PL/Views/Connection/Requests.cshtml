@@ -5,11 +5,11 @@
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">Connection Requests</h2>
+    <h2 class="mb-4"> @SharedLocalizer["Connection Requests"]</h2>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info">No pending requests.</div>
+        <div class="alert alert-info"> @SharedLocalizer["No pending requests."]</div>
     }
     else
     {
@@ -22,18 +22,18 @@
                     <img src="~/Files/@r.SenderImage" class="rounded-circle me-3" width="56" height="56" />
 
                     <div class="flex-grow-1">
-                        <div class="fw-bold">@r.SenderName</div>
-                        <div class="text-muted">@r.SenderHeadline</div>
+                        <div class="fw-bold text-white">@r.SenderName</div>
+                        <div class="text-muted text-white">@r.SenderHeadline</div>
                     </div>
 
                     <form asp-action="AcceptRequest" method="post" class="me-2">
                         <input type="hidden" name="requestId" value="@r.Id" />
-                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                        <button type="submit" class="btn btn-success btn-sm"> @SharedLocalizer["Accept"]</button>
                         @Html.AntiForgeryToken()
                     </form>
                     <form asp-action="RejectRequest" method="post">
                         <input type="hidden" name="requestId" value="@r.Id" />
-                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                        <button type="submit" class="btn btn-danger btn-sm"> @SharedLocalizer["Reject"]</button>
                         @Html.AntiForgeryToken()
                     </form>
                 </div>

@@ -1,0 +1,142 @@
+1- Models/Job.cs
+
+using System.ComponentModel.DataAnnotations;
+
+namespace SocialMedia.PL.Models
+{
+    public class Job
+    {
+        public int Id { get; set; }
+
+        [Required]
+        public string Title { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        public string Company { get; set; }
+
+        public DateTime PostedDate { get; set; } = DateTime.Now;
+    }
+}
+---------------------------------------------------------------------
+2- public DbSet<Job> Jobs { get; set; }
+
+
+Add-Migration AddJobsTable
+Update-Database
+
+-------------------------------------------------------------------
+3- Controllers/JobsController.cs
+
+
+namespace SocialMedia.PL.Controllers
+{
+    public class JobsController : Controller
+    {
+        private readonly AppDbContext _context;
+
+        public JobsController(AppDbContext context)
+        {
+            _context = context;
+        }
+        public IActionResult Index()
+        {
+            var jobs = _context.Jobs.ToList();
+            return View(jobs);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Job job)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Jobs.Add(job);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(job);
+        }
+    }
+}
+
+-------------------------------------------------------------------
+
+4- Views
+
+@model IEnumerable<SocialMedia.PL.Models.Job>
+
+<h2>Available Jobs</h2>
+
+<table class="table">
+    <tr>
+        <th>Title</th>
+        <th>Description</th>
+        <th>Company</th>
+        <th>Date</th>
+    </tr>
+@foreach (var job in Model)
+{
+    <tr>
+        <td>@job.Title</td>
+        <td>@job.Description</td>
+        <td>@job.Company</td>
+        <td>@job.PostedDate.ToShortDateString()</td>
+    </tr>
+}
+</table>
+
+-----------------------------------------------------------
+
+5- Create.cshtml 
+
+@model SocialMedia.PL.Models.Job
+
+<h2>Add New Job</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Company"></label>
+        <input asp-for="Company" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+
+متنسيش بس تجربي ب اكونت ادمن علشان يظهر انوا يكريت بوست
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

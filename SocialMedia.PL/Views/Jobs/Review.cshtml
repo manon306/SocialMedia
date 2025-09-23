@@ -5,11 +5,11 @@
 <form asp-action="Review" method="post">
 	<input type="hidden" name="id" value="@Model.Id" />
 	<div class="mb-3">
-		<label class="form-label">Your Review</label>
+        <label class="form-label">@SharedLocalizer["Your Review"]</label>
 		<textarea name="review" class="form-control" rows="6">@Model.Review</textarea>
 	</div>
-	<button type="submit" class="btn btn-primary">Save Review</button>
-	<a asp-action="Index" class="btn btn-secondary">Back</a>
+	<button type="submit" class="btn btn-primary"> @SharedLocalizer["Save Review"]</button>
+	<a asp-action="Index" class="btn btn-secondary"> @SharedLocalizer["Back"]</a>
 </form>
 
 

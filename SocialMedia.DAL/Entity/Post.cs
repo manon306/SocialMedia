@@ -44,8 +44,12 @@
         public void Update(string UpdatedBy, string content, List<string>? Image, List<string>? Videos)
         {
             if (!string.IsNullOrEmpty(content)) this.Content = content;
-            if (Image != null) this.Image = Image;
-            if (Videos != null) this.Videos = Videos;
+            if (Image != null && Image.Count > 0)
+                this.Image = Image;
+
+            if (Videos != null && Videos.Count > 0)
+                this.Videos = Videos;
+
             this.UpdatedAt = DateTime.Now;
             this.UpdatedBy = UpdatedBy;
         }

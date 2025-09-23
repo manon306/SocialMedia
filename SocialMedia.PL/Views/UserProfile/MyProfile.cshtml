@@ -1,24 +1,4 @@
-﻿﻿@* @model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
-@{
-    ViewData["Title"] = "Login";
-    Layout = "_NewLayout";
-}
-<div class="container mt-4">
-    <div class="card bg-dark text-light">
-        <div class="card-body text-center">
-            <img src="~/Files/@Model.ProfileImagePath" class="rounded-circle mb-3" width="120" height="120" />
-            <h3>@Model.Name</h3>
-            <h5 class="text-muted">@Model.Headline</h5>
-            <p>@Model.Bio</p>
-            <p><i class="fa-solid fa-location-dot"></i> @Model.Location</p>
-            <p><strong>Skills:</strong> @Model.Skills</p>
-
-            <a asp-controller="UserProfile" asp-action="Edit" class="btn btn-warning">Edit Profile</a>
-        </div>
-    </div>
-</div>
- *@
-
+﻿
 @model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
 @{
     ViewData["Title"] = "My Profile";
@@ -125,10 +105,10 @@
 
         <div class="action-buttons mt-3">
             <a asp-controller="UserProfile" asp-action="Edit" class="btn btn-outline-light">
-                <i class="fa fa-pen"></i> Edit
+                <i class="fa fa-pen"></i>  @SharedLocalizer["Edit"]
             </a>
             <a asp-controller="UserProfile" asp-action="Delete" class="btn btn-outline-danger">
-                <i class="fa fa-trash"></i> Delete
+                <i class="fa fa-trash"></i>  @SharedLocalizer["Delete"]
             </a>
         </div>
     </div>
@@ -136,11 +116,11 @@
     <!-- Main Content -->
     <div class="profile-main">
         <!-- Bio -->
-        <h4>About</h4>
+        <h4> @SharedLocalizer["About"]</h4>
         <p>@Model.Bio</p>
-        <h4>Education</h4>
+        <h4> @SharedLocalizer["Education"]</h4>
         <p>@Model.Education</p>
-        <h4>Language</h4>
+        <h4> @SharedLocalizer["Language"]</h4>
         <p>@Model.Language</p>
 
 

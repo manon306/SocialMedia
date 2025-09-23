@@ -2,14 +2,14 @@
 @inject UserManager<SocialMedia.DAL.Entity.User> UserManager
 @model List<SocialMedia.DAL.Entity.User>
 
-<h2>Manage User Roles</h2>
+<h2>  @SharedLocalizer["Manage User Roles"]</h2>
 
 <table class="table table-bordered">
     <thead>
         <tr class="text-white">
-            <th>Email</th>
-            <th>Current Roles</th>
-            <th>Assign New Role</th>
+            <th>@SharedLocalizer["Email"]</th>
+            <th>@SharedLocalizer["Current Roles"]</th>
+            <th>@SharedLocalizer["Assign New Role"]</th>
         </tr>
     </thead>
     <tbody>
@@ -28,11 +28,11 @@
                         <input type="hidden" name="userId" value="@user.Id" />
 
                         <select name="roleName" class="form-control bg-black text-white ">
-                            <option value="Admin">Admin</option>
+                            <option value="Admin">Admin </option>
                             <option value="User">User</option>
                         </select>
 
-                        <button type="submit" class="btn btn-primary btn-sm">Assign</button>
+                        <button type="submit" class="btn btn-primary btn-sm">@SharedLocalizer["Assign"]</button>
                     </form>
                 </td>
             </tr>

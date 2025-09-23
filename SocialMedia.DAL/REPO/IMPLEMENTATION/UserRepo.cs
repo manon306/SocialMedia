@@ -6,7 +6,7 @@
 
         public UserRepo(SocialMediaDbContext db)
         {
-            db = db;
+            this.db = db;
         }
 
         public bool Create(User user)

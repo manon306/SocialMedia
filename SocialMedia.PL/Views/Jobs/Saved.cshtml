@@ -13,10 +13,10 @@ else
     <table class="table table-striped mt-3">
         <thead>
             <tr class="text-white">
-                <th>Title</th>
-                <th>Company</th>
-                <th>Location</th>
-                <th>Posted Date</th>
+                <th> @SharedLocalizer["Title"]</th>
+                <th>@SharedLocalizer["Company"]</th>
+                <th>@SharedLocalizer["Location"]</th>
+                <th>@SharedLocalizer["Posted Date"]</th>
                 <th></th>
             </tr>
         </thead>
@@ -31,7 +31,7 @@ else
                         <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-info btn-sm">Details</a>
                         <form asp-action="ToggleSave" asp-route-id="@job.Id" method="post" style="display:inline">
                             <button type="submit" class="btn btn-warning btn-sm">
-                                Unsave
+                                @SharedLocalizer["Unsave"]
                             </button>
                         </form>
                     </td>
@@ -40,4 +40,4 @@ else
         </tbody>
     </table>
 }
-<a asp-action="Index" class="btn btn-secondary mt-3">Back to All Jobs</a>
+<a asp-action="Index" class="btn btn-secondary mt-3">@SharedLocalizer["Back to All Jobs"]</a>

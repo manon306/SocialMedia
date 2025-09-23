@@ -13,14 +13,22 @@
         {
             var allUsers = userServices.GetAll().Item3;
 
-            var result = string.IsNullOrEmpty(keyword)
-                ? allUsers
-                : allUsers
-                    .Where(u => !string.IsNullOrEmpty(u.Name)
-                                && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
+            if (string.IsNullOrEmpty(keyword))
+            {
+                return View("AllUsers", allUsers);
+            }
 
-            return PartialView("_UsersPartial", result);
+            var result = allUsers
+                .Where(u => !string.IsNullOrEmpty(u.Name)
+                            && u.Name.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (!result.Any())
+            {
+                ViewBag.Message = "No User Found😢";
+            }
+
+            return View("AllUsers", result);
         }
 
 

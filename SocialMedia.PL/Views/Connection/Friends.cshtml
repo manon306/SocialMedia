@@ -32,7 +32,7 @@
                                     <input type="hidden" name="friendId" value="@friend.Id" />
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-success btn-sm me-1">
-                                        <i class="bi bi-unlock-fill"></i> Unblock
+                                        <i class="bi bi-unlock-fill"></i>  @SharedLocalizer["Unblock"]
                                     </button>
                                 </form>
 
@@ -40,7 +40,7 @@
                                     <input type="hidden" name="friendId" value="@friend.Id" />
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-danger btn-sm">
-                                        <i class="bi bi-slash-circle-fill"></i> Block
+                                        <i class="bi bi-slash-circle-fill"></i> @SharedLocalizer["Block"]
                                     </button>
                                 </form>
                             </div>

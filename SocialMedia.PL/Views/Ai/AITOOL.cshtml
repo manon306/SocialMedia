@@ -41,7 +41,7 @@
                 <div class="card-footer bg-white border-0">
                     <form method="post" asp-controller="Ai" asp-action="Ask" class="d-flex">
                         <input type="text" name="userInput" class="form-control rounded-start-3" placeholder="اكتب رسالتك..." required />
-                        <button type="submit" class="btn btn-primary rounded-end-3">Send</button>
+                        <button type="submit" class="btn btn-primary rounded-end-3"> @SharedLocalizer["Send"]</button>
                     </form>
                 </div>
             </div>

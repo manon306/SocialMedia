@@ -21,8 +21,8 @@
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-primary"> @SharedLocalizer["Create"]</button>
+    <a asp-action="Index" class="btn btn-secondary"> @SharedLocalizer["Cancel"]</a>
 </form>
 
 @section Scripts {

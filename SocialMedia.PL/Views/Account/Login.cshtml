@@ -7,7 +7,7 @@
 <div class="d-flex align-items-center justify-content-center vh-100">
     <div class="card shadow-lg border-0 rounded-4" style="width: 400px;">
         <div class="card-header text-center text-white fw-bold rounded-top-4" style="background: linear-gradient(135deg, #4facfe, #00f2fe); font-size: 1.3rem;">
-            <i class="bi bi-box-arrow-in-right"></i> Login
+            <i class="bi bi-box-arrow-in-right"></i>  @SharedLocalizer["Login"]
         </div>
         <div class="card-body p-4">
 
@@ -26,14 +26,14 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100 rounded-pill shadow-sm">
-                    <i class="bi bi-unlock"></i> Login
+                    <i class="bi bi-unlock"></i> @SharedLocalizer["Login"]
                 </button>
             </form>
             <a asp-action="ForgotPassword" asp-controller="Account">Forgot Password?</a>
             <!-- Sign up link -->
             <div class="text-center mt-3">
                 <small class="text-muted">
-                    Don’t have an account?
+                     @SharedLocalizer["Don’t have an account?"]
                     <a asp-action="SignUp" asp-controller="Account" class="text-decoration-none fw-semibold">Sign up</a>
                 </small>
             </div>
@@ -43,10 +43,10 @@
             <!-- External Login -->
             <form asp-action="ExternalLogin" asp-controller="Account" method="post">
                 <button type="submit" name="provider" value="Google" class="btn btn-light w-100 mb-2 rounded-pill shadow-sm border">
-                    <i class="fab fa-google text-danger me-2"></i> Continue with Google
+                    <i class="fab fa-google text-danger me-2"></i>  @SharedLocalizer["Continue with Google"]
                 </button>
                 <button type="submit" name="provider" value="Facebook" class="btn btn-primary w-100 rounded-pill shadow-sm">
-                    <i class="fab fa-facebook-f me-2"></i> Continue with Facebook
+                    <i class="fab fa-facebook-f me-2"></i>  @SharedLocalizer["Continue with Facebook"]
                 </button>
             </form>
 
