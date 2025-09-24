@@ -87,13 +87,15 @@ namespace SocialMedia.BLL.Service.Implementation
             }
             //use repo
             var getResult = postsRepo.GetPostById(post.ID);
+            var imagePaths = getResult.Item3.Image ?? new List<string>();
+            var videoPaths = getResult.Item3.Videos ?? new List<string>();
             if (!getResult.Item1)
             {
                 return (false, getResult.Item2);
             }
             var oldpost = getResult.Item3;
             //update fields
-            oldpost.Update(post.UpdatedBy, post.Content, post.Image, post.Videos);
+            oldpost.Update(post.UpdatedBy, post.Content,imagePaths,videoPaths);
             //use Repo to save Changes
             var updateResult = postsRepo.UpdatePost(oldpost);
             if (!updateResult.Item1)

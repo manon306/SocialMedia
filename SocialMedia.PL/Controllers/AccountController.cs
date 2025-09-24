@@ -267,8 +267,9 @@
             if (result.Succeeded) return LocalRedirect(returnUrl);
 
             //create account
+            var name = info.Principal.FindFirstValue(System.Security.Claims.ClaimTypes.Name);
             var email = info.Principal.FindFirstValue(System.Security.Claims.ClaimTypes.Email);
-            var user = new User { UserName = email, Email = email };
+            var user = new User { UserName = name, Email = email };
 
             var createResult = await userManager.CreateAsync(user);
             if (createResult.Succeeded)

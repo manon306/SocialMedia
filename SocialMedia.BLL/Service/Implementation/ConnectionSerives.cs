@@ -56,9 +56,16 @@
         {
             var connections = await _repo.GetUserConnections(userId, ConnectionStatus.Pending);
             return connections
-                    .Where(c => c.ReceiverId == userId)
-                    .Select(c => _mapper.Map<ConnectionRequestVM>(c))
-                    .ToList();
+         .Where(c => c.ReceiverId == userId)
+         .Select(c => new ConnectionRequestVM
+         {
+             Id = c.Id,
+             SenderId = c.Sender.Id,
+             SenderName = c.Sender.Name,        // ✅ الاسم هيظهر
+             SenderHeadline = c.Sender.Headline,
+             SenderImage = c.Sender.ImagePath
+         })
+         .ToList();
 
         }
         public async Task<List<FriendVM>> GetFriends(string userId)
