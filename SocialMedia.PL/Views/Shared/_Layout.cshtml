@@ -110,7 +110,9 @@
                         <img src="@Url.Content("~/Files/" + (ViewData["LayoutProfileImage"] ?? "default-profile.jpg"))" class="w-100 h-100" alt="Profile">
                     </div>
                     <h6 class="fw-bold text-white">
-                        @User.Identity?.Name
+                        @User.Identity?.Name.Split('@')[0]
+
+                        
                     </h6>
                 </div>
                 <div class="modern-menu">

@@ -61,15 +61,35 @@ namespace SocialMedia.PL
                 .AddGoogle(googleOptions =>
                 {
                     googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+                    
                     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-
-                    googleOptions.Scope.Add("email");
                     googleOptions.Scope.Add("profile");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
 
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
+                    googleOptions.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
+                    googleOptions.Events.OnCreatingTicket = ctx =>
+                    {
+                        var email = ctx.User.GetProperty("email").GetString();
+                        var name = ctx.User.TryGetProperty("name", out var nameProp) ? nameProp.GetString() : null;
+
+                        if (!string.IsNullOrEmpty(email) && ctx.Identity != null)
+                        {
+                            // الجزء قبل الـ @
+                            var username = email.Split('@')[0];
+
+                            // لو Google رجعت Name
+                            if (!string.IsNullOrEmpty(name))
+                            {
+                                ctx.Identity.AddClaim(new Claim(ClaimTypes.Name, name));
+                            }
+                            else
+                            {
+                                ctx.Identity.AddClaim(new Claim(ClaimTypes.Name, username));
+                            }
+                        }
+
+                        return Task.CompletedTask;
+                    };
 
                 })
                 .AddFacebook(facebookOptions =>
