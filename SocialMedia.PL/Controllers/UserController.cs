@@ -30,7 +30,25 @@
 
             return View("AllUsers", result);
         }
+        // GET: User/Suggest/{id}
+        public IActionResult Suggest(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return BadRequest("User ID is required");
 
+            (bool success, string message, List<ViewProfileVM> suggestedUsers) = userServices.GetSuggestUsers(id);
 
+            if (!success)
+            {
+                // في حالة الخطأ أو مفيش يوزر
+                return NotFound(new { Message = message });
+            }
+
+            // لو عايزة تعمليها View
+            return View(suggestedUsers);
+
+            // أو لو API Json
+            // return Ok(new { Message = message, Users = suggestedUsers });
+        }
     }
 }

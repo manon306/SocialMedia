@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <div class="card mb-3 shadow-sm bg-dark text-light">
                         <div class="card-body d-flex align-items-center">
-                            <img src="@Url.Content("~/Files/" + friend.ProfileImagePath)"
+                            <img src="~/Files/@(string.IsNullOrEmpty(friend.ProfileImagePath) ? "29722db6-fa7d-422d-a8a7-d633e0765f30.png" : friend.ProfileImagePath)"
                                  class="rounded-circle me-3 border border-secondary"
                                  width="60" height="60" alt="Profile Image" />
 

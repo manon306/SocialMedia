@@ -1,4 +1,72 @@
-﻿@using SocialMedia.BLL.ModelVM.Connect
+﻿<style>
+    .content-wrapper {
+        flex: 1;
+        display: flex;
+        overflow: hidden;
+    }
+
+    /* تحسينات خاصة بصفحة People You May Know */
+    .container.my-4 {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: calc(100vh - 200px);
+    }
+
+
+    /* تحسينات البطاقات في الصفحة */
+    .card {
+        background: var(--card-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 15px !important;
+        transition: all 0.3s ease;
+        color: var(--text-color);
+    }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-color) !important;
+            box-shadow: var(--shadow);
+        }
+
+    /* تحسينات البحث */
+    .form-control {
+        background: var(--card-bg) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: var(--text-color) !important;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 0 0.2rem rgba(15, 206, 91, 0.25) !important;
+        }
+
+    .btn-outline-light {
+        border-color: rgba(255, 255, 255, 0.3) !important;
+        color: var(--text-color) !important;
+    }
+
+        .btn-outline-light:hover {
+            background: var(--accent-color) !important;
+            border-color: var(--accent-color) !important;
+        }
+
+    /* تحسينات التنبيهات */
+    .alert-warning {
+        background: rgba(255, 193, 7, 0.1) !important;
+        border-color: rgba(255, 193, 7, 0.3) !important;
+        color: #ffc107 !important;
+    }
+
+    /* التأكد من ظهور المحتوى كاملاً */
+    .row.g-3 {
+        margin-bottom: 20px;
+    }
+
+    
+</style>
+
+@using SocialMedia.BLL.ModelVM.Connect
 @model IEnumerable<SocialMedia.BLL.ModelVM.Connect.FriendVM>
 
 @{

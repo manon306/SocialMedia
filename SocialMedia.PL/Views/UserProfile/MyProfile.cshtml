@@ -1,23 +1,42 @@
-﻿
-@model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
-@{
-    ViewData["Title"] = "My Profile";
-}
+﻿<style>
+    :root {
+        --primary-color: #1a1a2e;
+        --secondary-color: #16213e;
+        --accent-color: #0fce5b;
+        --header-color: #0d1930;
+        --text-color: #ffffff;
+        --muted-text: #b0b0b0;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --hover-effect: rgba(15, 206, 91, 0.1);
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
 
-<style>
+    body {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0f3460 100%);
+        min-height: 100vh;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-color);
+    }
+
     .profile-wrapper {
         display: grid;
         grid-template-columns: 1fr 2fr;
         gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
     }
 
     /* Sidebar Card */
     .profile-sidebar {
-        background-color: var(--secondary-color);
+        background: linear-gradient(180deg, var(--secondary-color) 0%, var(--header-color) 100%);
         border-radius: 15px;
         padding: 25px;
         text-align: center;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: fit-content;
+        position: sticky;
+        top: 20px;
     }
 
         .profile-sidebar img {
@@ -27,11 +46,13 @@
             object-fit: cover;
             border: 4px solid var(--accent-color);
             margin-bottom: 15px;
+            box-shadow: 0 0 20px rgba(15, 206, 91, 0.3);
         }
 
         .profile-sidebar h3 {
             margin-bottom: 5px;
             font-weight: bold;
+            color: var(--text-color);
         }
 
         .profile-sidebar p {
@@ -44,38 +65,62 @@
         width: 100%;
         border-radius: 30px;
         font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline-light {
+        border-color: rgba(255, 255, 255, 0.3);
+        color: var(--text-color);
+    }
+
+        .btn-outline-light:hover {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+        }
+
+    .btn-outline-danger:hover {
+        transform: translateY(-2px);
     }
 
     /* Main Content */
     .profile-main {
-        background-color: var(--secondary-color);
+        background: linear-gradient(180deg, var(--secondary-color) 0%, var(--header-color) 100%);
         border-radius: 15px;
         padding: 25px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
         .profile-main h4 {
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 8px;
             margin-bottom: 15px;
+            color: var(--accent-color);
+            font-weight: 600;
         }
 
     .stat-box {
-        background-color: var(--header-color);
+        background: var(--card-bg);
         border-radius: 10px;
         padding: 15px;
         text-align: center;
-        transition: background 0.3s ease;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        height: 100%;
     }
 
         .stat-box:hover {
-            background-color: var(--accent-color);
+            background: var(--hover-effect);
+            transform: translateY(-3px);
+            border-color: var(--accent-color);
         }
 
         .stat-box h5 {
             margin: 0;
             font-size: 20px;
             font-weight: bold;
+            color: var(--accent-color);
         }
 
         .stat-box p {
@@ -85,17 +130,84 @@
         }
 
     .skills-list span {
-        background: var(--header-color);
-        padding: 6px 12px;
+        background: linear-gradient(135deg, var(--accent-color), #2ecc71);
+        padding: 8px 15px;
         border-radius: 20px;
         margin: 5px;
         display: inline-block;
         font-size: 13px;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+        .skills-list span:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(15, 206, 91, 0.3);
+        }
+
+    /* Recent Activity */
+    .profile-main ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .profile-main ul li {
+            background: var(--card-bg);
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+            .profile-main ul li:hover {
+                transform: translateX(5px);
+                background: var(--hover-effect);
+            }
+
+    /* Text Content */
+    .profile-main p {
+        color: var(--text-color);
+        line-height: 1.6;
+        background: var(--card-bg);
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 3px solid var(--accent-color);
+    }
+
+    .text-muted {
+        color: var(--muted-text) !important;
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .profile-wrapper {
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .profile-sidebar {
+            position: static;
+        }
+
+        .stat-box {
+            margin-bottom: 15px;
+        }
+    }
+
+    /* Icons */
+    .fa-solid, .fa {
+        margin-right: 5px;
     }
 </style>
 
-<div class="container mt-4 profile-wrapper">
+@model SocialMedia.BLL.ModelVM.Profile.ViewProfileVM
+@{
+    ViewData["Title"] = "My Profile";
+}
 
+<div class="container mt-4 profile-wrapper">
     <!-- Sidebar -->
     <div class="profile-sidebar">
         <img src="~/Files/@Model.ProfileImagePath" alt="@Model.Name" />
@@ -118,12 +230,12 @@
         <!-- Bio -->
         <h4> @SharedLocalizer["About"]</h4>
         <p>@Model.Bio</p>
+
         <h4> @SharedLocalizer["Education"]</h4>
         <p>@Model.Education</p>
+
         <h4> @SharedLocalizer["Language"]</h4>
         <p>@Model.Language</p>
-
-
 
         <!-- Stats -->
         <h4>Statistics</h4>

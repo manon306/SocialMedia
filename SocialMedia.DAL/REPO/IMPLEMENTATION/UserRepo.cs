@@ -23,6 +23,11 @@
             }
         }
 
+        public User GetByID(string id)
+        {
+            var user = db.Users.FirstOrDefault(i=>i.Id== id);
+            return user;
+        }
         public List<User> GetUsers()
         {
             return db.Users.ToList();

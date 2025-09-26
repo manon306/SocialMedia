@@ -1,19 +1,23 @@
 @model List<SocialMedia.BLL.ModelVM.job.Jobvm>
 
+@{
+    ViewData["Title"] = "All Jobs";
+}
+
 <div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="text-primary fw-bold">?? All Jobs</h2>
-        <a asp-action="Create" class="btn btn-success">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold text-accent"><i class="fa-solid fa-briefcase"></i> @SharedLocalizer["All Jobs"]</h2>
+        <a asp-action="Create" class="btn btn-accent shadow">
             <i class="fas fa-plus"></i> @SharedLocalizer["Add New Job"]
         </a>
     </div>
 
-    <div class="card shadow-lg border-0 rounded-3">
+    <div class="card job-card shadow-lg border-0 rounded-4">
         <div class="card-body p-0">
-            <table class="table table-hover table-striped mb-0 align-middle">
-                <thead class="table-dark text-center">
+            <table class="table table-hover mb-0 align-middle text-white">
+                <thead class="table-header text-center">
                     <tr>
-                        <th> @SharedLocalizer["Title"]</th>
+                        <th>@SharedLocalizer["Title"]</th>
                         <th>@SharedLocalizer["Company"]</th>
                         <th>@SharedLocalizer["Description"]</th>
                         <th>@SharedLocalizer["Posted Date"]</th>
@@ -25,24 +29,24 @@
                     {
                         foreach (var job in Model)
                         {
-                            <tr class="text-white">
+                            <tr>
                                 <td>@job.Title</td>
                                 <td>@job.Company</td>
                                 <td class="text-truncate" style="max-width: 200px;">@job.Description</td>
                                 <td>@job.PostedDate.ToShortDateString()</td>
                                 <td class="text-center">
-                                    <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-info btn-sm me-1">
+                                    <a asp-action="Details" asp-route-id="@job.Id" class="btn btn-info btn-sm me-1 shadow-sm">
                                         <i class="fas fa-eye"></i> @SharedLocalizer["Details"]
                                     </a>
 
                                     <form asp-action="Delete" asp-route-id="@job.Id" method="post" style="display:inline">
-                                        <button type="submit" class="btn btn-danger btn-sm me-1">
+                                        <button type="submit" class="btn btn-danger btn-sm me-1 shadow-sm">
                                             <i class="fas fa-trash"></i> @SharedLocalizer["Delete"]
                                         </button>
                                     </form>
 
                                     <form asp-action="ToggleSave" asp-route-id="@job.Id" method="post" style="display:inline">
-                                        <button type="submit" class="btn btn-warning btn-sm">
+                                        <button type="submit" class="btn btn-warning btn-sm shadow-sm">
                                             <i class="fas fa-bookmark"></i> @SharedLocalizer["Save"]
                                         </button>
                                     </form>
@@ -64,3 +68,62 @@
         </div>
     </div>
 </div>
+
+<style>
+    :root {
+        --primary-color: #1a1a2e;
+        --secondary-color: #16213e;
+        --accent-color: #0fce5b;
+        --header-color: #0d1930;
+        --text-color: #ffffff;
+        --muted-text: #b0b0b0;
+        --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+    }
+
+    body {
+        background: linear-gradient(135deg, var(--primary-color) 0%, #0f3460 100%);
+        color: var(--text-color);
+    }
+
+    .text-accent {
+        color: var(--accent-color);
+    }
+
+    .btn-accent {
+        background: var(--accent-color);
+        color: #fff;
+        font-weight: 600;
+        border-radius: 30px;
+        transition: all 0.3s ease;
+    }
+
+        .btn-accent:hover {
+            background: #12e065;
+            transform: translateY(-2px);
+        }
+
+    .job-card {
+        background: linear-gradient(180deg, var(--secondary-color) 0%, var(--header-color) 100%);
+        border-radius: 15px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .table-header {
+        background: var(--header-color);
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+    table tr {
+        transition: all 0.3s ease;
+    }
+
+    .table td, .table th {
+        vertical-align: middle;
+    }
+
+    .btn {
+        border-radius: 20px;
+        font-weight: 500;
+    }
+</style>

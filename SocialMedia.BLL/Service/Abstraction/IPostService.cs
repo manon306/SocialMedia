@@ -2,7 +2,7 @@
 {
     public interface IPostService
     {
-        (bool, string) AddPost(CreateVm post);
+        Task<(bool, string)> AddPost(CreateVm post);
         (bool, string) DeletePost(int postId, string deletedBy);
         (bool, string) UpdatePost(updatePostVm post);
         (bool, string, Post) GetById(int id);

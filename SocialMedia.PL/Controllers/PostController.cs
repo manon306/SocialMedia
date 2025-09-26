@@ -70,7 +70,7 @@
                 return View(posts);
             }
 
-            var (isSuccessAdd, errorMessageAdd) = postService.AddPost(post);
+            var (isSuccessAdd, errorMessageAdd) = await postService.AddPost(post);
             if (!isSuccessAdd)
             {
                 ModelState.AddModelError(string.Empty, errorMessageAdd);
@@ -155,12 +155,22 @@
         }
 
         [HttpGet]
-        public IActionResult GetAllArchivedPosts()
+        public async Task<IActionResult> GetAllArchivedPosts()
         {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var (isSuccess, ErrorMessage, posts) = postService.GetArchivedPosts();
+            var profile = await service.GetProfile(user.Id.ToString());
             if (isSuccess)
             {
-                return View(posts);
+                var viewModel = (
+                    posts ?? new List<PostVm>(),
+                    profile ?? new ViewProfileVM()
+                );
+                return View(viewModel);
             }
             ModelState.AddModelError(string.Empty, ErrorMessage);
             return View();

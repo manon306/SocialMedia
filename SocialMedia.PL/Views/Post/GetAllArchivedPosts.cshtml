@@ -1,4 +1,4 @@
-﻿@model List<PostVm>
+﻿@model (List<PostVm>,SocialMedia.BLL.ModelVM.Profile.ViewProfileVM)
 @{
     ViewData["Title"] = "Archieved Posts";
 }
@@ -7,17 +7,17 @@
         <div class="col-md-8 col-lg-6">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="mb-0">Archived </h3>
-                <span class="badge bg-accent rounded-pill">@Model.Count Post</span>
+                <span class="badge bg-accent rounded-pill">@Model.Item1.Count Post</span>
             </div>
 
-            @foreach (var post in Model)
+            @foreach (var post in Model.Item1)
             {
                 <div class="card post-card">
                     <div class="card-header">
-                        <div class="d-flex align-items-center">
-                            <img src="https://via.placeholder.com/48" class="rounded-circle user-avatar me-3" alt="Profile Image">
+                        <div class="d-flex align-items-center">@post.CreatedByUserName
+                            <img src="~/Files/@Model.Item2.ProfileImagePath" class="rounded-circle user-avatar me-3" alt="Profile Image">
                             <div class="flex-grow-1">
-                                <div class="user-name">عمر أحمد</div>
+                                <div class="user-name"> @Model.Item2.Name</div>
                             </div>
                             <div class="dropdown">
                                 <button class="btn btn-sm text-muted" type="button" data-bs-toggle="dropdown">
@@ -91,7 +91,7 @@
                         </div>
 
                         <div class="d-flex align-items-center mt-3">
-                            <img src="https://via.placeholder.com/32" class="rounded-circle me-2" width="32" height="32" alt="Profile Image">
+                            <img src="~/Files/@Model.Item2.ProfileImagePath" class="rounded-circle me-2" width="32" height="32" alt="Profile Image">
                             <div class="input-group">
                                 <input type="text" class="form-control" placeholder="Add Comment" aria-label="Add Comment">
                                 <button class="btn btn-outline-secondary" type="button"><i class="bi bi-send"></i></button>
@@ -101,7 +101,7 @@
                 </div>
             }
 
-            @if (Model.Count == 0)
+            @if (Model.Item1.Count == 0)
             {
                 <div class="text-center py-5">
                     <i class="bi bi-bookmark-x" style="font-size: 3rem; color: var(--muted-text);"></i>

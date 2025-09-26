@@ -1,0 +1,343 @@
+﻿@model List<SocialMedia.BLL.ModelVM.Profile.ViewProfileVM>
+
+@{
+    ViewData["Title"] = "Suggested Connections";
+    Layout = "_Layout";
+}
+
+<style>
+    .suggestions-page {
+       
+        min-height: 100vh;
+        padding: 20px 0;
+    }
+
+    .suggestions-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+    }
+
+    .page-header {
+        text-align: center;
+        color: white;
+        margin-bottom: 40px;
+    }
+
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .page-subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+    /* إصلاح الـ Keyframes */
+    @@keyframes fadeInUp {
+        from
+
+    {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    }
+
+    .user-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255,255,255,0.2);
+        height: 100%;
+        opacity: 0; /* يبدأ مخفي */
+        animation: fadeInUp 0.8s ease forwards; /* التصحيح هنا */
+    }
+
+        .user-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #667eea;
+        margin: 0 auto 15px;
+    }
+
+    .user-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 5px;
+    }
+
+    .user-headline {
+        color: #667eea;
+        font-weight: 500;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+    }
+
+    .user-bio {
+        color: #718096;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .user-details {
+        background: #f7fafc;
+        border-radius: 10px;
+        padding: 15px;
+        margin: 15px 0;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
+        color: #4a5568;
+    }
+
+        .detail-item i {
+            color: #667eea;
+            margin-right: 10px;
+            width: 20px;
+        }
+
+    .action-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .btn-connect {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        flex: 1;
+        cursor: pointer;
+    }
+
+        .btn-connect:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+    .btn-view {
+        background: #e2e8f0;
+        color: #4a5568;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        flex: 1;
+        cursor: pointer;
+    }
+
+        .btn-view:hover {
+            background: #cbd5e0;
+        }
+
+    .no-suggestions {
+        text-align: center;
+        color: white;
+        padding: 60px 20px;
+    }
+
+    .no-suggestions-icon {
+        font-size: 4rem;
+        margin-bottom: 20px;
+        opacity: 0.7;
+    }
+
+    .match-badge {
+        background: linear-gradient(135deg, #48bb78, #38a169);
+        color: white;
+        padding: 5px 15px;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+    }
+
+    .skills-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 10px;
+    }
+
+    .skill-tag {
+        background: #edf2f7;
+        color: #4a5568;
+        padding: 3px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+    }
+
+    .loading-spinner {
+        display: none;
+        text-align: center;
+        color: white;
+        padding: 40px;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(0,0,0,0.7);
+        border-radius: 10px;
+        z-index: 1000;
+    }
+
+    @@media (max-width: 768px) {
+        .page-title {
+            font-size: 2rem;
+        }
+
+        .user-card {
+            padding: 20px;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+
+<!-- Loading Spinner -->
+<div id="loadingSpinner" class="loading-spinner">
+    <div style="font-size: 3rem;">⏳</div>
+    <h3>Loading suggestions...</h3>
+</div>
+
+<div class="suggestions-page">
+    <div class="suggestions-container">
+        <div class="page-header">
+            <h1 class="page-title">✨ Discover Amazing People</h1>
+            <p class="page-subtitle">Connect with professionals who share your interests and background</p>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="no-suggestions">
+                <div class="no-suggestions-icon">👥</div>
+                <h3>No suggestions found at the moment</h3>
+                <p>Check back later for new connection recommendations</p>
+                <a href="/users/search" class="btn-connect mt-3">Search Users</a>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                @for (int i = 0; i < Model.Count; i++)
+                {
+                    var user = Model[i];
+                    <div class="col-xl-4 col-lg-6 col-md-6 mb-4">
+                        <!-- التصحيح هنا: إضافة s للـ animation-delay -->
+                        <div class="user-card" style="animation-delay: @(i * 0.1)s">
+                            <div class="match-badge">💫 Great Match</div>
+                            <div class="text-center">
+                                <!-- التصحيح هنا: إزالة الفاصلة الزائدة -->
+                                <img src="https://ui-avatars.com/api/?name=@user.Name&background=0D8ABC&color=fff&size=128"
+                                     class="user-avatar"
+                                     alt="@user.Name"
+                                     onerror="this.src='/images/default-avatar.png'">
+                            </div>
+                            <div class="text-center">
+                                <h3 class="user-name">@user.Name</h3>
+                                <p class="user-headline">@user.Headline</p>
+                            </div>
+                            <div class="user-details">
+                                @if (!string.IsNullOrEmpty(user.Bio))
+                                {
+                                    <p class="user-bio">@user.Bio</p>
+                                }
+                                <div class="detail-item">
+                                    <span>🎓</span>
+                                    <span>@(user.Education ?? "Education not specified")</span>
+                                </div>
+                                <div class="detail-item">
+                                    <span>📍</span>
+                                    <span>@(user.Location ?? "Location not specified")</span>
+                                </div>
+                                @if (user.Skills != null && user.Skills.Any())
+                                {
+                                    <div class="skills-container">
+                                        @foreach (var skill in user.Skills.Take(5))
+                                        {
+                                            <span class="skill-tag">@skill</span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            <div class="text-center mt-4">
+                <p style="color: white; opacity: 0.8;">
+                    Showing @Model.Count suggested connections based on your profile
+                </p>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    // إخفاء loading عندما تكون الصفحة جاهزة
+    document.addEventListener('DOMContentLoaded', function() {
+        const spinner = document.getElementById('loadingSpinner');
+        if (spinner) spinner.style.display = 'block';
+
+        // إخفاء spinner بعد تحميل الصفحة
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                if (spinner) spinner.style.display = 'none';
+
+                // تأكد من ظهور الكروت
+                const cards = document.querySelectorAll('.user-card');
+                cards.forEach((card, index) => {
+                    card.style.animationDelay = (index * 0.1) + 's';
+                });
+            }, 500);
+        });
+
+        // Fallback - إخفاء بعد 3 ثواني وتفعيل الكروت
+        setTimeout(() => {
+            if (spinner) spinner.style.display = 'none';
+
+            // إذا لسة الكروت مش ظاهرة، نظهرها يدوياً
+            const cards = document.querySelectorAll('.user-card');
+            cards.forEach((card) => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            });
+        }, 3000);
+    });
+</script>

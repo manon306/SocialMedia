@@ -9,7 +9,7 @@ namespace SocialMedia.BLL.Service.Implementation
             this.postsRepo = postsRepo;
             this.mapper = mapper;
         }
-        public (bool, string) AddPost(CreateVm post)
+        public async Task<(bool, string)> AddPost(CreateVm post)
         {
 
             //validation
@@ -22,12 +22,12 @@ namespace SocialMedia.BLL.Service.Implementation
             List<string>? videoPaths = null;
             if (post.Image != null && post.Image.Count > 0)
             {
-                imagePaths = Upload.UploadFile("Images", post.Image);
+                imagePaths = await Upload.UploadFile("Images", post.Image);
             }
 
             if (post.Videos != null && post.Videos.Count > 0)
             {
-                videoPaths = Upload.UploadFile("Videos", post.Videos);
+                videoPaths = await Upload.UploadFile("Videos", post.Videos);
             }
             // Mapping
             var postEntity = new Post(post.Content, imagePaths, videoPaths,post.UserId,post.CreatedBy);

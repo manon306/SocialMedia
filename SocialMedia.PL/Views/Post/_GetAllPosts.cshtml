@@ -365,7 +365,7 @@ function loadComments(postId) {
                     container.append(`
                                     <div class="d-flex mb-3 comment-item" id="comment-${c.id}">
                                     <div class="flex-shrink-0">
-                                                <img src="~/Files/@(Model.Item2?.ProfileImagePath ?? "default-profile.jpg")" class="rounded-circle me-2" width="40" height="40" alt="Profile">
+                                                    <img src="/Files/@profileImagePath" class="rounded-circle me-2" width="40" height="40" alt="Profile">
                                     </div>
         <div class="flex-grow-1 ms-2">
             <div class="comment-content p-3 rounded" id="comment-text-${c.id}">

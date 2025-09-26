@@ -15,11 +15,4 @@
         public DateTime CreatedOn { get; set; } = DateTime.UtcNow;
     }
 
-    //public enum ConnectionStatus
-    //{
-    //    Pending = 0,
-    //    Accepted = 1,
-    //    Rejected = 2,
-    //    Blocked = 3
-    //}
 }

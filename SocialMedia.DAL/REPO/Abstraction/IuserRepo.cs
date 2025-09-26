@@ -5,5 +5,6 @@
         bool Create(User user);
         List<User> SearchUser(string keyword);
         List<User> GetUsers();
+        User GetByID(string id);
     }
 }

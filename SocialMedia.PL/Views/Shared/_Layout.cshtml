@@ -1,4 +1,4 @@
-﻿@inject IUserProfileService profileService
+﻿@* @inject IUserProfileService profileService
 @inject UserManager<User> userManager
 
 @{
@@ -270,6 +270,630 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html> *@
+@inject IUserProfileService profileService
+@inject UserManager<User> userManager
+
+@{
+    var user = await userManager.GetUserAsync(Context.User);
+    string profileImagePath = "default-profile.jpg";
+
+    if (user != null)
+    {
+        var profile = await profileService.GetProfile(user.Id.ToString());
+        profileImagePath = profile?.ProfileImagePath ?? "default-profile.jpg";
+    }
+
+    ViewData["LayoutProfileImage"] = profileImagePath;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - ConnectPro</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/SocialMedia.PL.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+          integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QIlR0Xn1L6cfu3zOa7uHh6T+2dg=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #0fce5b;
+            --header-color: #0d1930;
+            --text-color: #ffffff;
+            --muted-text: #b0b0b0;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --hover-effect: rgba(15, 206, 91, 0.1);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #0f3460 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Navbar Enhancements */
+        .navbar {
+            background: linear-gradient(90deg, var(--header-color) 0%, var(--secondary-color) 100%) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent-color), #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-link {
+            transition: all 0.3s ease;
+            border-radius: 8px;
+            margin: 0 5px;
+            padding: 8px 12px !important;
+        }
+         .nav-link:hover {
+                background: var(--hover-effect);
+                transform: translateY(-2px);
+         }
+
+            .nav-link small {
+                font-size: 0.75rem;
+                transition: color 0.3s ease;
+            }
+
+            .nav-link:hover small {
+                color: var(--accent-color) !important;
+            }
+
+        /* Main Container */
+        .container-fluid {
+            min-height: calc(100vh - 76px);
+        }
+
+        /* Sidebar Enhancements */
+        aside {
+            background: linear-gradient(180deg, var(--secondary-color) 0%, var(--header-color) 100%) !important;
+            border: none !important;
+            box-shadow: 5px 0 15px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+            position: sticky;
+            top: 0;
+            height: 115vh;
+            margin-bottom: 100px;
+        }
+
+        /* Profile Section */
+        .profile-section {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+            
+        }
+
+            .profile-section:hover {
+                transform: translateY(-5px);
+            }
+
+        .profile-image-container {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+            border: 3px solid var(--accent-color);
+            border-radius: 50%;
+            padding: 3px;
+            background: var(--secondary-color);
+            box-shadow: 0 0 20px rgba(15, 206, 91, 0.3);
+        }
+
+            .profile-image-container img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+
+        /* Modern Menu Items */
+        .modern-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom:20px;
+        }
+        .modern-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background: var(--card-bg) !important;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+        }
+            .modern-item::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(15, 206, 91, 0.1), transparent);
+                transition: left 0.5s;
+            }
+
+            .modern-item:hover::before {
+                left: 100%;
+            }
+
+            .modern-item:hover {
+                transform: translateX(5px);
+                border-color: var(--accent-color);
+                box-shadow: 0 5px 15px rgba(15, 206, 91, 0.2);
+            }
+
+        .modern-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1.2rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .modern-content {
+            flex-grow: 1;
+        }
+
+        .modern-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 3px;
+        }
+
+        .modern-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .modern-badge {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Main Content Area */
+        main {
+            background: transparent;
+            min-height: calc(100vh - 140px);
+        }
+
+        /* Quick Links */
+        .quick-links h5 {
+            position: relative;
+            padding-bottom: 10px;
+            margin-top:20px;
+        }
+
+            .quick-links h5::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 25%;
+                width: 50%;
+                height: 2px;
+                background: var(--accent-color);
+                border-radius: 2px;
+            }
+
+        .list-group-item {
+            background: var(--card-bg) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            margin-bottom: 8px;
+            border-radius: 10px !important;
+            transition: all 0.3s ease;
+            color: var(--text-color);
+        }
+
+            .list-group-item:hover {
+                transform: translateX(5px);
+                border-color: var(--accent-color) !important;
+                box-shadow: 0 5px 15px rgba(15, 206, 91, 0.1);
+            }
+
+            .list-group-item a {
+                color: inherit;
+                text-decoration: none;
+                transition: color 0.3s ease;
+            }
+
+            .list-group-item:hover a {
+                color: var(--accent-color) !important;
+            }
+
+        /* AI Button */
+        .ai-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-color), #2ecc71);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(15, 206, 91, 0.4);
+            z-index: 1000;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            animation: pulse 2s infinite;
+        }
+        .ai-btn:hover {
+                transform: scale(1.1);
+                color: white;
+         }
+        /* Footer */
+        footer {
+            background: var(--header-color) !important;
+            position: relative;
+
+            margin-top: auto;
+        }
+
+        /* Dropdown Enhancements */
+        .dropdown-menu {
+            background: var(--secondary-color) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .dropdown-item {
+            color: var(--text-color) !important;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-item:hover {
+                background: var(--hover-effect) !important;
+                color: var(--accent-color) !important;
+         }
+
+        /* Responsive Adjustments */
+        @@media (max-width: 768px) {
+            .modern-item {
+                padding: 12px;
+            }
+
+            .modern-icon {
+                width: 40px;
+                height: 40px;
+                margin-right: 12px;
+            }
+
+            .ai-btn {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+
+            .profile-image-container {
+                width: 80px;
+                height: 80px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--secondary-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+       ::-webkit-scrollbar-thumb:hover {
+            background: #0db354;
+       }
+    </style>
+</head>
+<body class="d-flex flex-column">
+
+    <!-- AI Assistant Button -->
+    <a href="@Url.Action("AITOOL", "Ai")"
+       class="ai-btn"
+       title="المساعد الذكي">
+        <i class="fas fa-robot"></i>
+    </a>
+
+    <!-- ✅ Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg shadow-sm fixed-top text-white">
+            <div class="container">
+                <a class="navbar-brand fw-bold" href="#">ConnectPro</a>
+
+                <!-- ✅ Hamburger Menu -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Menu -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center">
+                        <li class="nav-item">
+                            <a asp-controller="Post" asp-action="Index" class="nav-link text-white">
+                                <i class="bi bi-house-door fs-5"></i><br /><small>@SharedLocalizer["Home"]</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-area="" asp-controller="Jobs" asp-action="Index">
+                                <i class="bi bi-briefcase fs-5"></i><br /><small>@SharedLocalizer["Jobs"]</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link text-white">
+                                <i class="bi bi-chat-dots fs-5"></i><br /><small>@SharedLocalizer["Messaging"]</small>
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-controller="Admin" asp-action="ManageRoles">
+                                    <i class="bi bi-speedometer2 fs-5"></i><br /><small>@SharedLocalizer["Dashboard"]</small>
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a asp-controller="Payment" asp-action="Pay" class="nav-link text-white">
+                                <i class="bi bi-star-fill fs-5" style="color: gold;"></i><br /><small>@SharedLocalizer["Upgrade To Premium"]</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="UserProfile" asp-action="MyProfile" class="nav-link text-white">
+                                <img src="@Url.Content("~/Files/" + ViewData["LayoutProfileImage"])"
+                                     class="rounded-circle me-2" width="40" height="40" alt="Profile">
+                                <br /><small>@SharedLocalizer["Me"]</small>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" asp-action="LogOff" asp-controller="Account">
+                                <i class="bi bi-box-arrow-right fs-5"></i><br /><small>@SharedLocalizer["LogOut"]</small>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ✅ Page Layout -->
+    <div class="container-fluid text-white" style="margin-top: 76px;">
+        <div class="row h-100">
+
+            <!-- Left Aside -->
+            <aside class="col-md-3 col-lg-2 p-3">
+                <div class="profile-section">
+                    <div class="profile-image-container">
+                        <img src="@Url.Content("~/Files/" + (ViewData["LayoutProfileImage"] ?? "default-profile.jpg"))" alt="Profile">
+                    </div>
+                    <h6 class="fw-bold text-white text-center mb-2">
+                        @User.Identity?.Name.Split('@')[0]
+                    </h6>
+                    <p class="text-center mb-0" style="color: var(--muted-text); font-size: 0.9rem;">
+                        <i class="bi bi-patch-check-fill me-1" style="color: var(--accent-color);"></i>
+                        Active Member
+                    </p>
+                </div>
+
+                <div class="modern-menu">
+                    <!-- زر إنشاء البروفايل -->
+                    <a href="/UserProfile/Create" class="modern-item">
+                        <div class="modern-icon">
+                            <i class="bi bi-plus-lg"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["Create Profile"]</div>
+                            <div class="modern-subtitle">@SharedLocalizer["Set up your profile"]</div>
+                        </div>
+                    </a>
+
+                    <a class="modern-item" asp-action="MyProfile" asp-controller="UserProfile">
+                        <div class="modern-icon">
+                            <i class="bi bi-person"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["My Profile"]</div>
+                            <div class="modern-subtitle">@SharedLocalizer["View your profile"]</div>
+                        </div>
+                    </a>
+
+                    <a class="modern-item" asp-action="ViewProfile" asp-controller="UserProfile">
+                        <div class="modern-icon">
+                            <i class="bi bi-eye"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["View Profile"]</div>
+                            <div class="modern-subtitle">@SharedLocalizer["See others' profiles"]</div>
+                        </div>
+                    </a>
+
+                    <a class="modern-item" asp-action="Friends" asp-controller="Connection">
+                        <div class="modern-icon">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["Connections"]</div>
+                            <div class="modern-subtitle">Manage your network</div>
+                        </div>
+                    </a>
+
+                    <a class="modern-item" asp-action="Requests" asp-controller="Connection">
+                        <div class="modern-icon">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["Requests"]</div>
+                            <div class="modern-subtitle">Connection requests</div>
+                        </div>
+                        <div class="modern-badge">5</div>
+                    </a>
+
+                    <a class="modern-item" asp-action="AllUsers" asp-controller="Connection">
+                        <div class="modern-icon">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <div class="modern-content">
+                            <div class="modern-title">@SharedLocalizer["AllUsers"]</div>
+                            <div class="modern-subtitle">Discover new people</div>
+                        </div>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="col-md-6 col-lg-8 p-4">
+                @RenderBody()
+            </main>
+
+            <!-- Right Aside -->
+            <aside class="col-md-3 col-lg-2 p-3 quick-links">
+                <h5 class="mb-4 text-center fw-bold">
+                    <i class="bi bi-lightning-charge-fill me-2"></i>Quick Links
+                </h5>
+
+                <ul class="list-group list-group-flush flex-column gap-2">
+                    <li class="list-group-item">
+                        <a asp-controller="Post" asp-action="GetAllSavedPosts"
+                           class="text-decoration-none d-flex align-items-center py-2">
+                            <i class="bi bi-save me-3"></i>
+                            <span>@SharedLocalizer["Saved Posts"]</span>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a asp-controller="Post" asp-action="GetAllArchivedPosts"
+                           class="text-decoration-none d-flex align-items-center py-2">
+                            <i class="bi bi-archive me-3"></i>
+                            <span>@SharedLocalizer["Archived Posts"]</span>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item">
+                        <a asp-controller="jobs" asp-action="Saved"
+                           class="text-decoration-none d-flex align-items-center py-2">
+                            <i class="bi bi-briefcase me-3"></i>
+                            <span>@SharedLocalizer["Saved jobs"]</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item">
+                        <form asp-controller="User" asp-action="Suggest" method="post">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="btn btn-primary btn-sm">View Profile</button>
+                        </form>
+
+                    </li>
+
+                    <li class="list-group-item">
+                        <a asp-controller="Ai" asp-action="AITOOL"
+                           class="text-decoration-none d-flex align-items-center py-2">
+                            <i class="bi bi-robot me-3"></i>
+                            <span>AI Assistant</span>
+                        </a>
+                    </li>
+
+                    <li class="list-group-item border-0 bg-transparent mt-3">
+                        <div class="dropdown">
+                            <button class="btn btn-outline-light w-100 dropdown-toggle d-flex align-items-center justify-content-center"
+                                    type="button" id="languageDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-translate me-2"></i>
+                                Language
+                            </button>
+                            <ul class="dropdown-menu shadow border-0 rounded-3" aria-labelledby="languageDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                       href="@Url.Action("SetLanguage", "Home", new { culture = "en-US", returnUrl = Context.Request.Path + Context.Request.QueryString })">
+                                        <i class="bi bi-flag-fill me-2 text-primary"></i>
+                                        <span>English</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center"
+                                       href="@Url.Action("SetLanguage", "Home", new { culture = "ar-EG", returnUrl = Context.Request.Path + Context.Request.QueryString })">
+                                        <i class="bi bi-flag-fill me-2 text-success"></i>
+                                        <span>العربية</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </aside>
+        </div>
+    </div>
+
+    <!-- ✅ Footer -->
+    <footer class="border-top py-4 mt-auto">
+        <div class="container text-center">
+            <p class="small text-muted mb-0">
+                <i class="bi bi-c-circle me-1"></i> 2023 ConnectPro. @SharedLocalizer["All rights reserved."]
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Add smooth scrolling and interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects to navigation items
+            const navItems = document.querySelectorAll('.nav-link');
+            navItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                item.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add loading animation for modern items
+            const modernItems = document.querySelectorAll('.modern-item');
+            modernItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

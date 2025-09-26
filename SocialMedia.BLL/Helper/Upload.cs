@@ -2,7 +2,7 @@
 {
     public class Upload
     {
-        public static List<string> UploadFile(string FolderName, List<IFormFile> Files)
+        public static async Task<List<string>>  UploadFile(string FolderName, List<IFormFile> Files)
         {
             var savedFiles = new List<string>();
 
@@ -30,7 +30,7 @@
                         // save file
                         using (var stream = new FileStream(finalPath, FileMode.Create))
                         {
-                            file.CopyTo(stream);
+                            await file.CopyToAsync(stream);
                         }
 
                         // relative path (علشان تخزني في الداتابيز)

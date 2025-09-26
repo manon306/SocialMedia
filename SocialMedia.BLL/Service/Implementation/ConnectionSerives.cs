@@ -61,7 +61,7 @@
          {
              Id = c.Id,
              SenderId = c.Sender.Id,
-             SenderName = c.Sender.Name,        // ✅ الاسم هيظهر
+             SenderName = c.Sender.UserName,        // ✅ الاسم هيظهر
              SenderHeadline = c.Sender.Headline,
              SenderImage = c.Sender.ImagePath
          })

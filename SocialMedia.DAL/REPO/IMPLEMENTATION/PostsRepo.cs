@@ -7,7 +7,7 @@
         {
             this.DB = DB;
         }
-        public (bool, string) AddPost(Post post)
+        public  (bool, string) AddPost(Post post)
         {
 
             if (post == null)

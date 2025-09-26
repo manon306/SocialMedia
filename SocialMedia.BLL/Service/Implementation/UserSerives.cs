@@ -55,5 +55,38 @@
             }
         }
 
+
+        public (bool success, string message, List<ViewProfileVM> suggestedUsers) GetSuggestUsers(string id)
+        {
+            try
+            {
+                var currentUser = userRepo.GetByID(id);
+                if (currentUser == null)
+                    return (false, "User not found", new List<ViewProfileVM>());
+
+                // جلب كل المستخدمين ما عدا اليوزر الحالي
+                var allUsers = userRepo.GetUsers().Where(u => u.Id != id).ToList();
+
+                // فلترة المستخدمين اللي عندهم نفس Headline
+                var usersWithSameHeadline = allUsers
+                    .Where(u => u.Bio?.ToLower() == currentUser.Bio?.ToLower())
+                    .ToList();
+
+                // تحويل إلى ViewModel
+                var result = usersWithSameHeadline.Select(user => new ViewProfileVM
+                {
+                    Name = user.UserName,
+                    Education = user.Education,
+                    Headline = user.Headline,
+                    Bio = user.Bio
+                }).ToList();
+
+                return (true, $"Found {result.Count} users with similar headline", result);
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error: {ex.Message}", new List<ViewProfileVM>());
+            }
+        }
     }
 }
